@@ -56,7 +56,7 @@ public class Vektor {
 	//TODO
 	
 	public float mag() {
-		return 0.0;
+		return 0.0f;
 	}
 	
 	
