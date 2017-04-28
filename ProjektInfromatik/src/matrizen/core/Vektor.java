@@ -56,9 +56,7 @@ public class Vektor {
 	//TODO
 	
 	public float mag() {
-		return 0.0f;
-	}
-	
-	
+		return (float) Math.sqrt(x*x+y*y);
+	}	
 	
 }
