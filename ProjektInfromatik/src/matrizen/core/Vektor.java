@@ -53,10 +53,7 @@ public class Vektor {
 		return this;
 	}
 	
-	//TODO
-	
 	public float mag() {
 		return (float) Math.sqrt(x*x+y*y);
-	}	
-	
+	}
 }
