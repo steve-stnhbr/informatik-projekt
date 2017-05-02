@@ -1,4 +1,4 @@
-package matrizen.view;
+package matrizen.model;
 
 public class Spiel {
 	private static Spiel instanz;
