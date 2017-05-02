@@ -3,6 +3,9 @@ package matrizen.view;
 public class Spiel {
 	private static Spiel instanz;
 	
+	private Spiel() {
+		
+	}
 	
 	public static Spiel gibInstanz() {
 		if(instanz == null)
