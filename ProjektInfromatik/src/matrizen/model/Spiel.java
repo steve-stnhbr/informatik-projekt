@@ -1,6 +1,7 @@
 package matrizen.model;
 
 public class Spiel {
+	public static final short zeilen = (short) 15, spalten = (short) 15;
 	private static Spiel instanz;
 	private Level level;
 	
@@ -14,7 +15,7 @@ public class Spiel {
 		return instanz;
 	}
 	
-	public static void main(String[] args){
-		Spiel spiel = new Spiel();
+	public static void main(String[] args) {
+		
 	}
 }
