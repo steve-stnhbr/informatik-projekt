@@ -1,5 +1,5 @@
 package matrizen.model;
 
-public class Levelelement {
+public abstract class Levelelement {
 
 }
