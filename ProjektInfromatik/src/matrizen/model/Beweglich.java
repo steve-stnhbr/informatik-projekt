@@ -2,8 +2,13 @@ package matrizen.model;
 
 import matrizen.core.Vektor;
 
-public interface Beweglich extends Grafisch {
+public abstract class Beweglich extends Grafisch {
+	protected Vektor pos, ges, bes;
 	
-	public void kraftAusueben(Vektor v);
-	public void aktualisieren();
+	public abstract void kraftAusueben(Vektor v);
+	
+	public void aktualisieren() {
+		pos.add(ges);
+		ges.add(bes);
+	}
 }

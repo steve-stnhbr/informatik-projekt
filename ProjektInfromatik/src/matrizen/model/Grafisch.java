@@ -1,8 +1,10 @@
 package matrizen.model;
 
 import java.awt.Graphics2D;
+import java.awt.Image;
 
-public interface Grafisch {
+public abstract class Grafisch {
+	protected Image grafik;
 	
-	public void zeichen(Graphics2D g);
+	public abstract void zeichnen(Graphics2D g);
 }

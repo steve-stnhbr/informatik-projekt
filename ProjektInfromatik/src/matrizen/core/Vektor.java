@@ -19,18 +19,34 @@ public class Vektor {
 		return addieren(x, y);
 	}
 	
+	public Vektor add(Vektor v) {
+		return add(v.x, v.y);
+	}
+	
 	public Vektor addieren(float x, float y) {
 		this.x += x;
 		this.y += y;
 		return this;
 	}
 	
+	public Vektor addieren(Vektor v) {
+		return addieren(v.x, v.y);
+	}
+	
 	public Vektor sub(float x, float y) {
 		return subtrahieren(x, y);
 	}
 	
+	public Vektor sub(Vektor v) {
+		return sub(v.x, v.y);
+	}
+	
 	public Vektor subtrahieren(float x, float y) {
 		return addieren(-x, -y);
+	}
+	
+	public Vektor subtrahieren(Vektor v) {
+		return subtrahieren(v.x, v.y);
 	}
 	
 	public Vektor mult(float m) {
