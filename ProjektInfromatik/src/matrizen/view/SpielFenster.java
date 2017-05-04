@@ -5,6 +5,7 @@ import javax.swing.JFrame;
 public class SpielFenster extends JFrame {
 	private static SpielFenster instanz;
 	
+	
 	private SpielFenster() {
 		
 	}
