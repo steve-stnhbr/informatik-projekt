@@ -2,6 +2,7 @@ package matrizen.model;
 
 public class Spiel {
 	private static Spiel instanz;
+	private Level level;
 	
 	private Spiel() {
 		
