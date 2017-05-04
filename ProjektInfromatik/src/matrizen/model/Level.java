@@ -1,9 +1,12 @@
 package matrizen.model;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Level {
 	private List<Levelelement> liste;
 	
 	public Level(){
-		liste = new List<Levelelement>;
+		liste = new ArrayList<Levelelement>();
 	}
 }
