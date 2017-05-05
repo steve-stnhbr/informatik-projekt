@@ -19,13 +19,11 @@ public class Spieler extends Figur {
 
 	@Override
 	public void kraftAusueben(Vektor v) {
-		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
 	public void zeichnen(Graphics2D g) {
-		// TODO Auto-generated method stub
 		
 	}
 	
