@@ -71,16 +71,26 @@ public class DateiManager {
 	}
 
 	public enum Bild {
-		feldStein0(0, 0, 32, srcFeld), feldStein1(0, 32, 32, srcFeld), feldStein2(0, 64, 32, srcFeld), feldStein3(0, 96,
-				32, srcFeld), feldGras0(32, 0, 32, srcFeld), feldGras1(32, 32, 32, srcFeld), feldGras2(32, 64, 32,
-						srcFeld), feldGras3(32, 96, 32, srcFeld), feldSteinchen0(64, 0, 32, srcFeld), feldSteinchen1(64,
-								32, 32, srcFeld), feldSteinchen2(64, 64, 32, srcFeld), feldSteinchen4(64, 96, 32,
-										srcFeld), feldSchotter0(96, 0, 32, srcFeld), feldSchotter1(96, 32, 32,
-												srcFeld), feldSchotter2(96, 64, 32, srcFeld), feldSchotter3(96, 96, 32,
-														srcFeld), feldBaum0(128, 0, 32, srcFeld), feldBaum1(128, 32, 32,
-																srcFeld), elementSpieler(0, 0, 32,
-																		srcElement), elementSchluessel(0, 32, 32,
-																				srcElement);
+		feldStein0(0, 0, 32, srcFeld),
+		feldStein1(0, 32, 32, srcFeld),
+		feldStein2(0, 64, 32, srcFeld),
+		feldStein3(0, 96, 32, srcFeld),
+		feldGras0(32, 0, 32, srcFeld),
+		feldGras1(32, 32, 32, srcFeld),
+		feldGras2(32, 64, 32, srcFeld),
+		feldGras3(32, 96, 32, srcFeld),
+		feldSteinchen0(64, 0, 32, srcFeld),
+		feldSteinchen1(64, 32, 32, srcFeld),
+		feldSteinchen2(64, 64, 32, srcFeld),
+		feldSteinchen4(64, 96, 32, srcFeld),
+		feldSchotter0(96, 0, 32, srcFeld),
+		feldSchotter1(96, 32, 32, srcFeld),
+		feldSchotter2(96, 64, 32, srcFeld),
+		feldSchotter3(96, 96, 32, srcFeld),
+		feldBaum0(128, 0, 32, srcFeld),
+		feldBaum1(128, 32, 32, srcFeld),
+		elementSpieler(0, 0, 32, srcElement),
+		elementSchluessel(0, 32, 32, srcElement);
 
 		public int x, y, groesse;
 		public BufferedImage src;
