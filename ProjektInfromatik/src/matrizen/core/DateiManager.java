@@ -22,7 +22,8 @@ public class DateiManager {
 	}
 
 	public static BufferedImage laden(Bild b) {
-		return b.src.getSubimage(b.x, b.y, b.groesse, b.groesse);
+		int hoehe = b.src.getHeight() / 7, breite = b.src.getWidth() / 4;
+		return b.src.getSubimage(b.x, b.y, hoehe, breite);
 	}
 
 	public static String inhaltLesen(String s) {
@@ -71,34 +72,33 @@ public class DateiManager {
 	}
 
 	public enum Bild {
-		feldStein0(0, 0, 32, srcFeld),
-		feldStein1(0, 32, 32, srcFeld),
-		feldStein2(0, 64, 32, srcFeld),
-		feldStein3(0, 96, 32, srcFeld),
-		feldGras0(32, 0, 32, srcFeld),
-		feldGras1(32, 32, 32, srcFeld),
-		feldGras2(32, 64, 32, srcFeld),
-		feldGras3(32, 96, 32, srcFeld),
-		feldSteinchen0(64, 0, 32, srcFeld),
-		feldSteinchen1(64, 32, 32, srcFeld),
-		feldSteinchen2(64, 64, 32, srcFeld),
-		feldSteinchen4(64, 96, 32, srcFeld),
-		feldSchotter0(96, 0, 32, srcFeld),
-		feldSchotter1(96, 32, 32, srcFeld),
-		feldSchotter2(96, 64, 32, srcFeld),
-		feldSchotter3(96, 96, 32, srcFeld),
-		feldBaum0(128, 0, 32, srcFeld),
-		feldBaum1(128, 32, 32, srcFeld),
-		elementSpieler(0, 0, 32, srcElement),
-		elementSchluessel(0, 32, 32, srcElement);
+		feldStein0(0, 0, srcFeld),
+		feldStein1(0, 32, srcFeld),
+		feldStein2(0, 64, srcFeld),
+		feldStein3(0, 96, srcFeld),
+		feldGras0(32, 0, srcFeld),
+		feldGras1(32, 32, srcFeld),
+		feldGras2(32, 64, srcFeld),
+		feldGras3(32, 96, srcFeld),
+		feldSteinchen0(64, 0, srcFeld),
+		feldSteinchen1(64, 32, srcFeld),
+		feldSteinchen2(64, 64, srcFeld),
+		feldSteinchen4(64, 96, srcFeld),
+		feldSchotter0(96, 0, srcFeld),
+		feldSchotter1(96, 32, srcFeld),
+		feldSchotter2(96, 64, srcFeld),
+		feldSchotter3(96, 96, srcFeld),
+		feldBaum0(128, 0, srcFeld),
+		feldBaum1(128, 32, srcFeld),
+		elementSpieler(0, 0, srcElement),
+		elementSchluessel(0, 32, srcElement);
 
-		public int x, y, groesse;
+		public int x, y;
 		public BufferedImage src;
 
-		private Bild(int x, int y, int sc, BufferedImage image) {
+		private Bild(int x, int y, BufferedImage image) {
 			this.x = x;
 			this.y = y;
-			this.groesse = sc;
 			this.src = image;
 		}
 
