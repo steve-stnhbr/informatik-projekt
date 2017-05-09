@@ -149,9 +149,8 @@ public class DateiManager {
 					felder[i][j] = new Feld(Feld.Typ.gibTyp(inArr.getInt(j)));
 				}
 			}
-
-			return null;
-
+			
+			return new matrizen.model.Level(felder);
 		}
 	}
 
