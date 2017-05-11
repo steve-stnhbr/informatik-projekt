@@ -19,14 +19,14 @@ public class Vektor {
 		return addieren(x, y);
 	}
 	
+	public Vektor add(Vektor v) {
+		return add(v.x, v.y);
+	}
+	
 	public Vektor addieren(float x, float y) {
 		this.x += x;
 		this.y += y;
 		return this;
-	}
-	
-	public Vektor add(Vektor k) {
-		return add(k.x, k.y);
 	}
 	
 	public Vektor addieren(Vektor k) {
