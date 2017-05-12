@@ -51,8 +51,8 @@ public class Spiel implements AWTEventListener {
 		
 		int c = e.getKeyCode();
 		
-		if (c == config.getOben())
-			input(Input.bewegungHoch);
+		if (c == KeyEvent.VK_ESCAPE)
+			System.exit(0);
 		else if (c == config.getLinks())
 			input(Input.bewegungLinks);
 		else if (c == config.getRechts())
@@ -61,6 +61,9 @@ public class Spiel implements AWTEventListener {
 			input(Input.bewegungRunter);
 		else if(c == config.getSchuss()) 
 			input(Input.schuss);
+		else if(c == config.getOben()) {
+			input(Input.bewegungHoch);
+		}
 	}
 
 	private void input(Input i) {

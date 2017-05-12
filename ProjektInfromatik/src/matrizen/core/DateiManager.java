@@ -30,10 +30,8 @@ public class DateiManager {
 
 	public static String inhaltLesen(String s) {
 		try {
-			return inhaltLesen(new File(DateiManager.class.getResource(s).toURI()));
+			return inhaltLesen(new File(s));
 		} catch (IOException e) {
-			e.printStackTrace();
-		} catch (URISyntaxException e) {
 			e.printStackTrace();
 		}
 		return null;
@@ -45,7 +43,7 @@ public class DateiManager {
 		while ((line = reader.readLine()) != null) {
 			s.concat(line + System.lineSeparator());
 		}
-
+		System.out.println(s);
 		reader.close();
 		return s;
 	}
@@ -53,11 +51,11 @@ public class DateiManager {
 	static {
 		try {
 			if (srcFeld == null)
-				srcFeld = ImageIO.read(DateiManager.class.getResourceAsStream("res\\grafik\\feld_res.png"));
+				srcFeld = ImageIO.read(new File("res\\grafik\\feld_res.png"));
 			if (srcElement == null)
-				srcElement = ImageIO.read(DateiManager.class.getResourceAsStream("res\\grafik\\element_res.png"));
+				srcElement = ImageIO.read(new File("res\\grafik\\element_res.png"));
 			if (srcPartikel == null)
-				srcPartikel = ImageIO.read(DateiManager.class.getResourceAsStream("res\\grafik\\partikel_res.png"));
+				srcPartikel = ImageIO.read(new File("res\\grafik\\partikel_res.png"));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
