@@ -2,6 +2,14 @@ package matrizen.core;
 
 import static java.awt.event.KeyEvent.*;
 
+/**
+ * Klasse, mit der die Steuerung angepasst werden kann!
+ * Hier werden die "KeyCodes" der Java-API Klasse 
+ * <code>java.awt.event.KeyEvent</code> mit Integern gespeichert
+ * Es wird möglicherweise die Möglichkeit hinzugefügt, eigene Konfigurationen zu erstellen!
+ * 
+ * @author Stefan
+ */
 public class Konfiguration {
 	public static final Konfiguration standardWASD = new Konfiguration(VK_W, VK_D, VK_S, VK_A, VK_SPACE),
 			standardPfeil = new Konfiguration(VK_UP, VK_RIGHT, VK_DOWN, VK_LEFT, VK_SPACE);
