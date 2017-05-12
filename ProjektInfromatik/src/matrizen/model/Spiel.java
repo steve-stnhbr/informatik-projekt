@@ -19,6 +19,8 @@ import java.awt.event.AWTEventListener;
 import java.awt.event.KeyEvent;
 
 import matrizen.core.Konfiguration;
+import matrizen.core.Richtung;
+import matrizen.model.elemente.Spieler;
 
 public class Spiel implements AWTEventListener {
 	public static final short zeilen = (short) 15, spalten = (short) 15;
@@ -61,7 +63,20 @@ public class Spiel implements AWTEventListener {
 	}
 
 	private void input(Input i) {
-
+		switch(i) {
+		case bewegungHoch:
+			Spieler.gibInstanz().bewegen(Richtung.OBEN);
+			break;
+		case bewegungRechts:
+			Spieler.gibInstanz().bewegen(Richtung.RECHTS);
+			break;
+		case bewegungRunter:
+			Spieler.gibInstanz().bewegen(Richtung.UNTEN);
+			break;
+		case bewegungLinks:
+			Spieler.gibInstanz().bewegen(Richtung.LINKS);
+			break;
+		}
 	}
 
 	enum Input {
