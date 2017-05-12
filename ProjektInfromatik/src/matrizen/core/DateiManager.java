@@ -1,11 +1,11 @@
 package matrizen.core;
 
-import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.net.URISyntaxException;
 
 import javax.imageio.ImageIO;
 
@@ -28,8 +28,10 @@ public class DateiManager {
 
 	public static String inhaltLesen(String s) {
 		try {
-			return inhaltLesen(new File(s));
+			return inhaltLesen(new File(DateiManager.class.getResource(s).toURI()));
 		} catch (IOException e) {
+			e.printStackTrace();
+		} catch (URISyntaxException e) {
 			e.printStackTrace();
 		}
 		return null;
@@ -49,20 +51,20 @@ public class DateiManager {
 	static {
 		try {
 			if (srcFeld == null)
-				srcFeld = ImageIO.read(new File("res/grafik/feld_res"));
+				srcFeld = ImageIO.read(DateiManager.class.getResourceAsStream("res\\grafik\\feld_res.png"));
 			if (srcElement == null)
-				srcElement = ImageIO.read(new File("res/grafik/element_res"));
+				srcElement = ImageIO.read(DateiManager.class.getResourceAsStream("res\\grafik\\element_res.png"));
 			if (srcPartikel == null)
-				srcPartikel = ImageIO.read(new File("res/grafik/partikel_res"));
+				srcPartikel = ImageIO.read(DateiManager.class.getResourceAsStream("res\\grafik\\partikel_res.png"));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
 
 	public enum Level {
-		level1(inhaltLesen("res/levels/level1.mld")), level2(inhaltLesen("res/levels/level2.mld")), level3(
-				inhaltLesen("res/levels/level3.mld")), level4(inhaltLesen("res/levels/level4.mld")), level5(
-						inhaltLesen("res/levels/level5.mld")), level6(inhaltLesen("res/levels/level6.mld"));
+		level1(inhaltLesen("res\\levels\\level1.mld")), level2(inhaltLesen("res\\levels\\level2.mld")), level3(
+				inhaltLesen("res\\levels\\level3.mld")), level4(inhaltLesen("res\\levels\\level4.mld")), level5(
+						inhaltLesen("res\\levels\\level5.mld")), level6(inhaltLesen("res\\levels\\level6.mld"));
 
 		public String src;
 
