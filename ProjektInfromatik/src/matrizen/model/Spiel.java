@@ -1,6 +1,16 @@
 package matrizen.model;
 
-import static java.awt.event.KeyEvent.*;
+import static java.awt.event.KeyEvent.VK_A;
+import static java.awt.event.KeyEvent.VK_DOWN;
+import static java.awt.event.KeyEvent.VK_E;
+import static java.awt.event.KeyEvent.VK_LEFT;
+import static java.awt.event.KeyEvent.VK_Q;
+import static java.awt.event.KeyEvent.VK_R;
+import static java.awt.event.KeyEvent.VK_RIGHT;
+import static java.awt.event.KeyEvent.VK_S;
+import static java.awt.event.KeyEvent.VK_SPACE;
+import static java.awt.event.KeyEvent.VK_UP;
+import static java.awt.event.KeyEvent.VK_W;
 
 import java.awt.AWTEvent;
 import java.awt.Graphics2D;
@@ -8,61 +18,53 @@ import java.awt.Toolkit;
 import java.awt.event.AWTEventListener;
 import java.awt.event.KeyEvent;
 
+import matrizen.core.Konfiguration;
+
 public class Spiel implements AWTEventListener {
 	public static final short zeilen = (short) 15, spalten = (short) 15;
 	private static Spiel instanz;
 	private Level level;
-	
+	private Konfiguration config;
+
 	private Spiel() {
 		Toolkit.getDefaultToolkit().addAWTEventListener(this, AWTEvent.KEY_EVENT_MASK);
 	}
-	
+
 	public static Spiel gibInstanz() {
-		if(instanz == null)
+		if (instanz == null)
 			instanz = new Spiel();
 		return instanz;
 	}
 
 	public void zeichnen(Graphics2D graphics) {
-		level.zeichnen(graphics);		
+		level.zeichnen(graphics);
 	}
 
 	@Override
 	public void eventDispatched(AWTEvent event) {
 		KeyEvent e = null;
-		if(event instanceof KeyEvent)
+		if (event instanceof KeyEvent)
 			e = (KeyEvent) event;
 		
-		switch(e.getKeyCode()) {
-		case VK_UP:
-		case VK_W: input(Input.bewegungHoch);
-			break;
-		case VK_RIGHT:
-		case VK_R: input(Input.bewegungRechts);
-			break;
-		case VK_LEFT:
-		case VK_A: input(Input.bewegungLinks);
-			break;
-		case VK_DOWN:
-		case VK_S: input(Input.bewegungRunter);
-			break;
-		case VK_SPACE:
-		case VK_Q:
-		case VK_E:
-			input(Input.schuss);
-			break;
-		}
-	}
-	
-	private void input(Input i) {
+		int c = e.getKeyCode();
 		
+		if (c == config.getOben())
+			input(Input.bewegungHoch);
+		else if (c == config.getLinks())
+			input(Input.bewegungLinks);
+		else if (c == config.getRechts())
+			input(Input.bewegungRechts);
+		else if (c == config.getUnten())
+			input(Input.bewegungRunter);
+		else if(c == config.getSchuss()) 
+			input(Input.schuss);
+	}
+
+	private void input(Input i) {
+
 	}
 
 	enum Input {
-		bewegungHoch,
-		bewegungRunter,
-		bewegungRechts,
-		bewegungLinks,
-		schuss;
+		bewegungHoch, bewegungRunter, bewegungRechts, bewegungLinks, schuss;
 	}
 }
