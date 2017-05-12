@@ -29,24 +29,24 @@ public class Vektor {
 		return this;
 	}
 	
-	public Vektor addieren(Vektor v) {
-		return addieren(v.x, v.y);
+	public Vektor addieren(Vektor k) {
+		return add(k);
 	}
 	
 	public Vektor sub(float x, float y) {
 		return subtrahieren(x, y);
 	}
 	
-	public Vektor sub(Vektor v) {
-		return sub(v.x, v.y);
-	}
-	
 	public Vektor subtrahieren(float x, float y) {
 		return addieren(-x, -y);
 	}
 	
-	public Vektor subtrahieren(Vektor v) {
-		return subtrahieren(v.x, v.y);
+	public Vektor sub(Vektor k) {
+		return sub(k.x, k.y);
+	}
+	
+	public Vektor subtrahieren(Vektor k) {
+		return sub(k);
 	}
 	
 	public Vektor mult(float m) {
