@@ -30,6 +30,7 @@ public class Spiel implements AWTEventListener {
 
 	private Spiel() {
 		Toolkit.getDefaultToolkit().addAWTEventListener(this, AWTEvent.KEY_EVENT_MASK);
+		level = Level.anfangsLevel;
 	}
 
 	public static Spiel gibInstanz() {

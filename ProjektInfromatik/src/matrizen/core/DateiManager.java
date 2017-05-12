@@ -49,17 +49,17 @@ public class DateiManager {
 	static {
 		try {
 			if (srcFeld == null)
-				srcFeld = ImageIO.read(new File("res/feld_res"));
+				srcFeld = ImageIO.read(new File("res/grafik/feld_res"));
 			if (srcElement == null)
-				srcElement = ImageIO.read(new File("res/element_res"));
+				srcElement = ImageIO.read(new File("res/grafik/element_res"));
 			if (srcPartikel == null)
-				srcPartikel = ImageIO.read(new File("res/partikel_res"));
+				srcPartikel = ImageIO.read(new File("res/grafik/partikel_res"));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
 
-	enum Level {
+	public enum Level {
 		level1(inhaltLesen("res/levels/level1.mld")), level2(inhaltLesen("res/levels/level2.mld")), level3(
 				inhaltLesen("res/levels/level3.mld")), level4(inhaltLesen("res/levels/level4.mld")), level5(
 						inhaltLesen("res/levels/level5.mld")), level6(inhaltLesen("res/levels/level6.mld"));
@@ -154,7 +154,7 @@ public class DateiManager {
 		}
 	}
 
-	private static class LevelParser {
+	public static class LevelParser {
 		public static matrizen.model.Level parse(String s) {
 			JSONObject obj = new JSONObject(s);
 			JSONArray arr = obj.getJSONArray("felder");
