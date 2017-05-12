@@ -1,5 +1,6 @@
 package matrizen.model;
 
+import java.awt.Graphics2D;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -34,5 +35,17 @@ public class Level {
 
 	public void setFelder(Feld[][] felder) {
 		this.felder = felder;
+	}
+
+	public void zeichnen(Graphics2D g) {
+		for (Feld[] felds : felder) {
+			for(Feld feld : felds) {
+				feld.zeichnen(g);
+			}
+		}
+		
+		for(Levelelement l : liste) {
+			l.zeichnen(g);
+		}
 	}
 }
