@@ -2,10 +2,12 @@ package matrizen.model.elemente;
 
 import java.awt.Graphics2D;
 
+import matrizen.core.Richtung;
 import matrizen.core.Vektor;
 
 public class Spieler extends Figur {
 	private static Spieler instanz;
+	private Vektor posImFeld;
 	
 	private Spieler() {
 		
@@ -25,6 +27,10 @@ public class Spieler extends Figur {
 	@Override
 	public void zeichnen(Graphics2D g) {
 		
+	}
+	
+	public void bewegen(Richtung r) {
+		posImFeld.add(r.vektor);
 	}
 	
 }
