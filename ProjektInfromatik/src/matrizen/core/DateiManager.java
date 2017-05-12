@@ -90,6 +90,12 @@ public class DateiManager {
 		feldSchotter3(96, 96, srcFeld),
 		feldBaum0(128, 0, srcFeld),
 		feldBaum1(128, 32, srcFeld),
+		feldWasser(128, 64, srcFeld),
+		feldBruecke(128, 96, srcFeld),
+		feldErde0(160, 0, srcFeld),
+		feldErde1(160, 32, srcFeld),
+		feldErde2(160, 64, srcFeld),
+		feldErde3(160, 96, srcFeld),
 		elementSpieler(0, 0, srcElement),
 		elementSchluessel(0, 32, srcElement);
 
@@ -122,14 +128,14 @@ public class DateiManager {
 			return values()[Math.round(Utils.random(16, 18))];
 		}
 		
-		public static Bild zufaelligesWasser() {
-			return values()[Math.round(Utils.random(18, 20))];
+		public static Bild zufaelligeErde() {
+			return values()[Math.round(Utils.random(20, 24))];
 		}
 
 		public static Bild zufaelligeGrafik(Feld.Typ t) {
 			switch (t) {
 			case WASSER:
-				return zufaelligesWasser();
+				return feldWasser;
 			case WIESE:
 				return zufaelligeWiese();
 			case BAUM:
@@ -140,6 +146,8 @@ public class DateiManager {
 				return zufaelligerSchotter();
 			case STEIN:
 				return zufaelligerStein();
+			case ERDE:
+				return zufaelligeErde();
 			default:
 				return null;
 			}
@@ -147,7 +155,7 @@ public class DateiManager {
 	}
 
 	private static class LevelParser {
-		private static matrizen.model.Level parse(String s) {
+		public static matrizen.model.Level parse(String s) {
 			JSONObject obj = new JSONObject(s);
 			JSONArray arr = obj.getJSONArray("felder");
 			Feld[][] felder = new Feld[obj.getInt("hoehe")][obj.getInt("breite")];
@@ -161,6 +169,22 @@ public class DateiManager {
 			}
 			
 			return new matrizen.model.Level(felder);
+		}
+		
+		public static String schreiben(matrizen.model.Level l) {
+			Feld[][] felder = l.getFelder();
+			JSONObject obj = new JSONObject();
+			JSONArray arr = new JSONArray();
+			
+			for(int i = 0; i < felder.length; i++) {
+				for(int j = 0; j < felder[i].length; j++) {
+					arr.put(Feld.Typ.gibIndex(felder[i][j].getTyp()));
+				}
+			}
+			
+			obj.put("felder", arr);
+			
+			return obj.toString();
 		}
 	}
 

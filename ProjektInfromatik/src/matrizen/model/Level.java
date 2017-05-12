@@ -19,4 +19,20 @@ public class Level {
 		this.liste = liste;
 		this.felder = felder;
 	}
+
+	public List<Levelelement> getListe() {
+		return liste;
+	}
+
+	public void setListe(List<Levelelement> liste) {
+		this.liste = liste;
+	}
+
+	public Feld[][] getFelder() {
+		return felder;
+	}
+
+	public void setFelder(Feld[][] felder) {
+		this.felder = felder;
+	}
 }
