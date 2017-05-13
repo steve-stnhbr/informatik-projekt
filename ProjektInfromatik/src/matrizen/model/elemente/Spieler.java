@@ -4,6 +4,8 @@ import java.awt.Graphics2D;
 
 import matrizen.core.Richtung;
 import matrizen.core.Vektor;
+import matrizen.model.Spiel;
+import matrizen.view.SpielFenster;
 
 public class Spieler extends Figur {
 	private static Spieler instanz;
@@ -31,6 +33,7 @@ public class Spieler extends Figur {
 	
 	public void bewegen(Richtung r) {
 		posImFeld.add(r.vektor);
+		pos = posImFeld.mult(SpielFenster.hoehe / Spiel.spalten);
 	}
 	
 }
