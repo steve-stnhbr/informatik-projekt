@@ -17,6 +17,8 @@ import matrizen.model.Feld;
 
 public class DateiManager {
 	private static BufferedImage srcFeld, srcElement, srcPartikel;
+	private final static String pfad = ("/"
+			+ DateiManager.class.getProtectionDomain().getCodeSource().getLocation().toString().replace("/file:/", ""));
 
 	public static matrizen.model.Level laden(Level l) {
 		return LevelParser.parse(l.src);
@@ -29,7 +31,7 @@ public class DateiManager {
 
 	public static String inhaltLesen(String s) {
 		try {
-			return inhaltLesen(new File(s));
+			return inhaltLesen(new File(DateiManager.class.getResource(s).toString()));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -38,23 +40,23 @@ public class DateiManager {
 
 	public static String inhaltLesen(File f) throws IOException {
 		BufferedReader reader = new BufferedReader(new FileReader(f));
-		String s = "", line = null;
+		StringBuilder builder = new StringBuilder();
+		String line = null;
 		while ((line = reader.readLine()) != null) {
-			s.concat(line + System.lineSeparator());
+			builder.append(line);
 		}
-		System.out.println(s);
 		reader.close();
-		return s;
+		return builder.toString();
 	}
 
 	static {
 		try {
 			if (srcFeld == null)
-				srcFeld = ImageIO.read(new File("res\\grafik\\feld_res.png"));
+				srcFeld = ImageIO.read(new File(pfad + "res/grafik/feld_res.png"));
 			if (srcElement == null)
-				srcElement = ImageIO.read(new File("res\\grafik\\element_res.png"));
+				srcElement = ImageIO.read(DateiManager.class.getResource("res\\grafik\\element_res.png"));
 			if (srcPartikel == null)
-				srcPartikel = ImageIO.read(new File("res\\grafik\\partikel_res.png"));
+				srcPartikel = ImageIO.read(DateiManager.class.getResource("res\\grafik\\partikel_res.png"));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -194,23 +196,19 @@ public class DateiManager {
 
 			return list;
 		}
-		
+
 		public static String write(List<Konfiguration> l) {
 			JSONObject obj = new JSONObject();
 			JSONArray arr = new JSONArray();
-			
-			for(Konfiguration k : l) {
-				arr.put(new JSONObject()
-						.put("oben", k.getOben())
-						.put("rechts", k.getRechts())
-						.put("unten", k.getUnten())
-						.put("links", k.getLinks())
-						.put("schuss", k.getSchuss()));
+
+			for (Konfiguration k : l) {
+				arr.put(new JSONObject().put("oben", k.getOben()).put("rechts", k.getRechts())
+						.put("unten", k.getUnten()).put("links", k.getLinks()).put("schuss", k.getSchuss()));
 			}
-			
+
 			return obj.toString();
 		}
-		
+
 	}
 
 }

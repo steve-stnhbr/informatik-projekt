@@ -1,16 +1,6 @@
 package matrizen.model;
 
-import static java.awt.event.KeyEvent.VK_A;
-import static java.awt.event.KeyEvent.VK_DOWN;
-import static java.awt.event.KeyEvent.VK_E;
-import static java.awt.event.KeyEvent.VK_LEFT;
-import static java.awt.event.KeyEvent.VK_Q;
-import static java.awt.event.KeyEvent.VK_R;
-import static java.awt.event.KeyEvent.VK_RIGHT;
-import static java.awt.event.KeyEvent.VK_S;
-import static java.awt.event.KeyEvent.VK_SPACE;
-import static java.awt.event.KeyEvent.VK_UP;
-import static java.awt.event.KeyEvent.VK_W;
+import static java.awt.event.KeyEvent.*;
 
 import java.awt.AWTEvent;
 import java.awt.Graphics2D;
@@ -49,6 +39,34 @@ public class Spiel implements AWTEventListener {
 		if (event instanceof KeyEvent)
 			e = (KeyEvent) event;
 		
+		switch(e.getKeyCode()) {
+		case VK_ESCAPE:
+			System.exit(0);
+			break;
+		case VK_W:
+		case VK_UP:
+			input(Input.bewegungHoch);
+			break;
+		case VK_D:
+		case VK_RIGHT:
+			input(Input.bewegungRechts);
+			break;
+		case VK_S:
+		case VK_DOWN:
+			input(Input.bewegungRunter);
+			break;
+		case VK_A:
+		case VK_LEFT:
+			input(Input.bewegungLinks);
+			break;
+		case VK_SPACE:
+		case VK_Q:
+		case VK_E:
+			input(Input.schuss);
+			break;
+		}
+		
+		/*
 		int c = e.getKeyCode();
 		
 		if (c == KeyEvent.VK_ESCAPE)
@@ -64,6 +82,7 @@ public class Spiel implements AWTEventListener {
 		else if(c == config.getOben()) {
 			input(Input.bewegungHoch);
 		}
+		*/
 	}
 
 	private void input(Input i) {
