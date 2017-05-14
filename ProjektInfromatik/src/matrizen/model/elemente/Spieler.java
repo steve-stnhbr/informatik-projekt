@@ -12,7 +12,6 @@ public class Spieler extends Figur {
 	private Vektor posImFeld;
 	
 	private Spieler() {
-		//lööl
 	}
 	
 	public static Spieler gibInstanz() {

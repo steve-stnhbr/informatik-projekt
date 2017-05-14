@@ -20,7 +20,7 @@ public class Feld extends Grafisch {
 		// this(t.gibGrafik(), t.solide);
 		this.t = t;
 		this.raster = raster;
-		grafik = DateiManager.laden(DateiManager.Bild.zufaelligeSteinchen());
+		grafik = DateiManager.laden(DateiManager.Bild.zufaelligeGrafik(t));
 	}
 
 	/*
@@ -59,7 +59,14 @@ public class Feld extends Grafisch {
 	}
 
 	public enum Typ {
-		WASSER(true), WIESE(false), BAUM(true), STEIN(false), STEINCHEN(true), ERDE(false), SCHOTTER(false);
+		WASSER(true),
+		WIESE(false),
+		BAUM(true),
+		STEIN(false),
+		STEINCHEN(true),
+		ERDE(false),
+		SCHOTTER(false),
+		BRUECKE(false);
 
 		final boolean solide;
 

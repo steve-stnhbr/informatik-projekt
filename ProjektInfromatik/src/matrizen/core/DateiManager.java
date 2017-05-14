@@ -1,5 +1,7 @@
 package matrizen.core;
 
+import static matrizen.core.Utils.random;
+
 import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
 import java.io.File;
@@ -14,6 +16,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import matrizen.model.Feld;
+import matrizen.model.Feld.Typ;
 
 /**
  * Diese Klasse reguliert alle Zugriffe auf Dateien
@@ -87,64 +90,66 @@ public class DateiManager {
 	}
 
 	public enum Bild {
-		feldStein0(0, 0, srcFeld),
-		feldStein1(0, 32, srcFeld),
-		feldStein2(0, 64, srcFeld),
-		feldStein3(0, 96, srcFeld),
-		feldGras0(32, 0, srcFeld),
-		feldGras1(32, 32, srcFeld),
-		feldGras2(32, 64, srcFeld),
-		feldGras3(32, 96, srcFeld),
-		feldSteinchen0(64, 0, srcFeld),
-		feldSteinchen1(64, 32, srcFeld),
-		feldSteinchen2(64, 64, srcFeld),
-		feldSteinchen4(64, 96, srcFeld),
-		feldSchotter0(96, 0, srcFeld),
-		feldSchotter1(96, 32, srcFeld),
-		feldSchotter2(96, 64, srcFeld),
-		feldSchotter3(96, 96, srcFeld),
-		feldBaum0(128, 0, srcFeld),
-		feldBaum1(128, 32, srcFeld),
-		feldWasser(128, 64, srcFeld),
-		feldBruecke(128, 96, srcFeld),
-		feldErde0(160, 0, srcFeld),
-		feldErde1(160, 32, srcFeld),
-		feldErde2(160, 64, srcFeld),
-		feldErde3(160, 96, srcFeld),
-		elementSpieler(0, 0, srcElement),
-		elementSchluessel(0, 32, srcElement);
+		feldStein0(0, 0, srcFeld, Typ.STEIN),
+		feldStein1(0, 32, srcFeld, Typ.STEIN),
+		feldStein2(0, 64, srcFeld, Typ.STEIN),
+		feldStein3(0, 96, srcFeld, Typ.STEIN),
+		feldGras0(32, 0, srcFeld, Typ.WIESE),
+		feldGras1(32, 32, srcFeld, Typ.WIESE),
+		feldGras2(32, 64, srcFeld, Typ.WIESE),
+		feldGras3(32, 96, srcFeld, Typ.WIESE),
+		feldSteinchen0(64, 0, srcFeld, Typ.STEINCHEN),
+		feldSteinchen1(64, 32, srcFeld, Typ.STEINCHEN),
+		feldSteinchen2(64, 64, srcFeld, Typ.STEINCHEN),
+		feldSteinchen4(64, 96, srcFeld, Typ.STEINCHEN),
+		feldSchotter0(96, 0, srcFeld, Typ.SCHOTTER),
+		feldSchotter1(96, 32, srcFeld, Typ.SCHOTTER),
+		feldSchotter2(96, 64, srcFeld, Typ.SCHOTTER),
+		feldSchotter3(96, 96, srcFeld, Typ.SCHOTTER),
+		feldBaum0(128, 0, srcFeld, Typ.BAUM),
+		feldBaum1(128, 32, srcFeld, Typ.BAUM),
+		feldWasser(128, 64, srcFeld, Typ.WASSER),
+		feldBruecke(128, 96, srcFeld, Typ.BRUECKE),
+		feldErde0(160, 0, srcFeld, Typ.ERDE),
+		feldErde1(160, 32, srcFeld, Typ.ERDE),
+		feldErde2(160, 64, srcFeld, Typ.ERDE),
+		feldErde3(160, 96, srcFeld, Typ.ERDE),
+		elementSpieler(0, 0, srcElement, null),
+		elementSchluessel(0, 32, srcElement, null);
 
 		public int x, y;
 		public BufferedImage src;
+		public Typ t;
 
-		private Bild(int x, int y, BufferedImage image) {
+		private Bild(int x, int y, BufferedImage image, Typ typ) {
 			this.x = x;
 			this.y = y;
 			this.src = image;
+			this.t= typ;
 		}
 
 		public static Bild zufaelligerStein() {
-			return values()[Math.round(Utils.random(4))];
+			return values()[random(0, 4)];
 		}
 
 		public static Bild zufaelligeWiese() {
-			return values()[Math.round(Utils.random(4, 8))];
+			return values()[random(4, 8)];
 		}
 
 		public static Bild zufaelligeSteinchen() {
-			return Utils.random(2) == 1 ? feldSteinchen0 : feldSteinchen1;
+			return values()[random(8, 12)];
 		}
 
 		public static Bild zufaelligerSchotter() {
-			return values()[Math.round(Utils.random(12, 16))];
+			return values()[random(12, 16)];
 		}
 
 		public static Bild zufaelligerBaum() {
-			return values()[Math.round(Utils.random(16, 18))];
+			return values()[random(16, 18)];
 		}
 
 		public static Bild zufaelligeErde() {
-			return values()[Math.round(Utils.random(20, 24))];
+			return values()[random(20, 24)];
 		}
 
 		public static Bild zufaelligeGrafik(Feld.Typ t) {

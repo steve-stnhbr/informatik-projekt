@@ -12,7 +12,7 @@ public class Utils {
 	}
 	
 	public static int random(int start, int end) {
-		return random.nextInt((int) (end - start) + 1) + start;
+		return random.nextInt(end - start) + start;
 	}
 	
 	@SuppressWarnings("unchecked")
