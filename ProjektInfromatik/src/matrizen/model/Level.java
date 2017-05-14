@@ -9,6 +9,7 @@ import matrizen.core.DateiManager;
 public class Level {
 	//nur zum testen
 	public static final Level anfangsLevel = DateiManager.laden(DateiManager.Level.level1);
+	//TODO
 	private List<Levelelement> liste;
 	private Feld[][] felder;
 	private Level levelOben, levelUnten, levelLinks, levelRechts;
@@ -36,6 +37,25 @@ public class Level {
 		for(Levelelement l : liste) {
 			l.zeichnen(g);
 		}
+	}
+	
+	public String toString() {
+		String s = "Level:{ felder=[";
+		
+		
+		for (Feld[] felds : felder) {
+			for(Feld feld : felds) {
+				s += feld.toString();
+			}
+		}
+		
+		s+= "];elemente=[";
+		
+		for(Levelelement l : liste) {
+			s+= l.toString();
+		}
+		
+		return s + "]}";
 	}
 
 	public List<Levelelement> getListe() {

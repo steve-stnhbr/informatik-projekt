@@ -4,6 +4,8 @@ package matrizen.core;
 * @author Steve
 */
 public class Vektor {
+	public static final Vektor nullVektor = new Vektor(0, 0);
+	
 	private float x, y;
 	
 	public Vektor() {
@@ -71,6 +73,10 @@ public class Vektor {
 	
 	public float mag() {
 		return (float) Math.sqrt(x*x+y*y);
+	}
+	
+	public String toString() {
+		return "Vektor:{x=" + x + "y=" + y + "]}";
 	}
 
 	public float getX() {

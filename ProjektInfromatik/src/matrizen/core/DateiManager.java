@@ -15,6 +15,11 @@ import org.json.JSONObject;
 
 import matrizen.model.Feld;
 
+/**
+ * Diese Klasse reguliert alle Zugriffe auf Dateien
+ * @author Stefan
+ *
+ */
 public class DateiManager {
 	private static BufferedImage srcFeld, srcElement, srcPartikel;
 	private final static String pfad = DateiManager.class.getProtectionDomain().getCodeSource().getLocation().toString()
@@ -67,9 +72,12 @@ public class DateiManager {
 	}
 
 	public enum Level {
-		level1(inhaltLesen("/levels/level1.mld")), level2(inhaltLesen("/levels/level2.mld")), level3(
-				inhaltLesen("/levels/level3.mld")), level4(inhaltLesen("/levels/level4.mld")), level5(
-						inhaltLesen("/levels/level5.mld")), level6(inhaltLesen("/levels/level6.mld"));
+		level1(inhaltLesen("/levels/level1.mld")),
+		level2(inhaltLesen("/levels/level2.mld")),
+		level3(inhaltLesen("/levels/level3.mld")),
+		level4(inhaltLesen("/levels/level4.mld")),
+		level5(inhaltLesen("/levels/level5.mld")),
+		level6(inhaltLesen("/levels/level6.mld"));
 
 		public String src;
 
@@ -79,22 +87,32 @@ public class DateiManager {
 	}
 
 	public enum Bild {
-		feldStein0(0, 0, srcFeld), feldStein1(0, 32, srcFeld), feldStein2(0, 64, srcFeld), feldStein3(0, 96,
-				srcFeld), feldGras0(32, 0, srcFeld), feldGras1(32, 32, srcFeld), feldGras2(32, 64, srcFeld), feldGras3(
-						32, 96,
-						srcFeld), feldSteinchen0(64, 0, srcFeld), feldSteinchen1(64, 32, srcFeld), feldSteinchen2(64,
-								64,
-								srcFeld), feldSteinchen4(64, 96, srcFeld), feldSchotter0(96, 0, srcFeld), feldSchotter1(
-										96, 32, srcFeld), feldSchotter2(96, 64, srcFeld), feldSchotter3(96, 96,
-												srcFeld), feldBaum0(128, 0, srcFeld), feldBaum1(128, 32,
-														srcFeld), feldWasser(128, 64, srcFeld), feldBruecke(128, 96,
-																srcFeld), feldErde0(160, 0, srcFeld), feldErde1(160, 32,
-																		srcFeld), feldErde2(160, 64,
-																				srcFeld), feldErde3(160, 96,
-																						srcFeld), elementSpieler(0, 0,
-																								srcElement), elementSchluessel(
-																										0, 32,
-																										srcElement);
+		feldStein0(0, 0, srcFeld),
+		feldStein1(0, 32, srcFeld),
+		feldStein2(0, 64, srcFeld),
+		feldStein3(0, 96, srcFeld),
+		feldGras0(32, 0, srcFeld),
+		feldGras1(32, 32, srcFeld),
+		feldGras2(32, 64, srcFeld),
+		feldGras3(32, 96, srcFeld),
+		feldSteinchen0(64, 0, srcFeld),
+		feldSteinchen1(64, 32, srcFeld),
+		feldSteinchen2(64, 64, srcFeld),
+		feldSteinchen4(64, 96, srcFeld),
+		feldSchotter0(96, 0, srcFeld),
+		feldSchotter1(96, 32, srcFeld),
+		feldSchotter2(96, 64, srcFeld),
+		feldSchotter3(96, 96, srcFeld),
+		feldBaum0(128, 0, srcFeld),
+		feldBaum1(128, 32, srcFeld),
+		feldWasser(128, 64, srcFeld),
+		feldBruecke(128, 96, srcFeld),
+		feldErde0(160, 0, srcFeld),
+		feldErde1(160, 32, srcFeld),
+		feldErde2(160, 64, srcFeld),
+		feldErde3(160, 96, srcFeld),
+		elementSpieler(0, 0, srcElement),
+		elementSchluessel(0, 32, srcElement);
 
 		public int x, y;
 		public BufferedImage src;
@@ -161,7 +179,7 @@ public class DateiManager {
 				JSONArray inArr = arr.getJSONArray(i);
 
 				for (int j = 0; j < inArr.length(); j++) {
-					felder[i][j] = new Feld(Feld.Typ.gibTyp(inArr.getInt(j)));
+					felder[i][j] = new Feld(Feld.Typ.gibTyp(inArr.getInt(j)), new Vektor(i, j));
 				}
 			}
 

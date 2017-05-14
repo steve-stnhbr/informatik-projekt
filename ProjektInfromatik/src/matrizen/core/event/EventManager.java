@@ -2,19 +2,18 @@ package matrizen.core.event;
 
 import java.util.List;
 
+/**
+ * In dieser Klasse werden alle Events registriert, die für die Entwicklung notwendig sind.
+ * 
+ * @author Stefan
+ *
+ */
 public class EventManager {
 	private static EventManager instanz;
 	private List<EventListener<Event>> listeners;
 	
 	private EventManager() {
-		listenerRegistrieren(new EventListener<BewegungsEvent>() {
-
-			@Override
-			public void ausfuehren(BewegungsEvent event) {
-				
-			}
-			
-		});
+		
 	}
 	
 	public static EventManager gibInstanz() {

@@ -13,7 +13,7 @@ import matrizen.core.Richtung;
 import matrizen.model.elemente.Spieler;
 
 public class Spiel implements AWTEventListener {
-	public static final short zeilen = (short) 15, spalten = (short) 15;
+	public static final short zeilen = (short) 5, spalten = (short) 5;
 	private static Spiel instanz;
 	private Level level;
 	private Konfiguration config;
@@ -30,6 +30,7 @@ public class Spiel implements AWTEventListener {
 	}
 
 	public void zeichnen(Graphics2D graphics) {
+		System.out.println(level);
 		level.zeichnen(graphics);
 	}
 

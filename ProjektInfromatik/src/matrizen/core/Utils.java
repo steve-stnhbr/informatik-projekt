@@ -7,14 +7,15 @@ import java.util.Random;
 public class Utils {
 	private static final Random random = new Random();
 	
-	public static float random(float end) {
-		return random.nextInt((int) (end - 1)) + random.nextFloat();
+	public static int random(int end) {
+		return random.nextInt(end);
 	}
 	
-	public static float random(float start, float end) {
-		return random.nextInt((int) (end - start - 1)) + random.nextFloat();
+	public static int random(int start, int end) {
+		return random.nextInt((int) (end - start) + 1) + start;
 	}
 	
+	@SuppressWarnings("unchecked")
 	public static <E> List<E> listeUmformen(List<?> l) {
 		List<E> list = new ArrayList<E>();
 		for(Object o : l)

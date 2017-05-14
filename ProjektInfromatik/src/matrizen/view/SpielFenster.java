@@ -6,6 +6,10 @@ import java.awt.image.BufferedImage;
 import javax.swing.JFrame;
 import javax.swing.Timer;
 
+import matrizen.core.Utils;
+import matrizen.core.Vektor;
+import matrizen.model.Feld;
+import matrizen.model.Feld.Typ;
 import matrizen.model.Spiel;
 
 public class SpielFenster extends JFrame {
@@ -30,6 +34,7 @@ public class SpielFenster extends JFrame {
 
 	private void aktualisieren() {
 		Spiel.gibInstanz().zeichnen(graphics);
+		zeichnen();
 	}
 
 	public void zeichnen() {
