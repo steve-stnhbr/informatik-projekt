@@ -31,6 +31,7 @@ public class DateiManager {
 
 	public static String inhaltLesen(String s) {
 		try {
+			//lol
 			return inhaltLesen(new File(pfad + "/res/" + s));
 		} catch (IOException e) {
 			e.printStackTrace();
