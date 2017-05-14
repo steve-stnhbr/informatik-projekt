@@ -30,6 +30,7 @@ public class DateiManager {
 	}
 
 	public static BufferedImage laden(Bild b) {
+		System.out.println(b.src);
 		int hoehe = b.src.getHeight() / 7, breite = b.src.getWidth() / 4;
 		return b.src.getSubimage(b.x, b.y, hoehe, breite);
 	}
@@ -57,7 +58,6 @@ public class DateiManager {
 
 	static {
 		try {
-			System.out.println(pfad);
 			if (srcFeld == null)
 				srcFeld = ImageIO.read(new File(pfad + "res/grafik/feld_res.png"));
 			/*
