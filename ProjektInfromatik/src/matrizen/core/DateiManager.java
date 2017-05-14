@@ -7,7 +7,6 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Properties;
 
 import javax.imageio.ImageIO;
 
@@ -18,8 +17,8 @@ import matrizen.model.Feld;
 
 public class DateiManager {
 	private static BufferedImage srcFeld, srcElement, srcPartikel;
-	private final static String pfad = ("/"
-			+ DateiManager.class.getProtectionDomain().getCodeSource().getLocation().toString().replace("/file:/", ""));
+	private final static String pfad = DateiManager.class.getProtectionDomain().getCodeSource().getLocation().toString()
+			.replace("/file:/", "").replace("file: /", "").replace("file:/", "");
 
 	public static matrizen.model.Level laden(Level l) {
 		return LevelParser.parse(l.src);
@@ -32,7 +31,7 @@ public class DateiManager {
 
 	public static String inhaltLesen(String s) {
 		try {
-			return inhaltLesen(new File(DateiManager.class.getResource(s).toString()));
+			return inhaltLesen(new File(pfad + "/res/" + s));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -45,6 +44,7 @@ public class DateiManager {
 		String line = null;
 		while ((line = reader.readLine()) != null) {
 			builder.append(line);
+			builder.append(System.lineSeparator());
 		}
 		reader.close();
 		return builder.toString();
@@ -52,13 +52,15 @@ public class DateiManager {
 
 	static {
 		try {
+			System.out.println(pfad);
 			if (srcFeld == null)
-				srcFeld = ImageIO.read(DateiManager.class.getClassLoader().getResourceAsStream("/grafik/feld_res.png"));
-			if (srcElement == null)
-				srcElement = ImageIO.read(DateiManager.class.getClassLoader().getResource("/grafik/element_res.png"));
-			if (srcPartikel == null)
-				srcPartikel = ImageIO
-						.read(DateiManager.class.getClassLoader().getResourceAsStream("/grafik/partikel_res.png"));
+				srcFeld = ImageIO.read(new File(pfad + "res/grafik/feld_res.png"));
+			/*
+			 * if (srcElement == null) srcElement = ImageIO.read(new File(pfad +
+			 * "res/grafik/element_res.png")); if (srcPartikel == null)
+			 * srcPartikel = ImageIO.read(new File(pfad +
+			 * "res/grafik/partikel_res.png"));
+			 */
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
