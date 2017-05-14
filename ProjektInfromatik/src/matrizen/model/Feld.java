@@ -10,18 +10,17 @@ import matrizen.core.Vektor;
 import matrizen.view.SpielFenster;
 
 public class Feld extends Grafisch {
+	private static final float faktorX = SpielFenster.hoehe / Spiel.zeilen,
+			faktorY = SpielFenster.breite / Spiel.spalten;
 	private boolean solide;
 	private Typ t;
 	private Vektor raster;
-	private final float faktorX, faktorY;
 
 	public Feld(Typ t, Vektor raster) {
 		// this(t.gibGrafik(), t.solide);
 		this.t = t;
 		this.raster = raster;
-		faktorX = SpielFenster.hoehe/Spiel.zeilen;
-		faktorY = SpielFenster.breite/Spiel.spalten;
-		grafik = DateiManager.laden(DateiManager.Bild.zufaelligeGrafik(t));
+		grafik = DateiManager.laden(DateiManager.Bild.zufaelligeSteinchen());
 	}
 
 	/*
@@ -31,12 +30,16 @@ public class Feld extends Grafisch {
 
 	@Override
 	public void zeichnen(Graphics2D g) {
-		g.drawImage(grafik, (int) (raster.getX() * faktorX), (int) (raster.getY() * faktorY), (int) SpielFenster.breite / Spiel.zeilen,
-				(int) SpielFenster.hoehe / Spiel.spalten, null);
+		g.drawImage(grafik, (int) (raster.getX() * faktorX), (int) (raster.getY() * faktorY),
+				(int) SpielFenster.breite / Spiel.zeilen, (int) SpielFenster.hoehe / Spiel.spalten, null);
 	}
-	
-	public String toString() {		
+
+	public String toString() {
 		return "Feld:{solid=" + solide + ";Type=" + t + ";pos=" + raster.toString() + "}";
+	}
+
+	public boolean equals(Feld other) {
+		return other.solide == solide && other.t == t && other.raster.equals(raster);
 	}
 
 	public boolean isSolide() {

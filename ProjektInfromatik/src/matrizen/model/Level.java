@@ -7,21 +7,21 @@ import java.util.List;
 import matrizen.core.DateiManager;
 
 public class Level {
-	//nur zum testen
+	// nur zum testen
 	public static final Level anfangsLevel = DateiManager.laden(DateiManager.Level.level1);
-	//TODO
+	// TODO
 	private List<Levelelement> liste;
 	private Feld[][] felder;
 	private Level levelOben, levelUnten, levelLinks, levelRechts;
-	
+
 	public Level() {
 		this(new Feld[Spiel.zeilen][Spiel.spalten]);
 	}
-	
+
 	public Level(Feld[][] felder) {
 		this(new ArrayList<Levelelement>(), felder);
 	}
-	
+
 	public Level(List<Levelelement> liste, Feld[][] felder) {
 		this.liste = liste;
 		this.felder = felder;
@@ -29,33 +29,38 @@ public class Level {
 
 	public void zeichnen(Graphics2D g) {
 		for (Feld[] felds : felder) {
-			for(Feld feld : felds) {
+			for (Feld feld : felds) {
 				feld.zeichnen(g);
 			}
 		}
-		
-		for(Levelelement l : liste) {
+
+		for (Levelelement l : liste) {
 			l.zeichnen(g);
 		}
 	}
-	
+
 	public String toString() {
-		String s = "Level:{ felder=[";
-		
-		
+		String s = "Level:{felder=[";
+
 		for (Feld[] felds : felder) {
-			for(Feld feld : felds) {
+			for (Feld feld : felds) {
 				s += feld.toString();
 			}
 		}
-		
-		s+= "];elemente=[";
-		
-		for(Levelelement l : liste) {
-			s+= l.toString();
+
+		s += "];elemente=[";
+
+		for (Levelelement l : liste) {
+			s += l.toString();
 		}
-		
+
 		return s + "]}";
+	}
+
+	public boolean equals(Level other) {
+		return liste.equals(other.liste) && felder.equals(other.felder) && levelOben.equals(other.levelOben)
+				&& levelRechts.equals(other.levelRechts) && levelUnten.equals(other.levelUnten)
+				&& levelLinks.equals(other.levelLinks);
 	}
 
 	public List<Levelelement> getListe() {

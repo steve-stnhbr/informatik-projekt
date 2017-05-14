@@ -132,7 +132,7 @@ public class DateiManager {
 		}
 
 		public static Bild zufaelligeSteinchen() {
-			return values()[Math.round(Utils.random(8, 12))];
+			return Utils.random(2) == 1 ? feldSteinchen0 : feldSteinchen1;
 		}
 
 		public static Bild zufaelligerSchotter() {
