@@ -51,8 +51,6 @@ public class Spieler extends Figur {
 				cooldown[i] = c - 1;
 		}
 
-		logger.log(Level.FINEST, "Cooldown für Spieler: " + cooldown.toString());
-
 		if (Spiel.gibInstanz().ticks % 5 == 0)
 			index++;
 	}

@@ -162,23 +162,17 @@ public class DateiManager {
 			case WASSER:
 				return feldWasser;
 			case WIESE:
-				return feldGras0;
-			// return zufaelligeWiese();
+				return feldGras1;
 			case BAUM:
 				return feldBaum0;
-			// return zufaelligerBaum();
 			case STEINCHEN:
 				return feldSteinchen0;
-			// return zufaelligeSteinchen();
 			case SCHOTTER:
 				return feldSchotter0;
-			// return zufaelligerSchotter();
 			case STEIN:
 				return feldStein0;
-			// return zufaelligerStein();
 			case ERDE:
 				return feldErde0;
-			// return zufaelligeErde();
 			default:
 				return null;
 			}

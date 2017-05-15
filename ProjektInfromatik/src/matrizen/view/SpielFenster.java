@@ -24,7 +24,7 @@ import matrizen.model.Spiel;
 public class SpielFenster extends JFrame {
 	private static final long serialVersionUID = 3327221473781403687L;
 	public static final Logger logger = Logger.getAnonymousLogger();
-	public static final int hoehe = getDefaultToolkit().getScreenSize().height / 2,
+	public static final int hoehe = getDefaultToolkit().getScreenSize().height / 4 * 3,
 			breite = hoehe/* getDefaultToolkit().getScreenSize().width / 3 */, ticks = 250;
 	private static SpielFenster instanz;
 	private BufferedImage bImg;

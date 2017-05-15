@@ -9,13 +9,14 @@ import java.awt.Toolkit;
 import java.awt.event.AWTEventListener;
 import java.awt.event.KeyEvent;
 
+import matrizen.core.DateiManager;
 import matrizen.core.Konfiguration;
 import matrizen.core.Richtung;
 import matrizen.model.elemente.Spieler;
 import matrizen.view.SpielFenster;
 
 public class Spiel implements AWTEventListener {
-	public static final short zeilen = (short) 5, spalten = (short) 5;
+	public static final short zeilen = (short) 12, spalten = (short) 12;
 	public static final float feldLaenge = SpielFenster.hoehe / zeilen;
 	private static Spiel instanz;
 	private Level level;

@@ -60,12 +60,12 @@ public class Feld extends Grafisch {
 	}
 
 	public enum Typ {
-		WASSER(true),
 		WIESE(false),
+		ERDE(false),
+		WASSER(true),
 		BAUM(true),
 		STEIN(false),
 		STEINCHEN(true),
-		ERDE(false),
 		SCHOTTER(false),
 		BRUECKE(false);
 
