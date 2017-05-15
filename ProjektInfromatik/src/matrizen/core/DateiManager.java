@@ -16,8 +16,10 @@ import javax.imageio.ImageIO;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import matrizen.core.DateiManager.Level;
 import matrizen.model.Feld;
 import matrizen.model.Feld.Typ;
+import matrizen.model.elemente.Item.ItemTyp;
 
 /**
  * Diese Klasse reguliert alle Zugriffe auf Dateien
@@ -73,7 +75,7 @@ public class DateiManager {
 			 * "res/grafik/partikel_res.png"));
 			 */
 		} catch (IOException e) {
-			e.printStackTrace();
+			logger.log(java.util.logging.Level.SEVERE, e.getMessage(), e);
 		}
 	}
 
@@ -180,6 +182,10 @@ public class DateiManager {
 			default:
 				return null;
 			}
+		}
+
+		public static Bild gegenstandLaden(ItemTyp t2) {
+			return null;
 		}
 	}
 

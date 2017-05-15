@@ -25,7 +25,7 @@ public class SpielFenster extends JFrame {
 	private static final long serialVersionUID = 3327221473781403687L;
 	public static final Logger logger = Logger.getAnonymousLogger();
 	public static final int hoehe = getDefaultToolkit().getScreenSize().height / 2,
-			breite = hoehe/* getDefaultToolkit().getScreenSize().width / 3 */, ticks = 100;
+			breite = hoehe/* getDefaultToolkit().getScreenSize().width / 3 */, ticks = 250;
 	private static SpielFenster instanz;
 	private BufferedImage bImg;
 	private Graphics2D graphics;
@@ -48,7 +48,7 @@ public class SpielFenster extends JFrame {
 			aktualisieren();
 			frame++;
 		});
-		logger.log(Level.FINE, "SpielFenster erstellt");
+		logger.log(Level.CONFIG, "SpielFenster erstellt");
 
 		setVisible(true);
 	}
@@ -101,7 +101,7 @@ public class SpielFenster extends JFrame {
 				return true;
 			}
 		});
-		logger.log(Level.INFO, "Spiel gestartet!");
+		logger.log(Level.CONFIG, "Spiel gestartet!");
 		timer.start();
 	}
 
@@ -112,11 +112,13 @@ public class SpielFenster extends JFrame {
 	}
 
 	public static void main(String[] args) {
-		//System.setProperty("java.util.logging.SimpleFormatter.format", "%1$tF %1$tT %4$s %2$s %5$s%6$s%n");
-		System.setProperty("java.util.logging.SimpleFormatter.format", "%1$tT: %5$s%6$s%n");
-		logger.setLevel(Level.ALL);
+		// System.setProperty("java.util.logging.SimpleFormatter.format", "%1$tF
+		// %1$tT %4$s %2$s %5$s%6$s%n");
+		// zeit, millisekunde, level, nachticht, neue zeile
+		System.setProperty("java.util.logging.SimpleFormatter.format", "%1$tT:%tL-%4$s: %5$s%6$s%n");
+		logger.setLevel(Level.WARNING);
 		Handler handler = new ConsoleHandler();
-		handler.setLevel(Level.ALL);
+		handler.setLevel(Level.WARNING);
 		logger.addHandler(handler);
 		instanz = new SpielFenster();
 		instanz.start();

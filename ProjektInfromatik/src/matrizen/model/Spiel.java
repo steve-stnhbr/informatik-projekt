@@ -36,6 +36,7 @@ public class Spiel implements AWTEventListener {
 
 	public void zeichnen(Graphics2D graphics) {
 		level.zeichnen(graphics);
+		Spieler.gibInstanz().zeichnen(graphics);
 		ticks++;
 	}
 
@@ -92,7 +93,7 @@ public class Spiel implements AWTEventListener {
 	}
 
 	private void input(Input i) {
-		logger.log(java.util.logging.Level.INFO, "Input " + i + " registriert und ausgeführt");
+		logger.log(java.util.logging.Level.FINE, "Input " + i + " registriert und ausgeführt");
 		switch(i) {
 		case bewegungHoch:
 			Spieler.gibInstanz().bewegen(Richtung.OBEN);

@@ -76,7 +76,7 @@ public class Vektor {
 	}
 	
 	public String toString() {
-		return "Vektor:{x=" + x + "y=" + y + "]}";
+		return "Vektor:{x=" + x + ";y=" + y + "}";
 	}
 
 	public float getX() {
