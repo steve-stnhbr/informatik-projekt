@@ -11,13 +11,16 @@ import java.awt.event.KeyEvent;
 import matrizen.core.Konfiguration;
 import matrizen.core.Richtung;
 import matrizen.model.elemente.Spieler;
+import matrizen.view.SpielFenster;
 
 public class Spiel implements AWTEventListener {
 	public static final short zeilen = (short) 5, spalten = (short) 5;
+	public static final float feldLaenge = SpielFenster.hoehe / zeilen;
 	private static Spiel instanz;
 	private Level level;
 	private Konfiguration config;
-
+	public long ticks;
+	
 	private Spiel() {
 		Toolkit.getDefaultToolkit().addAWTEventListener(this, AWTEvent.KEY_EVENT_MASK);
 		level = Level.anfangsLevel;
@@ -32,6 +35,7 @@ public class Spiel implements AWTEventListener {
 	public void zeichnen(Graphics2D graphics) {
 		System.out.println(level);
 		level.zeichnen(graphics);
+		ticks++;
 	}
 
 	@Override

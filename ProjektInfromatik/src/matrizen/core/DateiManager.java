@@ -1,6 +1,7 @@
 package matrizen.core;
 
 import static matrizen.core.Utils.random;
+import static matrizen.view.SpielFenster.l;
 
 import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
@@ -20,12 +21,13 @@ import matrizen.model.Feld.Typ;
 
 /**
  * Diese Klasse reguliert alle Zugriffe auf Dateien
+ * 
  * @author Stefan
  *
  */
 public class DateiManager {
 	private static BufferedImage srcFeld, srcElement, srcPartikel;
-	private final static String pfad = DateiManager.class.getProtectionDomain().getCodeSource().getLocation().toString()
+	public final static String pfad = DateiManager.class.getProtectionDomain().getCodeSource().getLocation().toString()
 			.replace("/file:/", "").replace("file: /", "").replace("file:/", "");
 
 	public static matrizen.model.Level laden(Level l) {
@@ -33,9 +35,9 @@ public class DateiManager {
 	}
 
 	public static BufferedImage laden(Bild b) {
-		System.out.println(b.src);
 		int hoehe = b.src.getHeight() / 7, breite = b.src.getWidth() / 4;
-		return b.src.getSubimage(b.x, b.y, hoehe, breite);
+		l.log(java.util.logging.Level.FINEST, "Bild " + b + " von Datei " + b.src + " geladen");
+		return b.src.getSubimage(b.x, b.y, breite, hoehe);
 	}
 
 	public static String inhaltLesen(String s) {
@@ -55,6 +57,8 @@ public class DateiManager {
 			builder.append(line);
 			builder.append(System.lineSeparator());
 		}
+		
+		l.log(java.util.logging.Level.FINEST, "Inhalt: " + builder.toString() + " aus Datei " + f + " gelesen");
 		reader.close();
 		return builder.toString();
 	}
@@ -90,32 +94,32 @@ public class DateiManager {
 	}
 
 	public enum Bild {
-		feldStein0(0, 0, srcFeld, Typ.STEIN),
-		feldStein1(0, 32, srcFeld, Typ.STEIN),
-		feldStein2(0, 64, srcFeld, Typ.STEIN),
-		feldStein3(0, 96, srcFeld, Typ.STEIN),
-		feldGras0(32, 0, srcFeld, Typ.WIESE),
-		feldGras1(32, 32, srcFeld, Typ.WIESE),
-		feldGras2(32, 64, srcFeld, Typ.WIESE),
-		feldGras3(32, 96, srcFeld, Typ.WIESE),
-		feldSteinchen0(64, 0, srcFeld, Typ.STEINCHEN),
-		feldSteinchen1(64, 32, srcFeld, Typ.STEINCHEN),
+		feldGras0(0, 0, srcFeld, Typ.WIESE),
+		feldGras1(32, 0, srcFeld, Typ.WIESE),
+		feldGras2(64, 0, srcFeld, Typ.WIESE),
+		feldGras3(96, 0, srcFeld, Typ.WIESE),
+		feldStein0(0, 32, srcFeld, Typ.STEIN),
+		feldStein1(32, 32, srcFeld, Typ.STEIN),
+		feldStein2(64, 32, srcFeld, Typ.STEIN),
+		feldStein3(96, 32, srcFeld, Typ.STEIN),
+		feldSteinchen0(0, 64, srcFeld, Typ.STEINCHEN),
+		feldSteinchen1(32, 64, srcFeld, Typ.STEINCHEN),
 		feldSteinchen2(64, 64, srcFeld, Typ.STEINCHEN),
-		feldSteinchen4(64, 96, srcFeld, Typ.STEINCHEN),
-		feldSchotter0(96, 0, srcFeld, Typ.SCHOTTER),
-		feldSchotter1(96, 32, srcFeld, Typ.SCHOTTER),
-		feldSchotter2(96, 64, srcFeld, Typ.SCHOTTER),
+		feldSteinchen4(96, 64, srcFeld, Typ.STEINCHEN),
+		feldSchotter0(0, 96, srcFeld, Typ.SCHOTTER),
+		feldSchotter1(32, 96, srcFeld, Typ.SCHOTTER),
+		feldSchotter2(64, 96, srcFeld, Typ.SCHOTTER),
 		feldSchotter3(96, 96, srcFeld, Typ.SCHOTTER),
-		feldBaum0(128, 0, srcFeld, Typ.BAUM),
-		feldBaum1(128, 32, srcFeld, Typ.BAUM),
-		feldWasser(128, 64, srcFeld, Typ.WASSER),
-		feldBruecke(128, 96, srcFeld, Typ.BRUECKE),
-		feldErde0(160, 0, srcFeld, Typ.ERDE),
-		feldErde1(160, 32, srcFeld, Typ.ERDE),
-		feldErde2(160, 64, srcFeld, Typ.ERDE),
-		feldErde3(160, 96, srcFeld, Typ.ERDE),
+		feldBaum0(0, 128, srcFeld, Typ.BAUM),
+		feldBaum1(32, 128, srcFeld, Typ.BAUM),
+		feldWasser(64, 128, srcFeld, Typ.WASSER),
+		feldBruecke(96, 128, srcFeld, Typ.BRUECKE),
+		feldErde0(0, 160, srcFeld, Typ.ERDE),
+		feldErde1(32, 160, srcFeld, Typ.ERDE),
+		feldErde2(64, 160, srcFeld, Typ.ERDE),
+		feldErde3(96, 160, srcFeld, Typ.ERDE),
 		elementSpieler(0, 0, srcElement, null),
-		elementSchluessel(0, 32, srcElement, null);
+		elementSchluessel(32, 0, srcElement, null);
 
 		public int x, y;
 		public BufferedImage src;
@@ -125,7 +129,7 @@ public class DateiManager {
 			this.x = x;
 			this.y = y;
 			this.src = image;
-			this.t= typ;
+			this.t = typ;
 		}
 
 		public static Bild zufaelligerStein() {
@@ -157,17 +161,23 @@ public class DateiManager {
 			case WASSER:
 				return feldWasser;
 			case WIESE:
-				return zufaelligeWiese();
+				return feldGras0;
+			// return zufaelligeWiese();
 			case BAUM:
-				return zufaelligerBaum();
+				return feldBaum0;
+			// return zufaelligerBaum();
 			case STEINCHEN:
-				return zufaelligeSteinchen();
+				return feldSteinchen0;
+			// return zufaelligeSteinchen();
 			case SCHOTTER:
-				return zufaelligerSchotter();
+				return feldSchotter0;
+			// return zufaelligerSchotter();
 			case STEIN:
-				return zufaelligerStein();
+				return feldStein0;
+			// return zufaelligerStein();
 			case ERDE:
-				return zufaelligeErde();
+				return feldErde0;
+			// return zufaelligeErde();
 			default:
 				return null;
 			}
@@ -178,7 +188,7 @@ public class DateiManager {
 		public static matrizen.model.Level parse(String s) {
 			JSONObject obj = new JSONObject(s);
 			JSONArray arr = obj.getJSONArray("felder");
-			Feld[][] felder = new Feld[obj.getInt("hoehe")][obj.getInt("breite")];
+			Feld[][] felder = new Feld[arr.length()][arr.getJSONArray(0).length()];
 
 			for (int i = 0; i < arr.length(); i++) {
 				JSONArray inArr = arr.getJSONArray(i);
@@ -187,8 +197,9 @@ public class DateiManager {
 					felder[i][j] = new Feld(Feld.Typ.gibTyp(inArr.getInt(j)), new Vektor(i, j));
 				}
 			}
-
-			return new matrizen.model.Level(felder);
+			matrizen.model.Level lvl = new matrizen.model.Level(felder);
+			l.log(java.util.logging.Level.FINEST, "Level " + lvl + " aus " + s + " gelesen");
+			return lvl;
 		}
 
 		public static String schreiben(matrizen.model.Level l) {
@@ -220,6 +231,8 @@ public class DateiManager {
 				list.add(new Konfiguration(ob.getInt("oben"), ob.getInt("rechts"), ob.getInt("unten"),
 						ob.getInt("links"), ob.getInt("schuss")));
 			}
+
+			l.log(java.util.logging.Level.FINEST, "Konfigurationen " + list + " aus " + str + " ausgelesen");
 
 			return list;
 		}
