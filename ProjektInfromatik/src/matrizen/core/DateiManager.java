@@ -199,7 +199,7 @@ public class DateiManager {
 				JSONArray inArr = arr.getJSONArray(i);
 
 				for (int j = 0; j < inArr.length(); j++) {
-					felder[i][j] = new Feld(Feld.Typ.gibTyp(inArr.getInt(j)), new Vektor(i, j));
+					felder[j][i] = new Feld(Feld.Typ.gibTyp(inArr.getInt(j)), new Vektor(j, i));
 				}
 			}
 			matrizen.model.Level lvl = new matrizen.model.Level(felder);

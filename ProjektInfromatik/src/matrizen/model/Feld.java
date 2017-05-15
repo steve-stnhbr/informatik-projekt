@@ -21,6 +21,7 @@ public class Feld extends Grafisch {
 		this.t = t;
 		this.raster = raster;
 		grafik = DateiManager.laden(DateiManager.Bild.zufaelligeGrafik(t));
+		this.solide = t.solide;
 	}
 
 	/*

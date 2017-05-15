@@ -1,8 +1,8 @@
 package matrizen.core;
 
 public enum Richtung {
-	OBEN(new Vektor(0, 1), 0),
-	UNTEN(new Vektor(0, -1), 180),
+	OBEN(new Vektor(0, -1), 0),
+	UNTEN(new Vektor(0, 1), 180),
 	RECHTS(new Vektor(1, 0), 90),
 	LINKS(new Vektor(-1, 0), 270);
 

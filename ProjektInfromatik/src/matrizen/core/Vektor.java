@@ -1,5 +1,7 @@
 package matrizen.core;
 
+import static matrizen.core.Vektor.Rechenmethode.*;
+
 /**
 * @author Steve
 */
@@ -15,6 +17,22 @@ public class Vektor {
 	public Vektor(float x, float y) {
 		this.x = x;
 		this.y = y;
+	}
+	
+	public Vektor add(Vektor v, Rechenmethode r) {
+		if(r == kopieren)
+			return new Vektor(v.x + x, v.y + y);
+		else if(r == hinzufuegen)
+			return add(v);
+		return null;
+	}
+	
+	public Vektor sub(Vektor v, Rechenmethode r) {
+		if(r == kopieren)
+			return new Vektor(v.x - x, v.y - y);
+		else if(r == hinzufuegen)
+			return sub(v);
+		return null;
 	}
 	
 	public Vektor add(float x, float y) {
@@ -55,6 +73,14 @@ public class Vektor {
 		return multiplizieren(m);
 	}
 	
+	public Vektor mult(float m, Rechenmethode r) {
+		if(r == kopieren)
+			return new Vektor(x * m, y * m);
+		else if(r == hinzufuegen)
+			return mult(m);
+		return null;
+	}
+	
 	public Vektor multiplizieren(float m) {
 		this.x *= m;
 		this.y *= m;
@@ -93,6 +119,10 @@ public class Vektor {
 
 	public void setY(float y) {
 		this.y = y;
+	}
+	
+	public enum Rechenmethode {
+		kopieren, hinzufuegen;
 	}
 	
 }

@@ -114,6 +114,22 @@ public class Spiel implements AWTEventListener {
 		}
 	}
 
+	public Level getLevel() {
+		return level;
+	}
+
+	public void setLevel(Level level) {
+		this.level = level;
+	}
+
+	public Konfiguration getConfig() {
+		return config;
+	}
+
+	public void setConfig(Konfiguration config) {
+		this.config = config;
+	}
+
 	enum Input {
 		bewegungHoch, bewegungRunter, bewegungRechts, bewegungLinks, schuss;
 	}

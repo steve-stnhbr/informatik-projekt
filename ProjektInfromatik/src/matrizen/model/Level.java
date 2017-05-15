@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import matrizen.core.DateiManager;
+import matrizen.core.Vektor;
 
 public class Level {
 	// nur zum testen
@@ -62,6 +63,10 @@ public class Level {
 				&& levelRechts.equals(other.levelRechts) && levelUnten.equals(other.levelUnten)
 				&& levelLinks.equals(other.levelLinks);
 	}
+	
+	public Feld getFeld(int x, int y) {
+		return felder[x][y];
+	}
 
 	public List<Levelelement> getListe() {
 		return liste;
@@ -109,5 +114,9 @@ public class Level {
 
 	public void setLevelRechts(Level levelRechts) {
 		this.levelRechts = levelRechts;
+	}
+
+	public Feld getFeld(Vektor v) {
+		return getFeld((int) v.getX(), (int) v.getY());
 	}
 }

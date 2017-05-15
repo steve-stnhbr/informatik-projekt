@@ -33,7 +33,7 @@ public class SpielFenster extends JFrame {
 	private int mausGedruecktX, mausGedruecktY, frame;
 
 	private SpielFenster() {
-		setSize(hoehe, breite);
+		setSize(hoehe + 1, breite + 1);
 		setResizable(false);
 		setUndecorated(true);
 		setPreferredSize(new Dimension(breite, hoehe));
@@ -116,9 +116,9 @@ public class SpielFenster extends JFrame {
 		// %1$tT %4$s %2$s %5$s%6$s%n");
 		// zeit, millisekunde, level, nachticht, neue zeile
 		System.setProperty("java.util.logging.SimpleFormatter.format", "%1$tT:%tL-%4$s: %5$s%6$s%n");
-		logger.setLevel(Level.WARNING);
+		logger.setLevel(Level.ALL);
 		Handler handler = new ConsoleHandler();
-		handler.setLevel(Level.WARNING);
+		handler.setLevel(Level.ALL);
 		logger.addHandler(handler);
 		instanz = new SpielFenster();
 		instanz.start();
