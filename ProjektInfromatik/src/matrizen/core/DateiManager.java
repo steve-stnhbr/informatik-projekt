@@ -23,6 +23,7 @@ import matrizen.model.elemente.Item.ItemTyp;
 
 /**
  * Diese Klasse reguliert alle Zugriffe auf Dateien
+ * 
  * @author Stefan
  *
  */
@@ -31,16 +32,35 @@ public class DateiManager {
 	public final static String pfad = DateiManager.class.getProtectionDomain().getCodeSource().getLocation().toString()
 			.replace("/file:/", "").replace("file: /", "").replace("file:/", "");
 
+	/**
+	 * lässt zu, dass aus der Datei ein Level-Objekt erstellt wird
+	 * 
+	 * @param l
+	 * @return
+	 */
 	public static matrizen.model.Level laden(Level l) {
 		return LevelParser.parse(l.src);
 	}
 
+	/**
+	 * Durch diese Methode kann aus einer Datei ein Bild geladen werden, das
+	 * später auf den Bildschirm gezeichnet wird
+	 * 
+	 * @param b
+	 * @return
+	 */
 	public static BufferedImage laden(Bild b) {
 		int hoehe = b.src.getHeight() / 7, breite = b.src.getWidth() / 4;
 		logger.log(java.util.logging.Level.FINEST, "Bild " + b + " von Datei " + b.src + " geladen");
 		return b.src.getSubimage(b.x, b.y, breite, hoehe);
 	}
 
+	/**
+	 * Diese Methode liest den Inhalt einer Datei in einen String ein
+	 * 
+	 * @param s
+	 * @return
+	 */
 	public static String inhaltLesen(String s) {
 		try {
 			return inhaltLesen(new File(pfad + "/res/" + s));
@@ -50,6 +70,13 @@ public class DateiManager {
 		return null;
 	}
 
+	/**
+	 * In dieser Methode wird ein String aus der übergebenen Datei ausgelesen
+	 * 
+	 * @param f
+	 * @return
+	 * @throws IOException
+	 */
 	public static String inhaltLesen(File f) throws IOException {
 		BufferedReader reader = new BufferedReader(new FileReader(f));
 		StringBuilder builder = new StringBuilder();
@@ -58,7 +85,7 @@ public class DateiManager {
 			builder.append(line);
 			builder.append(System.lineSeparator());
 		}
-		
+
 		logger.log(java.util.logging.Level.FINEST, "Inhalt: " + builder.toString() + " aus Datei " + f + " gelesen");
 		reader.close();
 		return builder.toString();
@@ -79,6 +106,12 @@ public class DateiManager {
 		}
 	}
 
+	/**
+	 * Enumerations-Klasse, die die Infos für die Level-Dateien enthält
+	 * 
+	 * @author Stefan
+	 *
+	 */
 	public enum Level {
 		level1(inhaltLesen("/levels/level1.mld")),
 		level2(inhaltLesen("/levels/level2.mld")),
@@ -94,6 +127,12 @@ public class DateiManager {
 		}
 	}
 
+	/**
+	 * Enumerations-Klasse, die die Infos der grafischen Elemente enthält
+	 * 
+	 * @author Stefan
+	 *
+	 */
 	public enum Bild {
 		feldGras0(0, 0, srcFeld, Typ.WIESE),
 		feldGras1(32, 0, srcFeld, Typ.WIESE),
@@ -178,12 +217,20 @@ public class DateiManager {
 			}
 		}
 
-		public static Bild gegenstandLaden(ItemTyp t2) {
+		public static Bild gegenstandLaden(ItemTyp t) {
 			return null;
 		}
 	}
 
 	public static class LevelParser {
+
+		/**
+		 * Diese Methode liest einen String in ein JSON-Objekt ein, das wiederum
+		 * in ein Level-Objekt umgewandelt wird *
+		 * 
+		 * @param s
+		 * @return
+		 */
 		public static matrizen.model.Level parse(String s) {
 			JSONObject obj = new JSONObject(s);
 			JSONArray arr = obj.getJSONArray("felder");
@@ -201,6 +248,13 @@ public class DateiManager {
 			return lvl;
 		}
 
+		/**
+		 * Diese Methode lässt zu, dass ein Level in ein JSON-Objekt umgewandelt
+		 * wird, das als String zurückgegeben wird *
+		 * 
+		 * @param l
+		 * @return
+		 */
 		public static String schreiben(matrizen.model.Level l) {
 			Feld[][] felder = l.getFelder();
 			JSONObject obj = new JSONObject();
@@ -218,7 +272,22 @@ public class DateiManager {
 		}
 	}
 
+	/**
+	 * Diese Klasse wird nicht unbedingt benötigt. Sie wird nur gebraucht, wenn
+	 * die Möglichkeit, verschiedene Tasten der Tastatur verschiedenen Aktionen
+	 * zuzuordnen hinzugefügt wird
+	 * 
+	 * @author Stefan
+	 *
+	 */
 	public static class ConfigParser {
+		/**
+		 * Diese Methode liest einen String in ein JSON-Objekt, aus dem ein
+		 * Konfigurations-Objekt erstellt wird
+		 * 
+		 * @param str
+		 * @return
+		 */
 		public static List<Konfiguration> parse(String str) {
 			List<Konfiguration> list = new ArrayList<Konfiguration>();
 			JSONObject obj = new JSONObject(str);
@@ -236,6 +305,11 @@ public class DateiManager {
 			return list;
 		}
 
+		/**
+		 * Diese Methode schreibt eine Konfiguration in ein JSON-Objekt, das als String zurückgegeben wird
+		 * @param l
+		 * @return
+		 */
 		public static String write(List<Konfiguration> l) {
 			JSONObject obj = new JSONObject();
 			JSONArray arr = new JSONArray();

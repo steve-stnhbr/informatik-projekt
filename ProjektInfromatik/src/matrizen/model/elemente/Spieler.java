@@ -11,10 +11,15 @@ import matrizen.core.Vektor.Rechenmethode;
 import matrizen.model.Spiel;
 import matrizen.view.SpielFenster;
 
+/**
+ * Diese Klasse repräsentiert den Spieler
+ * @author Stefan
+ *
+ */
 public class Spieler extends Figur {
 	private static Spieler instanz;
 	private Vektor posImFeld;
-	private int index, delay = 2;
+	private int index, delay = 5;
 	private int[] cooldown;
 
 	private Spieler() {
@@ -63,6 +68,11 @@ public class Spieler extends Figur {
 		}
 	}
 
+	/**
+	 * Diese Methode überprüft, ob die Bewegung, die der Spieler machen mag, überhaupt möglich ist
+	 * @param r
+	 * @return
+	 */
 	private boolean bewegungMoeglich(Richtung r) {
 		Vektor v = posImFeld.add(r.vektor, Rechenmethode.kopieren);
 		logger.log(Level.WARNING, v.toString());

@@ -15,6 +15,11 @@ import matrizen.core.Richtung;
 import matrizen.model.elemente.Spieler;
 import matrizen.view.SpielFenster;
 
+/**
+ * Dies ist die Hauptklasse, die auch den Input verwaltet
+ * @author Stefan
+ *
+ */
 public class Spiel implements AWTEventListener {
 	public static final short zeilen = (short) 12, spalten = (short) 12;
 	public static final float feldLaenge = SpielFenster.hoehe / zeilen;
@@ -41,6 +46,9 @@ public class Spiel implements AWTEventListener {
 		ticks++;
 	}
 
+	/**
+	 * Listener-Methode für Tastatureingaben
+	 */
 	@Override
 	public void eventDispatched(AWTEvent event) {
 		KeyEvent e = null;
@@ -93,6 +101,10 @@ public class Spiel implements AWTEventListener {
 		*/
 	}
 
+	/**
+	 * hier wird der Input umgesetzt
+	 * @param i
+	 */
 	private void input(Input i) {
 		logger.log(java.util.logging.Level.FINE, "Input " + i + " registriert und ausgeführt");
 		switch(i) {

@@ -4,7 +4,7 @@ import java.util.List;
 
 /**
  * In dieser Klasse werden alle Events registriert, die für die Entwicklung notwendig sind.
- * 
+ * Sie wird jedoch nur wirklich benötigt, wenn Puzzleelemente in das Proojekt eingefügt werden
  * @author Stefan
  *
  */

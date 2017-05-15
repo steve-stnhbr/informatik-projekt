@@ -3,6 +3,7 @@ package matrizen.core;
 import static matrizen.core.Vektor.Rechenmethode.*;
 
 /**
+ * Diese elementare Klasse wird benutzt, um Positionen, Bewegungen oder Verschiebungen darzustellen
 * @author Steve
 */
 public class Vektor {

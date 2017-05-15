@@ -21,11 +21,16 @@ import javax.swing.Timer;
 
 import matrizen.model.Spiel;
 
+/**
+ * Diese Klasse kümmert sich um die Darstellung des Spiels auf dem Bildschirm
+ * @author Stefan
+ *
+ */
 public class SpielFenster extends JFrame {
 	private static final long serialVersionUID = 3327221473781403687L;
 	public static final Logger logger = Logger.getAnonymousLogger();
 	public static final int hoehe = getDefaultToolkit().getScreenSize().height / 4 * 3,
-			breite = hoehe/* getDefaultToolkit().getScreenSize().width / 3 */, ticks = 250;
+			breite = hoehe/* getDefaultToolkit().getScreenSize().width / 3 */, ticks = 50;
 	private static SpielFenster instanz;
 	private BufferedImage bImg;
 	private Graphics2D graphics;
@@ -33,7 +38,7 @@ public class SpielFenster extends JFrame {
 	private int mausGedruecktX, mausGedruecktY, frame;
 
 	private SpielFenster() {
-		setSize(hoehe + 1, breite + 1);
+		setSize(hoehe, breite);
 		setResizable(false);
 		setUndecorated(true);
 		setPreferredSize(new Dimension(breite, hoehe));
@@ -53,6 +58,9 @@ public class SpielFenster extends JFrame {
 		setVisible(true);
 	}
 
+	/**
+	 * fügt Listener hinzu, die zulassen, dass das Fenster verschoben werden kann
+	 */
 	private void listenerHinzufuegen() {
 
 		addMouseListener(new MouseAdapter() {
@@ -76,17 +84,26 @@ public class SpielFenster extends JFrame {
 		});
 	}
 
+	/**
+	 * Methode, die jeden Tick ausgeführt wird und alle Elemente aktualisiert und zeichnet
+	 */
 	private void aktualisieren() {
 		logger.log(Level.FINEST, "SpielFenster aktualisiert [Frame " + frame + "]");
 		Spiel.gibInstanz().zeichnen(graphics);
 		zeichnen();
 	}
 
+	/**
+	 * zeichnet die Grafiken für jeden Tick
+	 */
 	public void zeichnen() {
 		if (isVisible())
 			getGraphics().drawImage(bImg, 0, 0, hoehe, breite, null);
 	}
-
+	/**
+	 * Überschreibt die painComponents-Methode der Oberklasse, um die Grafik zu zeichnen
+	 * @param g
+	 */
 	public void paintComponents(Graphics2D g) {
 		super.paintComponents(g);
 		g.drawImage(bImg, 0, 0, hoehe, breite, null);
@@ -94,6 +111,9 @@ public class SpielFenster extends JFrame {
 			getGraphics().drawImage(bImg, 0, 0, hoehe, breite, null);
 	}
 
+	/**
+	 * Startet den Timer und damit das Spiel
+	 */
 	public void start() {
 		logger.setFilter(new Filter() {
 			@Override
@@ -105,6 +125,10 @@ public class SpielFenster extends JFrame {
 		timer.start();
 	}
 
+	/**
+	 * Singleton-Methode, die die statische Instanz des Spielfensters zurückgibt
+	 * @return die einzige Instanz der SpieleFenster-Klasse
+	 */
 	public static SpielFenster gibInstanz() {
 		if (instanz == null)
 			instanz = new SpielFenster();
@@ -115,11 +139,14 @@ public class SpielFenster extends JFrame {
 		// System.setProperty("java.util.logging.SimpleFormatter.format", "%1$tF
 		// %1$tT %4$s %2$s %5$s%6$s%n");
 		// zeit, millisekunde, level, nachticht, neue zeile
+		//ändert die formatierung der Konsole, des logs
 		System.setProperty("java.util.logging.SimpleFormatter.format", "%1$tT:%tL-%4$s: %5$s%6$s%n");
+		//ändert die wichtigkeit des loggers
 		logger.setLevel(Level.ALL);
 		Handler handler = new ConsoleHandler();
 		handler.setLevel(Level.ALL);
 		logger.addHandler(handler);
+		//erstellt die instanz des SpielFensters
 		instanz = new SpielFenster();
 		instanz.start();
 	}
