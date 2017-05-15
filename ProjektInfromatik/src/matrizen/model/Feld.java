@@ -24,11 +24,6 @@ public class Feld extends Grafisch {
 		this.solide = t.solide;
 	}
 
-	/*
-	 * private Feld(BufferedImage grafik, boolean solide) { super(); this.grafik
-	 * = grafik; this.solide = solide; }
-	 */
-
 	@Override
 	public void zeichnen(Graphics2D g) {
 		g.drawImage(grafik, (int) (raster.getX() * faktorX), (int) (raster.getY() * faktorY),
