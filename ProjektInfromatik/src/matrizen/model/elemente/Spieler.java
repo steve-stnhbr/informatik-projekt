@@ -8,6 +8,8 @@ import java.util.logging.Level;
 import matrizen.core.Richtung;
 import matrizen.core.Vektor;
 import matrizen.core.Vektor.Rechenmethode;
+import matrizen.core.event.BewegungsEvent;
+import matrizen.core.event.EventManager;
 import matrizen.model.Spiel;
 import matrizen.view.SpielFenster;
 
@@ -62,7 +64,7 @@ public class Spieler extends Figur {
 
 	public void bewegen(Richtung r) {
 		if (cooldown[Richtung.getIndex(r)] == 0 && bewegungMoeglich(r)) {
-			posImFeld.add(r.vektor);
+			EventManager.gibInstanz().eventUebergeben(new BewegungsEvent(posImFeld, posImFeld.add(r.vektor), r));
 			pos = new Vektor(posImFeld.getX() * Spiel.feldLaenge, posImFeld.getY() * Spiel.feldLaenge);
 			cooldown[Richtung.getIndex(r)] = delay;
 		}

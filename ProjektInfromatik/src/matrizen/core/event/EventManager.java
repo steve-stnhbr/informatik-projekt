@@ -1,6 +1,9 @@
 package matrizen.core.event;
 
+import static matrizen.view.SpielFenster.logger;
+
 import java.util.List;
+import java.util.logging.Level;
 
 /**
  * In dieser Klasse werden alle Events registriert, die für die Entwicklung notwendig sind.
@@ -28,7 +31,7 @@ public class EventManager {
 				if(event.getClass().equals(l.getType()))
 					l.ausfuehren(event);
 			} catch (Exception e) {
-				e.printStackTrace();
+				logger.log(Level.SEVERE, e.getMessage(), e);
 			}
 		}
 	}

@@ -9,7 +9,6 @@ public abstract class EventListener<E extends Event> {
 	@SuppressWarnings("unchecked")
 	public Class<E> getType() throws Exception {
 		ParameterizedType superclass = (ParameterizedType) getClass().getGenericSuperclass();
-
 		return (Class<E>) superclass.getActualTypeArguments()[0];
 	}
 }
