@@ -1,7 +1,7 @@
 package matrizen.core;
 
 import static matrizen.core.Utils.random;
-import static matrizen.view.SpielFenster.l;
+import static matrizen.view.SpielFenster.logger;
 
 import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
@@ -21,7 +21,6 @@ import matrizen.model.Feld.Typ;
 
 /**
  * Diese Klasse reguliert alle Zugriffe auf Dateien
- * 
  * @author Stefan
  *
  */
@@ -36,7 +35,7 @@ public class DateiManager {
 
 	public static BufferedImage laden(Bild b) {
 		int hoehe = b.src.getHeight() / 7, breite = b.src.getWidth() / 4;
-		l.log(java.util.logging.Level.FINEST, "Bild " + b + " von Datei " + b.src + " geladen");
+		logger.log(java.util.logging.Level.FINEST, "Bild " + b + " von Datei " + b.src + " geladen");
 		return b.src.getSubimage(b.x, b.y, breite, hoehe);
 	}
 
@@ -44,7 +43,7 @@ public class DateiManager {
 		try {
 			return inhaltLesen(new File(pfad + "/res/" + s));
 		} catch (IOException e) {
-			e.printStackTrace();
+			logger.log(java.util.logging.Level.SEVERE, e.getMessage(), e);
 		}
 		return null;
 	}
@@ -58,7 +57,7 @@ public class DateiManager {
 			builder.append(System.lineSeparator());
 		}
 		
-		l.log(java.util.logging.Level.FINEST, "Inhalt: " + builder.toString() + " aus Datei " + f + " gelesen");
+		logger.log(java.util.logging.Level.FINEST, "Inhalt: " + builder.toString() + " aus Datei " + f + " gelesen");
 		reader.close();
 		return builder.toString();
 	}
@@ -198,7 +197,7 @@ public class DateiManager {
 				}
 			}
 			matrizen.model.Level lvl = new matrizen.model.Level(felder);
-			l.log(java.util.logging.Level.FINEST, "Level " + lvl + " aus " + s + " gelesen");
+			logger.log(java.util.logging.Level.FINEST, "Level " + lvl + " aus " + s + " gelesen");
 			return lvl;
 		}
 
@@ -232,7 +231,7 @@ public class DateiManager {
 						ob.getInt("links"), ob.getInt("schuss")));
 			}
 
-			l.log(java.util.logging.Level.FINEST, "Konfigurationen " + list + " aus " + str + " ausgelesen");
+			logger.log(java.util.logging.Level.FINEST, "Konfigurationen " + list + " aus " + str + " ausgelesen");
 
 			return list;
 		}

@@ -12,7 +12,9 @@ public class Spieler extends Figur {
 	private Vektor posImFeld;
 	private int index;
 
-	private Spieler() {}
+	private Spieler() {
+		posImFeld = Vektor.nullVektor;
+	}
 
 	public static Spieler gibInstanz() {
 		if (instanz == null)

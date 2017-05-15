@@ -1,6 +1,7 @@
 package matrizen.model;
 
 import static java.awt.event.KeyEvent.*;
+import static matrizen.view.SpielFenster.logger;
 
 import java.awt.AWTEvent;
 import java.awt.Graphics2D;
@@ -22,6 +23,7 @@ public class Spiel implements AWTEventListener {
 	public long ticks;
 	
 	private Spiel() {
+		logger.log(java.util.logging.Level.INFO, "Spiel erstellt");
 		Toolkit.getDefaultToolkit().addAWTEventListener(this, AWTEvent.KEY_EVENT_MASK);
 		level = Level.anfangsLevel;
 	}
@@ -33,7 +35,6 @@ public class Spiel implements AWTEventListener {
 	}
 
 	public void zeichnen(Graphics2D graphics) {
-		System.out.println(level);
 		level.zeichnen(graphics);
 		ticks++;
 	}
@@ -91,6 +92,7 @@ public class Spiel implements AWTEventListener {
 	}
 
 	private void input(Input i) {
+		logger.log(java.util.logging.Level.INFO, "Input " + i + " registriert und ausgeführt");
 		switch(i) {
 		case bewegungHoch:
 			Spieler.gibInstanz().bewegen(Richtung.OBEN);
@@ -103,6 +105,10 @@ public class Spiel implements AWTEventListener {
 			break;
 		case bewegungLinks:
 			Spieler.gibInstanz().bewegen(Richtung.LINKS);
+			break;
+		case schuss:
+			break;
+		default:
 			break;
 		}
 	}
