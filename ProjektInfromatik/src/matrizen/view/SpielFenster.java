@@ -74,19 +74,23 @@ public class SpielFenster extends JFrame {
 			public void mousePressed(MouseEvent me) {
 				mausGedruecktX = me.getX();
 				mausGedruecktY = me.getY();
-
 			}
 
 			public void mouseDragged(MouseEvent me) {
-
 				setLocation(getLocation().x + me.getX() - mausGedruecktX, getLocation().y + me.getY() - mausGedruecktY);
 			}
 		});
 
 		addMouseMotionListener(new MouseMotionAdapter() {
 			public void mouseDragged(MouseEvent me) {
-
-				setLocation(getLocation().x + me.getX() - mausGedruecktX, getLocation().y + me.getY() - mausGedruecktY);
+				Point nP = new Point(getLocation().x + me.getX() - mausGedruecktX,
+						getLocation().y + me.getY() - mausGedruecktY);
+				if (nP.x > 0 && nP.y > 0 && nP.x + breite < getDefaultToolkit().getScreenSize().width
+						&& nP.y + hoehe < getDefaultToolkit().getScreenSize().height) {
+					setLocation(nP);
+					logger.log(Level.FINER, "Fenster an Position x=" + (getLocation().x + me.getX() - mausGedruecktX)
+							+ ";y=" + (getLocation().y + me.getY() - mausGedruecktY));
+				}
 			}
 		});
 	}
