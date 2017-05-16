@@ -26,8 +26,8 @@ public class Feld extends Grafisch {
 
 	@Override
 	public void zeichnen(Graphics2D g) {
-		g.drawImage(grafik, (int) (raster.getX() * faktorX), (int) (raster.getY() * faktorY),
-				(int) SpielFenster.breite / Spiel.zeilen, (int) SpielFenster.hoehe / Spiel.spalten, null);
+		g.drawImage(grafik, (int) (raster.getX() * Spiel.feldLaenge), (int) (raster.getY() * Spiel.feldLaenge),
+				(int) SpielFenster.breite / Spiel.spalten, (int) SpielFenster.hoehe / Spiel.zeilen, null);
 	}
 
 	public String toString() {

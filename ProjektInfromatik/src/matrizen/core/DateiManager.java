@@ -234,7 +234,7 @@ public class DateiManager {
 		public static matrizen.model.Level parse(String s) {
 			JSONObject obj = new JSONObject(s);
 			JSONArray arr = obj.getJSONArray("felder");
-			Feld[][] felder = new Feld[arr.length()][arr.getJSONArray(0).length()];
+			Feld[][] felder = new Feld[arr.getJSONArray(0).length()][arr.length()];
 
 			for (int i = 0; i < arr.length(); i++) {
 				JSONArray inArr = arr.getJSONArray(i);

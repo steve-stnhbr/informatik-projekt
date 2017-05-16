@@ -21,8 +21,8 @@ import matrizen.view.SpielFenster;
  *
  */
 public class Spiel implements AWTEventListener {
-	public static final short zeilen = (short) 12, spalten = (short) 12;
-	public static final float feldLaenge = SpielFenster.hoehe / zeilen;
+	public static final short zeilen = (short) 18, spalten = (short) 32;
+	public static final float feldLaenge = SpielFenster.breite / Spiel.spalten;
 	private static Spiel instanz;
 	private Level level;
 	private Konfiguration config;

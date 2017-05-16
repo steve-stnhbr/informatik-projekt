@@ -2,8 +2,12 @@ package matrizen.model.elemente;
 
 import static matrizen.view.SpielFenster.logger;
 
+import java.awt.BasicStroke;
+import java.awt.Color;
 import java.awt.Graphics2D;
 import java.util.logging.Level;
+
+import javax.swing.border.StrokeBorder;
 
 import matrizen.core.Richtung;
 import matrizen.core.Vektor;
@@ -43,6 +47,8 @@ public class Spieler extends Figur {
 	@Override
 	public void zeichnen(Graphics2D g) {
 		int x = (int) (posImFeld.getX() * Spiel.feldLaenge), y = (int) (posImFeld.getY() * Spiel.feldLaenge);
+		g.setStroke(new BasicStroke(2));
+		g.setColor(Color.black);
 		g.drawRect(x, y, (int) Spiel.feldLaenge, (int) Spiel.feldLaenge);
 		/*
 		 * if (ges.mag() < .5) g.drawImage(grafik, (int) (posImFeld.getX() *

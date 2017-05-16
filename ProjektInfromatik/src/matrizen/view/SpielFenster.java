@@ -23,14 +23,20 @@ import matrizen.model.Spiel;
 
 /**
  * Diese Klasse kümmert sich um die Darstellung des Spiels auf dem Bildschirm
+ * 
  * @author Stefan
  *
  */
 public class SpielFenster extends JFrame {
 	private static final long serialVersionUID = 3327221473781403687L;
 	public static final Logger logger = Logger.getAnonymousLogger();
-	public static final int hoehe = getDefaultToolkit().getScreenSize().height / 4 * 3,
-			breite = hoehe/* getDefaultToolkit().getScreenSize().width / 3 */, ticks = 50;
+	/**
+	 * hier wird die höhe und die breite des Fensters festgelegt je nach dem, ob
+	 * das fenster hoch oder querkant steht, wird immer von der längeren seite
+	 * ausgehend die andere Seite berechnet
+	 */
+	public static final int hoehe = getDefaultToolkit().getScreenSize().height / 3 * 2,
+			breite = hoehe * Spiel.spalten / Spiel.zeilen, ticks = 50;
 	private static SpielFenster instanz;
 	private BufferedImage bImg;
 	private Graphics2D graphics;
@@ -38,7 +44,7 @@ public class SpielFenster extends JFrame {
 	private int mausGedruecktX, mausGedruecktY, frame;
 
 	private SpielFenster() {
-		setSize(hoehe, breite);
+		setSize(breite, hoehe);
 		setResizable(false);
 		setUndecorated(true);
 		setPreferredSize(new Dimension(breite, hoehe));
@@ -47,7 +53,7 @@ public class SpielFenster extends JFrame {
 		setLocation(new Point(getDefaultToolkit().getScreenSize().width / 2 - breite / 2,
 				getDefaultToolkit().getScreenSize().height / 2 - hoehe / 2));
 		listenerHinzufuegen();
-		bImg = new BufferedImage(hoehe, breite, BufferedImage.TYPE_INT_RGB);
+		bImg = new BufferedImage(breite, hoehe, BufferedImage.TYPE_INT_RGB);
 		graphics = (Graphics2D) bImg.getGraphics();
 		timer = new Timer(ticks, (e) -> {
 			aktualisieren();
@@ -59,7 +65,8 @@ public class SpielFenster extends JFrame {
 	}
 
 	/**
-	 * fügt Listener hinzu, die zulassen, dass das Fenster verschoben werden kann
+	 * fügt Listener hinzu, die zulassen, dass das Fenster verschoben werden
+	 * kann
 	 */
 	private void listenerHinzufuegen() {
 
@@ -85,7 +92,8 @@ public class SpielFenster extends JFrame {
 	}
 
 	/**
-	 * Methode, die jeden Tick ausgeführt wird und alle Elemente aktualisiert und zeichnet
+	 * Methode, die jeden Tick ausgeführt wird und alle Elemente aktualisiert
+	 * und zeichnet
 	 */
 	private void aktualisieren() {
 		logger.log(Level.FINEST, "SpielFenster aktualisiert [Frame " + frame + "]");
@@ -98,17 +106,20 @@ public class SpielFenster extends JFrame {
 	 */
 	public void zeichnen() {
 		if (isVisible())
-			getGraphics().drawImage(bImg, 0, 0, hoehe, breite, null);
+			getGraphics().drawImage(bImg, 0, 0, breite, hoehe, null);
 	}
+
 	/**
-	 * Überschreibt die painComponents-Methode der Oberklasse, um die Grafik zu zeichnen
+	 * Überschreibt die painComponents-Methode der Oberklasse, um die Grafik zu
+	 * zeichnen
+	 * 
 	 * @param g
 	 */
 	public void paintComponents(Graphics2D g) {
 		super.paintComponents(g);
-		g.drawImage(bImg, 0, 0, hoehe, breite, null);
+		g.drawImage(bImg, 0, 0, breite, hoehe, null);
 		if (isVisible())
-			getGraphics().drawImage(bImg, 0, 0, hoehe, breite, null);
+			getGraphics().drawImage(bImg, 0, 0, breite, hoehe, null);
 	}
 
 	/**
@@ -127,6 +138,7 @@ public class SpielFenster extends JFrame {
 
 	/**
 	 * Singleton-Methode, die die statische Instanz des Spielfensters zurückgibt
+	 * 
 	 * @return die einzige Instanz der SpieleFenster-Klasse
 	 */
 	public static SpielFenster gibInstanz() {
@@ -139,14 +151,14 @@ public class SpielFenster extends JFrame {
 		// System.setProperty("java.util.logging.SimpleFormatter.format", "%1$tF
 		// %1$tT %4$s %2$s %5$s%6$s%n");
 		// zeit, millisekunde, level, nachticht, neue zeile
-		//ändert die formatierung der Konsole, des logs
+		// ändert die formatierung der Konsole, des logs
 		System.setProperty("java.util.logging.SimpleFormatter.format", "%1$tT:%tL-%4$s: %5$s%6$s%n");
-		//ändert die wichtigkeit des loggers
+		// ändert die wichtigkeit des loggers
 		logger.setLevel(Level.ALL);
 		Handler handler = new ConsoleHandler();
 		handler.setLevel(Level.ALL);
 		logger.addHandler(handler);
-		//erstellt die instanz des SpielFensters
+		// erstellt die instanz des SpielFensters
 		instanz = new SpielFenster();
 		instanz.start();
 	}

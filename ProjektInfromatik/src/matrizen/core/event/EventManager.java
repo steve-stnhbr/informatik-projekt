@@ -2,6 +2,7 @@ package matrizen.core.event;
 
 import static matrizen.view.SpielFenster.logger;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 
@@ -16,7 +17,7 @@ public class EventManager {
 	private List<EventListener<Event>> listeners;
 	
 	private EventManager() {
-		
+		listeners = new ArrayList<>();
 	}
 	
 	public static EventManager gibInstanz() {
