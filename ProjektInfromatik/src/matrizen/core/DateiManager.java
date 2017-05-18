@@ -16,9 +16,7 @@ import javax.imageio.ImageIO;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import matrizen.core.DateiManager.Level;
 import matrizen.model.Feld;
-import matrizen.model.Feld.Typ;
 import matrizen.model.elemente.Item.ItemTyp;
 
 /**
@@ -134,42 +132,40 @@ public class DateiManager {
 	 *
 	 */
 	public enum Bild {
-		feldGras0(0, 0, srcFeld, Typ.WIESE),
-		feldGras1(32, 0, srcFeld, Typ.WIESE),
-		feldGras2(64, 0, srcFeld, Typ.WIESE),
-		feldGras3(96, 0, srcFeld, Typ.WIESE),
-		feldStein0(0, 32, srcFeld, Typ.STEIN),
-		feldStein1(32, 32, srcFeld, Typ.STEIN),
-		feldStein2(64, 32, srcFeld, Typ.STEIN),
-		feldStein3(96, 32, srcFeld, Typ.STEIN),
-		feldSteinchen0(0, 64, srcFeld, Typ.STEINCHEN),
-		feldSteinchen1(32, 64, srcFeld, Typ.STEINCHEN),
-		feldSteinchen2(64, 64, srcFeld, Typ.STEINCHEN),
-		feldSteinchen4(96, 64, srcFeld, Typ.STEINCHEN),
-		feldSchotter0(0, 96, srcFeld, Typ.SCHOTTER),
-		feldSchotter1(32, 96, srcFeld, Typ.SCHOTTER),
-		feldSchotter2(64, 96, srcFeld, Typ.SCHOTTER),
-		feldSchotter3(96, 96, srcFeld, Typ.SCHOTTER),
-		feldBaum0(0, 128, srcFeld, Typ.BAUM),
-		feldBaum1(32, 128, srcFeld, Typ.BAUM),
-		feldWasser(64, 128, srcFeld, Typ.WASSER),
-		feldBruecke(96, 128, srcFeld, Typ.BRUECKE),
-		feldErde0(0, 160, srcFeld, Typ.ERDE),
-		feldErde1(32, 160, srcFeld, Typ.ERDE),
-		feldErde2(64, 160, srcFeld, Typ.ERDE),
-		feldErde3(96, 160, srcFeld, Typ.ERDE),
-		elementSpieler(0, 0, srcElement, null),
-		elementSchluessel(32, 0, srcElement, null);
+		feldGras0(0, 0, srcFeld),
+		feldGras1(32, 0, srcFeld),
+		feldGras2(64, 0, srcFeld),
+		feldGras3(96, 0, srcFeld),
+		feldStein0(0, 32, srcFeld),
+		feldStein1(32, 32, srcFeld),
+		feldStein2(64, 32, srcFeld),
+		feldStein3(96, 32, srcFeld),
+		feldSteinchen0(0, 64, srcFeld),
+		feldSteinchen1(32, 64, srcFeld),
+		feldSteinchen2(64, 64, srcFeld),
+		feldSteinchen4(96, 64, srcFeld),
+		feldSchotter0(0, 96, srcFeld),
+		feldSchotter1(32, 96, srcFeld),
+		feldSchotter2(64, 96, srcFeld),
+		feldSchotter3(96, 96, srcFeld),
+		feldBaum0(0, 128, srcFeld),
+		feldBaum1(32, 128, srcFeld),
+		feldWasser(64, 128, srcFeld),
+		feldBruecke(96, 128, srcFeld),
+		feldErde0(0, 160, srcFeld),
+		feldErde1(32, 160, srcFeld),
+		feldErde2(64, 160, srcFeld),
+		feldErde3(96, 160, srcFeld),
+		elementSpieler(0, 0, srcElement),
+		elementSchluessel(32, 0, srcElement);
 
 		public int x, y;
 		public BufferedImage src;
-		public Typ t;
 
-		private Bild(int x, int y, BufferedImage image, Typ typ) {
+		private Bild(int x, int y, BufferedImage image) {
 			this.x = x;
 			this.y = y;
 			this.src = image;
-			this.t = typ;
 		}
 
 		public static Bild zufaelligerStein() {

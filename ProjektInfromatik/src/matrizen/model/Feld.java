@@ -62,7 +62,8 @@ public class Feld extends Grafisch {
 		STEIN(false),
 		STEINCHEN(true),
 		SCHOTTER(false),
-		BRUECKE(false);
+		BRUECKE(false),
+		HECKE(true);
 
 		final boolean solide;
 

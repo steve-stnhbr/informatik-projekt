@@ -19,6 +19,7 @@ import matrizen.view.SpielFenster;
 
 /**
  * Diese Klasse repräsentiert den Spieler
+ * 
  * @author Stefan
  *
  */
@@ -40,16 +41,12 @@ public class Spieler extends Figur {
 	}
 
 	@Override
-	public void kraftAusueben(Vektor v) {
-
-	}
-
-	@Override
 	public void zeichnen(Graphics2D g) {
 		int x = (int) (posImFeld.getX() * Spiel.feldLaenge), y = (int) (posImFeld.getY() * Spiel.feldLaenge);
 		g.setStroke(new BasicStroke(2));
 		g.setColor(Color.black);
 		g.drawRect(x, y, (int) Spiel.feldLaenge, (int) Spiel.feldLaenge);
+
 		/*
 		 * if (ges.mag() < .5) g.drawImage(grafik, (int) (posImFeld.getX() *
 		 * Spiel.feldLaenge), (int) (posImFeld.getY() * Spiel.feldLaenge), (int)
@@ -58,6 +55,7 @@ public class Spieler extends Figur {
 		 * Spiel.feldLaenge), (int) (posImFeld.getY() * Spiel.feldLaenge), (int)
 		 * Spiel.feldLaenge, (int) Spiel.feldLaenge, null);
 		 */
+		
 		for (int i = 0; i < cooldown.length; i++) {
 			int c = cooldown[i];
 			if (c > 0)
@@ -77,13 +75,15 @@ public class Spieler extends Figur {
 	}
 
 	/**
-	 * Diese Methode überprüft, ob die Bewegung, die der Spieler machen mag, überhaupt möglich ist
+	 * Diese Methode überprüft, ob die Bewegung, die der Spieler machen mag,
+	 * überhaupt möglich ist
+	 * 
 	 * @param r
 	 * @return
 	 */
 	private boolean bewegungMoeglich(Richtung r) {
 		Vektor v = posImFeld.add(r.vektor, Rechenmethode.kopieren);
-		logger.log(Level.WARNING, v.toString());
+		logger.log(Level.FINE, v.toString());
 		return v.getX() >= 0 && v.getY() >= 0 && v.getX() < Spiel.spalten && v.getY() < Spiel.zeilen
 				&& !Spiel.gibInstanz().getLevel().getFeld(v).isSolide();
 	}
