@@ -158,9 +158,9 @@ public class SpielFenster extends JFrame {
 		// ändert die formatierung der Konsole, des logs
 		System.setProperty("java.util.logging.SimpleFormatter.format", "%1$tT:%tL-%4$s: %5$s%6$s%n");
 		// ändert die wichtigkeit des loggers
-		logger.setLevel(Level.ALL);
+		logger.setLevel(Level.FINE);
 		Handler handler = new ConsoleHandler();
-		handler.setLevel(Level.ALL);
+		handler.setLevel(Level.FINE);
 		logger.addHandler(handler);
 		// erstellt die instanz des SpielFensters
 		instanz = new SpielFenster();
