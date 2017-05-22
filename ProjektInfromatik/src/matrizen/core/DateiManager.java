@@ -92,7 +92,7 @@ public class DateiManager {
 	static {
 		try {
 			if (srcFeld == null)
-				srcFeld = ImageIO.read(new File(pfad + "res/grafik/feld_res_test_2.png"));
+				srcFeld = ImageIO.read(new File(pfad + "res/grafik/feld_res.png"));
 			/*
 			 * if (srcElement == null) srcElement = ImageIO.read(new File(pfad +
 			 * "res/grafik/element_res.png")); if (srcPartikel == null)

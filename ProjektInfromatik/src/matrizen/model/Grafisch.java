@@ -1,11 +1,11 @@
 package matrizen.model;
 
 import java.awt.Graphics2D;
-import java.awt.Image;
+import java.awt.image.BufferedImage;
 
 public abstract class Grafisch {
-	protected Image grafik;
-	protected Image[] animation;
+	protected BufferedImage grafik;
+	protected BufferedImage[] animation;
 	
 	public abstract void zeichnen(Graphics2D g);
 }

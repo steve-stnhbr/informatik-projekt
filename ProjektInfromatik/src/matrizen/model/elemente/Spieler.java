@@ -2,12 +2,12 @@ package matrizen.model.elemente;
 
 import static matrizen.view.SpielFenster.logger;
 
-import java.awt.BasicStroke;
-import java.awt.Color;
 import java.awt.Graphics2D;
+import java.awt.Image;
+import java.awt.geom.AffineTransform;
+import java.awt.image.AffineTransformOp;
+import java.awt.image.BufferedImage;
 import java.util.logging.Level;
-
-import javax.swing.border.StrokeBorder;
 
 import matrizen.core.Richtung;
 import matrizen.core.Vektor;
@@ -15,7 +15,6 @@ import matrizen.core.Vektor.Rechenmethode;
 import matrizen.core.event.BewegungsEvent;
 import matrizen.core.event.EventManager;
 import matrizen.model.Spiel;
-import matrizen.view.SpielFenster;
 
 /**
  * Diese Klasse repräsentiert den Spieler
@@ -28,6 +27,7 @@ public class Spieler extends Figur {
 	private Vektor posImFeld;
 	private int index, delay = 5;
 	private int[] cooldown;
+	private Richtung blick;
 
 	private Spieler() {
 		posImFeld = Vektor.nullVektor;
@@ -42,20 +42,20 @@ public class Spieler extends Figur {
 
 	@Override
 	public void zeichnen(Graphics2D g) {
-		int x = (int) (posImFeld.getX() * Spiel.feldLaenge), y = (int) (posImFeld.getY() * Spiel.feldLaenge);
-		g.setStroke(new BasicStroke(2));
-		g.setColor(Color.black);
-		g.drawRect(x, y, (int) Spiel.feldLaenge, (int) Spiel.feldLaenge);
-
 		/*
-		 * if (ges.mag() < .5) g.drawImage(grafik, (int) (posImFeld.getX() *
-		 * Spiel.feldLaenge), (int) (posImFeld.getY() * Spiel.feldLaenge), (int)
-		 * Spiel.feldLaenge, (int) Spiel.feldLaenge, null); else
-		 * g.drawImage(animation[index], (int) (posImFeld.getX() *
-		 * Spiel.feldLaenge), (int) (posImFeld.getY() * Spiel.feldLaenge), (int)
-		 * Spiel.feldLaenge, (int) Spiel.feldLaenge, null);
-		 */
-		
+		int x = (int) (posImFeld.getX() * 32), y = (int) (posImFeld.getY() * 32);
+		g.setStroke(new BasicStroke(1));
+		g.setColor(Color.PINK);
+		g.drawRect(x, y, (int) 32, (int) 32);
+		*/
+
+		if (ges.mag() < .5)
+			g.drawImage(bildDrehen(grafik), (int) (posImFeld.getX() * 32),
+					(int) (posImFeld.getY() * 32), (int) 32, (int) 32, null);
+		else
+			g.drawImage(bildDrehen(animation[index]), (int) (posImFeld.getX() * 32),
+					(int) (posImFeld.getY() * 32), (int) 32, (int) 32, null);
+
 		for (int i = 0; i < cooldown.length; i++) {
 			int c = cooldown[i];
 			if (c > 0)
@@ -66,10 +66,18 @@ public class Spieler extends Figur {
 			index++;
 	}
 
+	private Image bildDrehen(BufferedImage grafik) {
+		AffineTransform aT = AffineTransform.getRotateInstance(Math.toRadians(blick.winkel), grafik.getWidth(null) / 2, grafik.getHeight(null) / 2);
+		AffineTransformOp operation = new AffineTransformOp(aT, AffineTransformOp.TYPE_BILINEAR);
+		
+		return operation.filter(grafik, null);
+	}
+
 	public void bewegen(Richtung r) {
 		if (cooldown[Richtung.getIndex(r)] == 0 && bewegungMoeglich(r)) {
 			EventManager.gibInstanz().eventUebergeben(new BewegungsEvent(posImFeld, posImFeld.add(r.vektor), r));
 			pos = new Vektor(posImFeld.getX() * Spiel.feldLaenge, posImFeld.getY() * Spiel.feldLaenge);
+			blick = r;
 			cooldown[Richtung.getIndex(r)] = delay;
 		}
 	}
