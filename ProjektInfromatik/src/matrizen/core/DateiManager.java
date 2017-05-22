@@ -93,11 +93,11 @@ public class DateiManager {
 		try {
 			if (srcFeld == null)
 				srcFeld = ImageIO.read(new File(pfad + "res/grafik/feld_res.png"));
+			if (srcElement == null)
+				srcElement = ImageIO.read(new File(pfad + "res/grafik/element_res.png"));
 			/*
-			 * if (srcElement == null) srcElement = ImageIO.read(new File(pfad +
-			 * "res/grafik/element_res.png")); if (srcPartikel == null)
-			 * srcPartikel = ImageIO.read(new File(pfad +
-			 * "res/grafik/partikel_res.png"));
+			 * if (srcPartikel == null) srcPartikel = ImageIO.read(new File(pfad
+			 * + "res/grafik/partikel_res.png"));
 			 */
 		} catch (IOException e) {
 			logger.log(java.util.logging.Level.SEVERE, e.getMessage(), e);
@@ -302,7 +302,9 @@ public class DateiManager {
 		}
 
 		/**
-		 * Diese Methode schreibt eine Konfiguration in ein JSON-Objekt, das als String zurückgegeben wird
+		 * Diese Methode schreibt eine Konfiguration in ein JSON-Objekt, das als
+		 * String zurückgegeben wird
+		 * 
 		 * @param l
 		 * @return
 		 */
