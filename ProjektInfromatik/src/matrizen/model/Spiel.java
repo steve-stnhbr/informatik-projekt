@@ -6,10 +6,10 @@ import static matrizen.view.SpielFenster.logger;
 import java.awt.AWTEvent;
 import java.awt.Graphics2D;
 import java.awt.Toolkit;
-import java.awt.event.AWTEventListener;
 import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 
-import matrizen.core.DateiManager;
+import matrizen.core.EingabeManager;
 import matrizen.core.Konfiguration;
 import matrizen.core.Richtung;
 import matrizen.model.elemente.Spieler;
@@ -20,8 +20,8 @@ import matrizen.view.SpielFenster;
  * @author Stefan
  *
  */
-public class Spiel implements AWTEventListener {
-	public static final short zeilen = (short) 18, spalten = (short) 32;
+public class Spiel implements KeyListener {
+	public static final short zeilen = (short) 14, spalten = (short) 24;
 	public static final float feldLaenge = SpielFenster.breite / Spiel.spalten;
 	private static Spiel instanz;
 	private Level level;
@@ -30,7 +30,7 @@ public class Spiel implements AWTEventListener {
 	
 	private Spiel() {
 		logger.log(java.util.logging.Level.INFO, "Spiel erstellt");
-		Toolkit.getDefaultToolkit().addAWTEventListener(this, AWTEvent.KEY_EVENT_MASK);
+		SpielFenster.gibInstanz().addKeyListener(this);
 		level = Level.anfangsLevel;
 	}
 
@@ -50,10 +50,7 @@ public class Spiel implements AWTEventListener {
 	 * Listener-Methode für Tastatureingaben
 	 */
 	@Override
-	public void eventDispatched(AWTEvent event) {
-		KeyEvent e = null;
-		if (event instanceof KeyEvent)
-			e = (KeyEvent) event;
+	public void keyPressed(KeyEvent e) {
 		
 		switch(e.getKeyCode()) {
 		case VK_ESCAPE:
@@ -61,24 +58,24 @@ public class Spiel implements AWTEventListener {
 			break;
 		case VK_W:
 		case VK_UP:
-			input(Input.bewegungHoch);
+			EingabeManager.aktivieren(Richtung.getIndex(Richtung.OBEN));
 			break;
 		case VK_D:
 		case VK_RIGHT:
-			input(Input.bewegungRechts);
+			EingabeManager.aktivieren(Richtung.getIndex(Richtung.RECHTS));
 			break;
 		case VK_S:
 		case VK_DOWN:
-			input(Input.bewegungRunter);
+			EingabeManager.aktivieren(Richtung.getIndex(Richtung.UNTEN));
 			break;
 		case VK_A:
 		case VK_LEFT:
-			input(Input.bewegungLinks);
+			EingabeManager.aktivieren(Richtung.getIndex(Richtung.LINKS));
 			break;
 		case VK_SPACE:
 		case VK_Q:
 		case VK_E:
-			input(Input.schuss);
+			EingabeManager.aktivieren(EingabeManager.gibEingaben().length - 1);
 			break;
 		}
 		
@@ -88,43 +85,17 @@ public class Spiel implements AWTEventListener {
 		if (c == KeyEvent.VK_ESCAPE)
 			System.exit(0);
 		else if (c == config.getLinks())
-			input(Input.bewegungLinks);
+			EingabeManager.aktivieren(Input.getIndex(Input.bewegungLinks);
 		else if (c == config.getRechts())
-			input(Input.bewegungRechts);
+			EingabeManager.aktivieren(Input.getIndex(Input.bewegungRechts);
 		else if (c == config.getUnten())
-			input(Input.bewegungRunter);
+			EingabeManager.aktivieren(Input.getIndex(Input.bewegungRunter);
 		else if(c == config.getSchuss()) 
-			input(Input.schuss);
+			EingabeManager.aktivieren(Input.getIndex(Input.schuss);
 		else if(c == config.getOben()) {
-			input(Input.bewegungHoch);
+			EingabeManager.aktivieren(Input.getIndex(Input.bewegungHoch);
 		}
 		*/
-	}
-
-	/**
-	 * hier wird der Input umgesetzt
-	 * @param i
-	 */
-	private void input(Input i) {
-		logger.log(java.util.logging.Level.FINE, "Input " + i + " registriert und ausgeführt");
-		switch(i) {
-		case bewegungHoch:
-			Spieler.gibInstanz().bewegen(Richtung.OBEN);
-			break;
-		case bewegungRechts:
-			Spieler.gibInstanz().bewegen(Richtung.RECHTS);
-			break;
-		case bewegungRunter:
-			Spieler.gibInstanz().bewegen(Richtung.UNTEN);
-			break;
-		case bewegungLinks:
-			Spieler.gibInstanz().bewegen(Richtung.LINKS);
-			break;
-		case schuss:
-			break;
-		default:
-			break;
-		}
 	}
 
 	public Level getLevel() {
@@ -143,7 +114,49 @@ public class Spiel implements AWTEventListener {
 		this.config = config;
 	}
 
-	enum Input {
+	public enum Input {
 		bewegungHoch, bewegungRunter, bewegungRechts, bewegungLinks, schuss;
+
+		public static int getIndex(Input in) {
+			for(int i = 0; i < values().length; i++) 
+				if(values()[i] == in)
+					return i;
+			return -1;
+		}
+	}
+
+	@Override
+	public void keyTyped(KeyEvent e) {}
+
+	@Override
+	public void keyReleased(KeyEvent e) {
+		switch(e.getKeyCode()) {
+		case VK_ESCAPE:
+			System.exit(0);
+			break;
+		case VK_W:
+		case VK_UP:
+			EingabeManager.deaktivieren(Input.getIndex(Input.bewegungHoch));
+			break;
+		case VK_D:
+		case VK_RIGHT:
+			EingabeManager.deaktivieren(Input.getIndex(Input.bewegungRechts));
+			break;
+		case VK_S:
+		case VK_DOWN:
+			EingabeManager.deaktivieren(Input.getIndex(Input.bewegungRunter));
+			break;
+		case VK_A:
+		case VK_LEFT:
+			EingabeManager.deaktivieren(Input.getIndex(Input.bewegungLinks));
+			break;
+		case VK_SPACE:
+		case VK_Q:
+		case VK_E:
+		case VK_CLEAR:
+		case VK_NUMPAD0:
+			EingabeManager.deaktivieren(Input.getIndex(Input.schuss));
+			break;
+		}
 	}
 }

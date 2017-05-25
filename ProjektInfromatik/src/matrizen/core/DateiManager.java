@@ -50,7 +50,7 @@ public class DateiManager {
 	public static BufferedImage laden(Bild b) {
 		int hoehe = b.src.getHeight() / 7, breite = b.src.getWidth() / 4;
 		logger.log(java.util.logging.Level.FINEST, "Bild " + b + " von Datei " + b.src + " geladen");
-		return b.src.getSubimage(b.x, b.y, breite, hoehe);
+		return b.src.getSubimage(b.x, b.y, breite, hoehe + 5);
 	}
 
 	/**
@@ -127,9 +127,6 @@ public class DateiManager {
 
 	/**
 	 * Enumerations-Klasse, die die Infos der grafischen Elemente enthält
-	 * 
-	 * @author Stefan
-	 *
 	 */
 	public enum Bild {
 		feldGras0(0, 0, srcFeld),
@@ -169,11 +166,11 @@ public class DateiManager {
 		}
 
 		public static Bild zufaelligerStein() {
-			return values()[random(0, 4)];
+			return values()[random(4, 8)];
 		}
 
 		public static Bild zufaelligeWiese() {
-			return values()[random(4, 8)];
+			return values()[random(0, 4)];
 		}
 
 		public static Bild zufaelligeSteinchen() {
@@ -197,7 +194,7 @@ public class DateiManager {
 			case WASSER:
 				return feldWasser;
 			case WIESE:
-				return feldGras1;
+				return zufaelligeWiese();
 			case BAUM:
 				return feldBaum0;
 			case STEINCHEN:
