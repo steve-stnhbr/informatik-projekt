@@ -152,8 +152,6 @@ public class SpielFenster extends JFrame {
 	}
 
 	public static void main(String[] args) {
-		// System.setProperty("java.util.logging.SimpleFormatter.format", "%1$tF
-		// %1$tT %4$s %2$s %5$s%6$s%n");
 		// zeit, millisekunde, level, nachticht, neue zeile
 		// ändert die formatierung der Konsole, des logs
 		System.setProperty("java.util.logging.SimpleFormatter.format", "%1$tT:%tL-%4$s: %5$s%6$s%n");

@@ -1,6 +1,5 @@
 package matrizen.core;
 
-import matrizen.model.Spiel;
 
 public class EingabeManager {
 	private static boolean[] eingabe;
