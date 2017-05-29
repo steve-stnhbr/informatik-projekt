@@ -17,6 +17,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import matrizen.model.Feld;
+import matrizen.model.Levelelement;
 import matrizen.model.elemente.Item.ItemTyp;
 
 /**
@@ -95,10 +96,9 @@ public class DateiManager {
 				srcFeld = ImageIO.read(new File(pfad + "res/grafik/feld_res.png"));
 			if (srcElement == null)
 				srcElement = ImageIO.read(new File(pfad + "res/grafik/element_res.png"));
-			/*
-			 * if (srcPartikel == null) srcPartikel = ImageIO.read(new File(pfad
-			 * + "res/grafik/partikel_res.png"));
-			 */
+
+			if (srcPartikel == null)
+				srcPartikel = ImageIO.read(new File(pfad + "res/grafik/partikel_res.png"));
 		} catch (IOException e) {
 			logger.log(java.util.logging.Level.SEVERE, e.getMessage(), e);
 		}
@@ -236,6 +236,14 @@ public class DateiManager {
 					felder[j][i] = new Feld(Feld.Typ.gibTyp(inArr.getInt(j)), new Vektor(j, i));
 				}
 			}
+
+			arr = obj.getJSONArray("elemente");
+			List<Levelelement> elem = new ArrayList<Levelelement>();
+
+			for (int i = 0; i < arr.length(); i++) {
+
+			}
+
 			matrizen.model.Level lvl = new matrizen.model.Level(felder);
 			logger.log(java.util.logging.Level.FINEST, "Level " + lvl + " aus " + s + " gelesen");
 			return lvl;
