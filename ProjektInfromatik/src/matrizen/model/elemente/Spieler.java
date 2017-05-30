@@ -97,8 +97,8 @@ public class Spieler extends Figur {
 
 		AffineTransformOp operation = new AffineTransformOp(transform, AffineTransformOp.TYPE_BILINEAR);
 
-		return operation.filter(grafik, null);
-//		return grafik;
+//		return operation.filter(grafik, null);
+		return grafik;
 	}
 
 	private void bewegen(Richtung r) {

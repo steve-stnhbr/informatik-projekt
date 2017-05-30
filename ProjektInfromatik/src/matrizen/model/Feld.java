@@ -7,6 +7,7 @@ import java.awt.image.ImageObserver;
 
 import matrizen.core.DateiManager;
 import matrizen.core.Vektor;
+import matrizen.model.elemente.GrafikTyp;
 import matrizen.view.SpielFenster;
 
 public class Feld extends Grafisch {
@@ -57,7 +58,7 @@ public class Feld extends Grafisch {
 		this.t = t;
 	}
 
-	public enum Typ {
+	public enum Typ implements GrafikTyp {
 		WIESE(false),
 		ERDE(false),
 		WASSER(true),

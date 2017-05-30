@@ -18,7 +18,10 @@ import org.json.JSONObject;
 
 import matrizen.model.Feld;
 import matrizen.model.Levelelement;
-import matrizen.model.elemente.Item.ItemTyp;
+import matrizen.model.elemente.Geschoss;
+import matrizen.model.elemente.GrafikTyp;
+import matrizen.model.elemente.Item;
+import matrizen.model.elemente.Item.Typ;
 
 /**
  * Diese Klasse reguliert alle Zugriffe auf Dateien
@@ -96,7 +99,6 @@ public class DateiManager {
 				srcFeld = ImageIO.read(new File(pfad + "res/grafik/feld_res.png"));
 			if (srcElement == null)
 				srcElement = ImageIO.read(new File(pfad + "res/grafik/element_res.png"));
-
 			if (srcPartikel == null)
 				srcPartikel = ImageIO.read(new File(pfad + "res/grafik/partikel_res.png"));
 		} catch (IOException e) {
@@ -129,6 +131,7 @@ public class DateiManager {
 	 * Enumerations-Klasse, die die Infos der grafischen Elemente enthält
 	 */
 	public enum Bild {
+		nullGrafik(96, 64, srcFeld),
 		feldGras0(0, 0, srcFeld),
 		feldGras1(32, 0, srcFeld),
 		feldGras2(64, 0, srcFeld),
@@ -139,8 +142,6 @@ public class DateiManager {
 		feldStein3(96, 32, srcFeld),
 		feldSteinchen0(0, 64, srcFeld),
 		feldSteinchen1(32, 64, srcFeld),
-		feldSteinchen2(64, 64, srcFeld),
-		feldSteinchen4(96, 64, srcFeld),
 		feldSchotter0(0, 96, srcFeld),
 		feldSchotter1(32, 96, srcFeld),
 		feldSchotter2(64, 96, srcFeld),
@@ -154,7 +155,10 @@ public class DateiManager {
 		feldErde2(64, 160, srcFeld),
 		feldErde3(96, 160, srcFeld),
 		elementSpieler(0, 0, srcElement),
-		elementSchluessel(32, 0, srcElement);
+		elementSchluessel(32, 0, srcElement),
+		partikelMittelOrange(0, 0, srcPartikel),
+		partikelMittelBlau(0, 32, srcPartikel),
+		partikelKleinRot(32, 0, srcPartikel);
 
 		public int x, y;
 		public BufferedImage src;
@@ -189,7 +193,29 @@ public class DateiManager {
 			return values()[random(20, 24)];
 		}
 
-		public static Bild zufaelligeGrafik(Feld.Typ t) {
+		public static Bild zufaelligeGrafik(GrafikTyp t) {
+			if(t instanceof Feld.Typ) 
+				return zufaelligesFeld((Feld.Typ) t);
+			else if(t instanceof Item.Typ) 
+				return zufaelligesItem((Item.Typ) t);
+			else if(t instanceof Geschoss.Typ)
+				return zufaelligerPartikel((Geschoss.Typ) t);
+			return nullGrafik;
+		}
+		
+		private static Bild zufaelligerPartikel(Geschoss.Typ t) {
+			switch(t) {
+			default: return nullGrafik;
+			}
+		}
+
+		private static Bild zufaelligesItem(Item.Typ t) {
+			switch(t) {
+			default: return nullGrafik;
+			}
+		}
+
+		public static Bild zufaelligesFeld(Feld.Typ t) {
 			switch (t) {
 			case WASSER:
 				return feldWasser;
@@ -206,12 +232,8 @@ public class DateiManager {
 			case ERDE:
 				return feldErde0;
 			default:
-				return null;
+				return nullGrafik;
 			}
-		}
-
-		public static Bild gegenstandLaden(ItemTyp t) {
-			return null;
 		}
 	}
 
@@ -237,7 +259,7 @@ public class DateiManager {
 				}
 			}
 
-			arr = obj.getJSONArray("elemente");
+			arr = obj.getJSONArray("gegner");
 			List<Levelelement> elem = new ArrayList<Levelelement>();
 
 			for (int i = 0; i < arr.length(); i++) {

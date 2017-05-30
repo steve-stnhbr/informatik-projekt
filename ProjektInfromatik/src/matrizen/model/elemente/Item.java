@@ -7,26 +7,19 @@ import matrizen.core.Vektor;
 import matrizen.model.Gegenstand;
 
 public class Item extends Gegenstand {
-	private ItemTyp typ;
+	private Typ typ;
 	
-	public Item(ItemTyp t) {
+	public Item(Typ t) {
 		this.typ = t;
-		this.grafik = DateiManager.laden(DateiManager.Bild.gegenstandLaden(t));
-	}
-	
-	@Override
-	public void kraftAusueben(Vektor v) {
-		
+		this.grafik = DateiManager.laden(DateiManager.Bild.zufaelligeGrafik(t));
 	}
 
 	@Override
 	public void zeichnen(Graphics2D g) {
-		
+		g.drawImage(grafik, (int) pos.getX(), (int) pos.getY(), null); 
 	}
 
-	public enum ItemTyp {
-		schluessel,
-		upgrade1,
-		updrade2;
+	public enum Typ implements GrafikTyp {
+		schluessel;
 	}
 }

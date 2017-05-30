@@ -21,7 +21,7 @@ import matrizen.view.SpielFenster;
  *
  */
 public class Spiel implements KeyListener {
-	public static final short zeilen = (short) 14, spalten = (short) 24;
+	public static final short zeilen = (short) 9, spalten = (short) 10;
 	public static final float feldLaenge = SpielFenster.breite / Spiel.spalten;
 	private static Spiel instanz;
 	private Level level;

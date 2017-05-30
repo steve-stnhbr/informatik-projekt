@@ -7,14 +7,17 @@ import matrizen.model.Gegenstand;
 
 public class Geschoss extends Gegenstand {
 
-	@Override
-	public void kraftAusueben(Vektor v) {
+	
+	public Geschoss(Typ t) {
 		
 	}
 
 	@Override
 	public void zeichnen(Graphics2D g) {
-		
+		g.drawImage(grafik, (int) pos.getX(), (int) pos.getY(), null);
 	}
 
+	public enum Typ implements GrafikTyp {
+		
+	}
 }
