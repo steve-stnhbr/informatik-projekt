@@ -6,10 +6,12 @@ import matrizen.core.Vektor;
 import matrizen.model.Gegenstand;
 
 public class Geschoss extends Gegenstand {
-
+	private Typ t;
+	private boolean spieler;
 	
-	public Geschoss(Typ t) {
-		
+	public Geschoss(Typ t, boolean spieler) {
+		this.t = t;
+		this.spieler = spieler;
 	}
 
 	@Override
@@ -18,6 +20,13 @@ public class Geschoss extends Gegenstand {
 	}
 
 	public enum Typ implements GrafikTyp {
+		kleinBlau(20),
+		kleinOrange(7);
 		
+		int radius;
+		
+		private Typ(int radius) {
+			this.radius = radius;
+		}
 	}
 }

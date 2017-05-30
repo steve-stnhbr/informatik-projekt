@@ -19,7 +19,10 @@ import java.util.logging.Logger;
 import javax.swing.JFrame;
 import javax.swing.Timer;
 
+import matrizen.core.EingabeManager;
+import matrizen.core.Richtung;
 import matrizen.model.Spiel;
+import matrizen.model.elemente.Spieler;
 
 /**
  * Diese Klasse kümmert sich um die Darstellung des Spiels auf dem Bildschirm

@@ -1,107 +1,124 @@
 package matrizen.core;
 
 import static matrizen.core.Vektor.Rechenmethode.*;
+import static matrizen.view.SpielFenster.logger;
+
+import java.util.logging.Level;
 
 /**
- * Diese elementare Klasse wird benutzt, um Positionen, Bewegungen oder Verschiebungen darzustellen
-* @author Steve
-*/
+ * Diese elementare Klasse wird benutzt, um Positionen, Bewegungen oder
+ * Verschiebungen darzustellen
+ * 
+ * @author Steve
+ */
 public class Vektor {
 	public static final Vektor nullVektor = new Vektor(0, 0);
-	
+
 	private float x, y;
-	
+
 	public Vektor() {
 		this(0, 0);
 	}
-	
+
 	public Vektor(float x, float y) {
 		this.x = x;
 		this.y = y;
 	}
-	
+
 	public Vektor add(Vektor v, Rechenmethode r) {
-		if(r == kopieren)
+		if (r == kopieren)
 			return new Vektor(v.x + x, v.y + y);
-		else if(r == hinzufuegen)
+		else if (r == hinzufuegen)
 			return add(v);
 		return null;
 	}
-	
+
 	public Vektor sub(Vektor v, Rechenmethode r) {
-		if(r == kopieren)
+		if (r == kopieren)
 			return new Vektor(v.x - x, v.y - y);
-		else if(r == hinzufuegen)
+		else if (r == hinzufuegen)
 			return sub(v);
 		return null;
 	}
-	
+
 	public Vektor add(float x, float y) {
+		logger.log(Level.FINER, "x: " + x + ";y: " + y + " zu " + toString() + " addiert");
 		return addieren(x, y);
 	}
-	
+
 	public Vektor add(Vektor v) {
 		return add(v.x, v.y);
 	}
-	
+
 	public Vektor addieren(float x, float y) {
 		this.x += x;
 		this.y += y;
 		return this;
 	}
-	
+
 	public Vektor addieren(Vektor k) {
 		return add(k);
 	}
-	
+
 	public Vektor sub(float x, float y) {
+		logger.log(Level.FINER, "x: " + x + ";y: " + y + " von " + toString() + " subtrahiert");
 		return subtrahieren(x, y);
 	}
-	
+
 	public Vektor subtrahieren(float x, float y) {
 		return addieren(-x, -y);
 	}
-	
+
 	public Vektor sub(Vektor k) {
 		return sub(k.x, k.y);
 	}
-	
+
 	public Vektor subtrahieren(Vektor k) {
 		return sub(k);
 	}
-	
+
 	public Vektor mult(float m) {
 		return multiplizieren(m);
 	}
-	
+
 	public Vektor mult(float m, Rechenmethode r) {
-		if(r == kopieren)
+		if (r == kopieren)
 			return new Vektor(x * m, y * m);
-		else if(r == hinzufuegen)
+		else if (r == hinzufuegen)
 			return mult(m);
 		return null;
 	}
-	
+
 	public Vektor multiplizieren(float m) {
+		logger.log(Level.FINER, toString() + " mit " + m + " multipliziert");
 		this.x *= m;
 		this.y *= m;
 		return this;
 	}
-	
+
 	public Vektor div(float m) {
 		return dividieren(m);
 	}
-	
+
 	public Vektor dividieren(float m) {
+		logger.log(Level.FINER, toString() + " durch " + m + " dividiert");
 		this.x /= m;
 		this.y /= m;
 		return this;
 	}
-	
+
 	public float mag() {
-		return (float) Math.sqrt(x*x+y*y);
+		return (float) Math.sqrt(x * x + y * y);
+	}
+
+	public float dist(Vektor o) {
+		return (float) Math.sqrt(Math.pow((o.x - x), 2) + Math.pow((o.y - y), 2));
 	}
 	
+	public Vektor kopieren() {
+		return new Vektor(x, y);
+	}
+
 	public String toString() {
 		return "Vektor:{x=" + x + ";y=" + y + "}";
 	}
@@ -121,9 +138,9 @@ public class Vektor {
 	public void setY(float y) {
 		this.y = y;
 	}
-	
+
 	public enum Rechenmethode {
 		kopieren, hinzufuegen;
 	}
-	
+
 }

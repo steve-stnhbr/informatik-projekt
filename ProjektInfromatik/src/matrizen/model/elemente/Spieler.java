@@ -27,22 +27,20 @@ import matrizen.view.SpielFenster;
 
 /**
  * Diese Klasse repräsentiert den Spieler
- * 
- * @author Stefan
- *
  */
 public class Spieler extends Figur {
 	private static Spieler instanz;
-	private Vektor posImFeld;
-	private int index;
-	short delay = 5;
+
+	private Vektor ziel;
+	private int index, xFeld, yFeld;
+	short delay = 7;
 	private short[] cooldown;
 	private Richtung blick = Richtung.OBEN;
 
 	private Spieler() {
 		cooldown = new short[5];
 		grafik = DateiManager.laden(DateiManager.Bild.elementSpieler);
-		posImFeld = Vektor.nullVektor;
+		ziel = pos;
 	}
 
 	public static Spieler gibInstanz() {
@@ -53,21 +51,10 @@ public class Spieler extends Figur {
 
 	@Override
 	public void zeichnen(Graphics2D g) {
+		super.zeichnen(g);
 		checkInput();
-		/*
-		 * int x = (int) (posImFeld.getX() * 32), y = (int) (posImFeld.getY() *
-		 * 32); g.setStroke(new BasicStroke(1)); g.setColor(Color.PINK);
-		 * g.drawRect(x, y, (int) 32, (int) 32);
-		 */
 
-		// if (ges.mag() < .5)
-		g.drawImage(bildDrehen(grafik), (int) (posImFeld.getX() * 32), (int) (posImFeld.getY() * 32), (int) 32,
-				(int) 32, null);
-		/*
-		 * else g.drawImage(bildDrehen(animation[index]), (int)
-		 * (posImFeld.getX() * 32), (int) (posImFeld.getY() * 32), (int) 32,
-		 * (int) 32, null);
-		 */
+		g.drawImage(grafik, (int) pos.getX(), (int) pos.getY(), (int) 32, (int) 32, null);
 
 		for (int i = 0; i < cooldown.length; i++) {
 			if (cooldown[i] > 0)
@@ -75,7 +62,7 @@ public class Spieler extends Figur {
 		}
 
 		if (Spiel.gibInstanz().ticks % 5 == 0)
-			index++;
+			index++;	
 	}
 
 	private void checkInput() {
@@ -88,7 +75,7 @@ public class Spieler extends Figur {
 	}
 
 	private void schuss() {
-		
+
 	}
 
 	private Image bildDrehen(BufferedImage grafik) {
@@ -97,15 +84,19 @@ public class Spieler extends Figur {
 
 		AffineTransformOp operation = new AffineTransformOp(transform, AffineTransformOp.TYPE_BILINEAR);
 
-//		return operation.filter(grafik, null);
+		// return operation.filter(grafik, null);
 		return grafik;
 	}
 
 	private void bewegen(Richtung r) {
 		blick = r;
 		if (bewegungMoeglich(r) && cooldown[Richtung.getIndex(r)] == 0) {
-			EventManager.gibInstanz().eventUebergeben(new BewegungsEvent(posImFeld, posImFeld.add(r.vektor), r));
-			pos = new Vektor(posImFeld.getX() * Spiel.feldLaenge, posImFeld.getY() * Spiel.feldLaenge);
+			EventManager.gibInstanz().eventUebergeben(
+					new BewegungsEvent(new Vektor(xFeld, yFeld), new Vektor(xFeld, yFeld).add(r.vektor).kopieren(), r));
+			xFeld += r.vektor.getX();
+			yFeld += r.vektor.getY();
+			ziel = new Vektor(xFeld, yFeld).mult(32f);
+			pos = ziel;
 			cooldown[Richtung.getIndex(r)] = delay;
 		}
 	}
@@ -118,7 +109,7 @@ public class Spieler extends Figur {
 	 * @return
 	 */
 	private boolean bewegungMoeglich(Richtung r) {
-		Vektor v = posImFeld.add(r.vektor, Rechenmethode.kopieren);
+		Vektor v = new Vektor(xFeld + r.vektor.getX(), yFeld + r.vektor.getY());
 		return v.getX() >= 0 && v.getY() >= 0 && v.getX() < Spiel.spalten && v.getY() < Spiel.zeilen
 				&& !Spiel.gibInstanz().getLevel().getFeld(v).isSolide();
 	}

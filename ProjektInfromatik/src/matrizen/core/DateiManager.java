@@ -220,7 +220,7 @@ public class DateiManager {
 			case WASSER:
 				return feldWasser;
 			case WIESE:
-				return zufaelligeWiese();
+				return feldGras0;
 			case BAUM:
 				return feldBaum0;
 			case STEINCHEN:
