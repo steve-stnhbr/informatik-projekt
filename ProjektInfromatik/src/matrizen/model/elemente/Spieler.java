@@ -1,29 +1,20 @@
 package matrizen.model.elemente;
 
-import static matrizen.view.SpielFenster.logger;
-
 import java.awt.Graphics2D;
 import java.awt.Image;
-import java.awt.RenderingHints;
 import java.awt.geom.AffineTransform;
-import java.awt.geom.Point2D;
-import java.awt.geom.Rectangle2D;
 import java.awt.image.AffineTransformOp;
 import java.awt.image.BufferedImage;
-import java.awt.image.BufferedImageFilter;
-import java.awt.image.BufferedImageOp;
-import java.awt.image.ColorModel;
-import java.util.logging.Level;
+import java.util.ArrayList;
+import java.util.List;
 
 import matrizen.core.DateiManager;
 import matrizen.core.EingabeManager;
 import matrizen.core.Richtung;
 import matrizen.core.Vektor;
-import matrizen.core.Vektor.Rechenmethode;
 import matrizen.core.event.BewegungsEvent;
 import matrizen.core.event.EventManager;
 import matrizen.model.Spiel;
-import matrizen.view.SpielFenster;
 
 /**
  * Diese Klasse repräsentiert den Spieler
@@ -36,11 +27,13 @@ public class Spieler extends Figur {
 	short delay = 7;
 	private short[] cooldown;
 	private Richtung blick = Richtung.OBEN;
+	private List<Item> inventar;
 
 	private Spieler() {
 		cooldown = new short[5];
 		grafik = DateiManager.laden(DateiManager.Bild.elementSpieler);
 		ziel = pos;
+		inventar = new ArrayList<Item>();
 	}
 
 	public static Spieler gibInstanz() {

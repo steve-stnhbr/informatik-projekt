@@ -158,7 +158,7 @@ public class DateiManager {
 		elementSchluessel(32, 0, srcElement),
 		elementGegener(0, 32, srcElement),
 		partikelMittelOrange(0, 0, srcPartikel),
-		partikelMittelBlau(0, 32, srcPartikel),
+		partikelMittelBlau(32, 0, srcPartikel),
 		partikelKleinRot(32, 0, srcPartikel);
 
 		public int x, y;
@@ -206,6 +206,7 @@ public class DateiManager {
 		
 		private static Bild zufaelligerPartikel(Geschoss.Typ t) {
 			switch(t) {
+			case kleinBlau: return partikelMittelBlau;
 			default: return nullGrafik;
 			}
 		}
