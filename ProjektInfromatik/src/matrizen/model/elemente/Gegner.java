@@ -4,7 +4,7 @@ import java.awt.Graphics2D;
 
 import matrizen.core.Vektor;
 
-public class Gegner extends Figur{
+public class Gegner extends Figur {
 
 	@Override
 	public void kraftAusueben(Vektor v) {
@@ -14,7 +14,6 @@ public class Gegner extends Figur{
 
 	@Override
 	public void zeichnen(Graphics2D g) {
-		// TODO Auto-generated method stub
 		
 	}
 

@@ -2,10 +2,9 @@ package matrizen.model.elemente;
 
 import java.awt.Graphics2D;
 
-import matrizen.core.Vektor;
-import matrizen.model.Gegenstand;
+import matrizen.model.Levelelement;
 
-public class Geschoss extends Gegenstand {
+public class Geschoss extends Levelelement {
 	private Typ t;
 	private boolean spieler;
 	

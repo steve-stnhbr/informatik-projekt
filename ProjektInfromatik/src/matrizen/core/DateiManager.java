@@ -156,6 +156,7 @@ public class DateiManager {
 		feldErde3(96, 160, srcFeld),
 		elementSpieler(0, 0, srcElement),
 		elementSchluessel(32, 0, srcElement),
+		elementGegener(0, 32, srcElement),
 		partikelMittelOrange(0, 0, srcPartikel),
 		partikelMittelBlau(0, 32, srcPartikel),
 		partikelKleinRot(32, 0, srcPartikel);
