@@ -20,6 +20,7 @@ public class Geschoss extends Levelelement {
 
 	@Override
 	public void zeichnen(Graphics2D g) {
+		super.aktualisieren();
 		g.drawImage(grafik, (int) pos.getX(), (int) pos.getY(), null);
 	}
 

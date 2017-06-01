@@ -35,7 +35,7 @@ public class Spiel implements KeyListener {
 		logger.log(java.util.logging.Level.INFO, "Spiel erstellt");
 		SpielFenster.gibInstanz().addKeyListener(this);
 		level = Level.anfangsLevel;
-		level.hinzufuegen(new Geschoss(Geschoss.Typ.kleinBlau, new Vektor(5, 5), new Vektor(1, 0), false));
+		level.hinzufuegen(new Geschoss(Geschoss.Typ.kleinBlau, new Vektor(5, 5), new Vektor(4, 1), false));
 	}
 
 	public static Spiel gibInstanz() {
