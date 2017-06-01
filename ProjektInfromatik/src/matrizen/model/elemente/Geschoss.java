@@ -2,6 +2,7 @@ package matrizen.model.elemente;
 
 import java.awt.Graphics2D;
 
+import matrizen.core.DateiManager;
 import matrizen.core.Vektor;
 import matrizen.model.Levelelement;
 
@@ -13,6 +14,7 @@ public class Geschoss extends Levelelement {
 		this.t = t;
 		this.pos = pos;
 		this.spieler = spieler;
+		grafik = DateiManager.laden(DateiManager.Bild.zufaelligeGrafik(t));
 		kraftAusueben(v);
 	}
 
