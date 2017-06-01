@@ -8,9 +8,11 @@ import matrizen.model.Gegenstand;
 
 public class Item extends Gegenstand {
 	private Typ typ;
+	private Vektor posIF;
 	
-	public Item(Typ t) {
+	public Item(Typ t, Vektor posIF) {
 		this.typ = t;
+		this.posIF = posIF;
 		this.grafik = DateiManager.laden(DateiManager.Bild.zufaelligeGrafik(t));
 	}
 
