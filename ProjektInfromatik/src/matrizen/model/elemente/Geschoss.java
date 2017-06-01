@@ -15,7 +15,7 @@ public class Geschoss extends Levelelement {
 		this.pos = pos;
 		this.spieler = spieler;
 		grafik = DateiManager.laden(DateiManager.Bild.zufaelligeGrafik(t));
-		kraftAusueben(v);
+		bes.add(v);
 	}
 
 	@Override

@@ -19,6 +19,7 @@ import matrizen.view.SpielFenster;
 
 /**
  * Dies ist die Hauptklasse, die auch den Input verwaltet
+ * 
  * @author Stefan
  *
  */
@@ -29,12 +30,12 @@ public class Spiel implements KeyListener {
 	private Level level;
 	private Konfiguration config;
 	public long ticks;
-	
+
 	private Spiel() {
 		logger.log(java.util.logging.Level.INFO, "Spiel erstellt");
 		SpielFenster.gibInstanz().addKeyListener(this);
 		level = Level.anfangsLevel;
-		level.hinzufuegen(new Geschoss(Geschoss.Typ.kleinBlau, new Vektor(5, 5), Vektor.nullVektor, false));
+		level.hinzufuegen(new Geschoss(Geschoss.Typ.kleinBlau, new Vektor(5, 5), new Vektor(1, 0), false));
 	}
 
 	public static Spiel gibInstanz() {
@@ -54,8 +55,8 @@ public class Spiel implements KeyListener {
 	 */
 	@Override
 	public void keyPressed(KeyEvent e) {
-		
-		switch(e.getKeyCode()) {
+
+		switch (e.getKeyCode()) {
 		case VK_ESCAPE:
 			System.exit(0);
 			break;
@@ -81,24 +82,22 @@ public class Spiel implements KeyListener {
 			EingabeManager.aktivieren(EingabeManager.gibEingaben().length - 1);
 			break;
 		}
-		
+
 		/*
-		int c = e.getKeyCode();
-		
-		if (c == KeyEvent.VK_ESCAPE)
-			System.exit(0);
-		else if (c == config.getLinks())
-			EingabeManager.aktivieren(Input.getIndex(Input.bewegungLinks);
-		else if (c == config.getRechts())
-			EingabeManager.aktivieren(Input.getIndex(Input.bewegungRechts);
-		else if (c == config.getUnten())
-			EingabeManager.aktivieren(Input.getIndex(Input.bewegungRunter);
-		else if(c == config.getSchuss()) 
-			EingabeManager.aktivieren(Input.getIndex(Input.schuss);
-		else if(c == config.getOben()) {
-			EingabeManager.aktivieren(Input.getIndex(Input.bewegungHoch);
-		}
-		*/
+		 * int c = e.getKeyCode();
+		 * 
+		 * if (c == KeyEvent.VK_ESCAPE) System.exit(0); else if (c ==
+		 * config.getLinks())
+		 * EingabeManager.aktivieren(Input.getIndex(Input.bewegungLinks); else
+		 * if (c == config.getRechts())
+		 * EingabeManager.aktivieren(Input.getIndex(Input.bewegungRechts); else
+		 * if (c == config.getUnten())
+		 * EingabeManager.aktivieren(Input.getIndex(Input.bewegungRunter); else
+		 * if(c == config.getSchuss())
+		 * EingabeManager.aktivieren(Input.getIndex(Input.schuss); else if(c ==
+		 * config.getOben()) {
+		 * EingabeManager.aktivieren(Input.getIndex(Input.bewegungHoch); }
+		 */
 	}
 
 	public Level getLevel() {
@@ -121,19 +120,20 @@ public class Spiel implements KeyListener {
 		bewegungHoch, bewegungRunter, bewegungRechts, bewegungLinks, schuss;
 
 		public static int getIndex(Input in) {
-			for(int i = 0; i < values().length; i++) 
-				if(values()[i] == in)
+			for (int i = 0; i < values().length; i++)
+				if (values()[i] == in)
 					return i;
 			return -1;
 		}
 	}
 
 	@Override
-	public void keyTyped(KeyEvent e) {}
+	public void keyTyped(KeyEvent e) {
+	}
 
 	@Override
 	public void keyReleased(KeyEvent e) {
-		switch(e.getKeyCode()) {
+		switch (e.getKeyCode()) {
 		case VK_ESCAPE:
 			System.exit(0);
 			break;
