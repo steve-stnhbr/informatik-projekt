@@ -39,6 +39,10 @@ public class Level {
 			l.zeichnen(g);
 		}
 	}
+	
+	public void hinzufuegen(Levelelement l) {
+		liste.add(l);
+	}
 
 	public String toString() {
 		String s = "Level:{felder=[";
