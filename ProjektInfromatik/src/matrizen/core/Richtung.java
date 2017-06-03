@@ -6,8 +6,8 @@ public enum Richtung {
 	RECHTS(new Vektor(1, 0), 90),
 	LINKS(new Vektor(-1, 0), 270);
 
-	public Vektor vektor;
-	public int winkel;
+	private Vektor vektor;
+	private int winkel;
 
 	private Richtung(Vektor v, int w) {
 		this.vektor = v;
@@ -16,6 +16,14 @@ public enum Richtung {
 	
 	public static Richtung getRichtung(int index) {
 		return values()[index];
+	}
+	
+	public Vektor getVektor() {
+		return vektor;
+	}
+	
+	public int getWinkel() {
+		return winkel;
 	}
 	
 	public static int getIndex(Richtung r) {

@@ -1,11 +1,12 @@
 package matrizen.model;
 
 import java.awt.Graphics2D;
-import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 import matrizen.core.DateiManager;
 import matrizen.core.Vektor;
+import matrizen.view.SpielFenster;
 
 public class Level {
 	// nur zum testen
@@ -20,7 +21,7 @@ public class Level {
 	}
 
 	public Level(Feld[][] felder) {
-		this(new ArrayList<Levelelement>(), felder);
+		this(new CopyOnWriteArrayList<Levelelement>(), felder);
 	}
 
 	public Level(List<Levelelement> liste, Feld[][] felder) {
@@ -37,9 +38,19 @@ public class Level {
 
 		for (Levelelement l : liste) {
 			l.zeichnen(g);
+			checkPosition(l);
 		}
 	}
-	
+
+	private void checkPosition(Levelelement l) {
+		if (l.pos.getX() > SpielFenster.breite + 100 
+				|| l.pos.getY() > SpielFenster.hoehe + 100 
+				|| l.pos.getX() < -100
+				|| l.pos.getY() < -100)			
+			liste.remove(l);
+
+	}
+
 	public void hinzufuegen(Levelelement l) {
 		liste.add(l);
 	}
@@ -67,7 +78,7 @@ public class Level {
 				&& levelRechts.equals(other.levelRechts) && levelUnten.equals(other.levelUnten)
 				&& levelLinks.equals(other.levelLinks);
 	}
-	
+
 	public Feld getFeld(int x, int y) {
 		return felder[x][y];
 	}

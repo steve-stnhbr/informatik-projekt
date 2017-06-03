@@ -42,43 +42,33 @@ public class Vektor {
 	}
 
 	public Vektor add(float x, float y) {
-		logger.log(Level.FINER, "x: " + x + ";y: " + y + " zu " + toString() + " addiert");
-		return addieren(x, y);
-	}
-
-	public Vektor add(Vektor v) {
-		return add(v.x, v.y);
-	}
-
-	public Vektor addieren(float x, float y) {
 		this.x += x;
 		this.y += y;
 		return this;
 	}
 
-	public Vektor addieren(Vektor k) {
-		return add(k);
+	public Vektor add(Vektor v) {
+		x += v.x;
+		y += v.y;
+		return this;
+	}
+
+	public Vektor sub(Vektor v) {
+		x -= v.x;
+		y -= v.y;
+		return this;
 	}
 
 	public Vektor sub(float x, float y) {
-		logger.log(Level.FINER, "x: " + x + ";y: " + y + " von " + toString() + " subtrahiert");
-		return subtrahieren(x, y);
-	}
-
-	public Vektor subtrahieren(float x, float y) {
-		return addieren(-x, -y);
-	}
-
-	public Vektor sub(Vektor k) {
-		return sub(k.x, k.y);
-	}
-
-	public Vektor subtrahieren(Vektor k) {
-		return sub(k);
+		this.x -= x;
+		this.y -= y;
+		return this;
 	}
 
 	public Vektor mult(float m) {
-		return multiplizieren(m);
+		x *= m;
+		y *= m;
+		return this;
 	}
 
 	public Vektor mult(float m, Rechenmethode r) {
@@ -89,21 +79,9 @@ public class Vektor {
 		return null;
 	}
 
-	public Vektor multiplizieren(float m) {
-		logger.log(Level.FINER, toString() + " mit " + m + " multipliziert");
-		this.x *= m;
-		this.y *= m;
-		return this;
-	}
-
 	public Vektor div(float m) {
-		return dividieren(m);
-	}
-
-	public Vektor dividieren(float m) {
-		logger.log(Level.FINER, toString() + " durch " + m + " dividiert");
-		this.x /= m;
-		this.y /= m;
+		x /= m;
+		y /= m;
 		return this;
 	}
 
@@ -114,9 +92,13 @@ public class Vektor {
 	public float dist(Vektor o) {
 		return (float) Math.sqrt(Math.pow((o.x - x), 2) + Math.pow((o.y - y), 2));
 	}
-	
+
 	public Vektor kopieren() {
 		return new Vektor(x, y);
+	}
+
+	public boolean equals(Vektor o) {
+		return this.x == o.x && this.y == o.y;
 	}
 
 	public String toString() {

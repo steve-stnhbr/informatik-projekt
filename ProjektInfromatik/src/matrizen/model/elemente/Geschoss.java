@@ -15,7 +15,7 @@ public class Geschoss extends Levelelement {
 		this.pos = pos;
 		this.spieler = spieler;
 		grafik = DateiManager.laden(DateiManager.Bild.zufaelligeGrafik(t));
-		bes.add(v);
+		bes = v;
 	}
 
 	@Override
@@ -26,7 +26,8 @@ public class Geschoss extends Levelelement {
 
 	public enum Typ implements GrafikTyp {
 		kleinBlau(20),
-		kleinOrange(7);
+		kleinOrange(7),
+		stern(2);
 		
 		int radius;
 		

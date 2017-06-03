@@ -15,6 +15,7 @@ import matrizen.core.Richtung;
 import matrizen.core.Vektor;
 import matrizen.model.elemente.Geschoss;
 import matrizen.model.elemente.Spieler;
+import matrizen.model.gegner.TestGegner;
 import matrizen.view.SpielFenster;
 
 /**
@@ -35,7 +36,7 @@ public class Spiel implements KeyListener {
 		logger.log(java.util.logging.Level.INFO, "Spiel erstellt");
 		SpielFenster.gibInstanz().addKeyListener(this);
 		level = Level.anfangsLevel;
-		level.hinzufuegen(new Geschoss(Geschoss.Typ.kleinBlau, new Vektor(5, 5), new Vektor(4, 1), false));
+		level.hinzufuegen(new TestGegner(new Vektor(2, 7)));
 	}
 
 	public static Spiel gibInstanz() {

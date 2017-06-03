@@ -1,9 +1,6 @@
 package matrizen.model;
 
-public class Zauberstab {
+public abstract class Zauberstab {
 
-	
-	public enum Aspekt {
-		
-	}
+	public abstract void schuss();
 }

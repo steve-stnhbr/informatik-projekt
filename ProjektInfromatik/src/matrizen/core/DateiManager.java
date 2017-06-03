@@ -10,6 +10,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 import javax.imageio.ImageIO;
 
@@ -18,10 +19,10 @@ import org.json.JSONObject;
 
 import matrizen.model.Feld;
 import matrizen.model.Levelelement;
+import matrizen.model.elemente.Gegner;
 import matrizen.model.elemente.Geschoss;
 import matrizen.model.elemente.GrafikTyp;
 import matrizen.model.elemente.Item;
-import matrizen.model.elemente.Item.Typ;
 
 /**
  * Diese Klasse reguliert alle Zugriffe auf Dateien
@@ -155,11 +156,12 @@ public class DateiManager {
 		feldErde2(64, 160, srcFeld),
 		feldErde3(96, 160, srcFeld),
 		elementSpieler(0, 0, srcElement),
-		elementSchluessel(32, 0, srcElement),
+		elementSpielerAnim0(32, 0, srcElement),
 		elementGegener(0, 32, srcElement),
 		partikelMittelOrange(0, 0, srcPartikel),
 		partikelMittelBlau(32, 0, srcPartikel),
-		partikelKleinRot(32, 0, srcPartikel);
+		partikelKleinRot(32, 0, srcPartikel),
+		partikelSternRotGelb(0, 32, srcPartikel);
 
 		public int x, y;
 		public BufferedImage src;
@@ -195,25 +197,32 @@ public class DateiManager {
 		}
 
 		public static Bild zufaelligeGrafik(GrafikTyp t) {
-			if(t instanceof Feld.Typ) 
+			if (t instanceof Feld.Typ)
 				return zufaelligesFeld((Feld.Typ) t);
-			else if(t instanceof Item.Typ) 
+			else if (t instanceof Item.Typ)
 				return zufaelligesItem((Item.Typ) t);
-			else if(t instanceof Geschoss.Typ)
+			else if (t instanceof Geschoss.Typ)
 				return zufaelligerPartikel((Geschoss.Typ) t);
 			return nullGrafik;
 		}
-		
+
 		private static Bild zufaelligerPartikel(Geschoss.Typ t) {
-			switch(t) {
-			case kleinBlau: return partikelMittelBlau;
-			default: return nullGrafik;
+			switch (t) {
+			case kleinBlau:
+				return partikelMittelBlau;
+			case kleinOrange:
+				return partikelMittelOrange;
+			case stern:
+				return partikelSternRotGelb;
+			default:
+				return nullGrafik;
 			}
 		}
 
 		private static Bild zufaelligesItem(Item.Typ t) {
-			switch(t) {
-			default: return nullGrafik;
+			switch (t) {
+			default:
+				return nullGrafik;
 			}
 		}
 
@@ -262,13 +271,23 @@ public class DateiManager {
 			}
 
 			arr = obj.getJSONArray("gegner");
-			List<Levelelement> elem = new ArrayList<Levelelement>();
+			List<Levelelement> elem = new CopyOnWriteArrayList<Levelelement>();
 
 			for (int i = 0; i < arr.length(); i++) {
-
+				JSONObject geg = arr.getJSONObject(i);
+				int t = geg.getInt("typ"), x = geg.getInt("x"), y = geg.getInt("y");
+				elem.add(Gegner.erstellen(t, x, y));
 			}
 
-			matrizen.model.Level lvl = new matrizen.model.Level(felder);
+			arr = obj.getJSONArray("items");
+
+			for (int i = 0; i < arr.length(); i++) {
+				JSONObject item = arr.getJSONObject(i);
+				int t = item.getInt("typ"), x = item.getInt("x"), y = item.getInt("y");
+				elem.add(new Item(Item.Typ.values()[t], new Vektor(x, y)));
+			}
+
+			matrizen.model.Level lvl = new matrizen.model.Level(elem, felder);
 			logger.log(java.util.logging.Level.FINEST, "Level " + lvl + " aus " + s + " gelesen");
 			return lvl;
 		}
