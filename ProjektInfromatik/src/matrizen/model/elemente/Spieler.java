@@ -95,6 +95,7 @@ public class Spieler extends Figur {
 			 * 1) * 32); if(ziel.getY() > pos.getY())
 			 * ziel.setY((((int)pos.getY() / 32) - 1) * 32);
 			 */
+			
 			logger.log(Level.WARNING, "Ziel danach: " + ziel.toString());
 			logger.log(Level.WARNING, "Position danach: " + pos.toString());
 		}
@@ -111,7 +112,8 @@ public class Spieler extends Figur {
 
 	private void schuss() {
 		if (cooldown[4] == 0) {
-			Spiel.gibInstanz().getLevel().hinzufuegen(new Geschoss(Typ.stern, this.pos,
+//			zauberstab.schuss();
+			Spiel.gibInstanz().getLevel().hinzufuegen(new Geschoss(Typ.stern, 10, this.pos,
 					new Vektor(blick.getVektor().getX(), blick.getVektor().getY()).mult(5), true));
 			cooldown[4] = delaySchuss;
 		}
@@ -155,6 +157,10 @@ public class Spieler extends Figur {
 		Vektor v = new Vektor(xFeld + r.getVektor().getX(), yFeld + r.getVektor().getY());
 		return v.getX() >= 0 && v.getY() >= 0 && v.getX() < Spiel.spalten && v.getY() < Spiel.zeilen
 				&& !Spiel.gibInstanz().getLevel().getFeld(v).isSolide();
+	}
+
+	public void schaden(int schaden) {
+		
 	}
 
 }

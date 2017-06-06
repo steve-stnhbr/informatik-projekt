@@ -6,6 +6,9 @@ import java.util.concurrent.CopyOnWriteArrayList;
 
 import matrizen.core.DateiManager;
 import matrizen.core.Vektor;
+import matrizen.model.elemente.Figur;
+import matrizen.model.elemente.Geschoss;
+import matrizen.model.elemente.Spieler;
 import matrizen.view.SpielFenster;
 
 public class Level {
@@ -30,6 +33,8 @@ public class Level {
 	}
 
 	public void zeichnen(Graphics2D g) {
+		kollisionUeberpruefen();
+		
 		for (Feld[] felds : felder) {
 			for (Feld feld : felds) {
 				feld.zeichnen(g);
@@ -39,6 +44,20 @@ public class Level {
 		for (Levelelement l : liste) {
 			l.zeichnen(g);
 			checkPosition(l);
+		}
+	}
+
+	private void kollisionUeberpruefen() {
+		for(Levelelement l0 : liste) {
+			for(Levelelement l1 : liste) {
+				if(l0 instanceof Geschoss && l1 instanceof Figur) {
+					Geschoss g = (Geschoss) l0;
+					if(g.getPos().dist(l1.getPos()) < g.getTyp().getRadius()) {
+						if(g.isSpieler())
+							Spieler.gibInstanz().schaden(g.getSchaden());
+					}
+				}
+			}
 		}
 	}
 

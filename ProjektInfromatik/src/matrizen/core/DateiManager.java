@@ -173,11 +173,11 @@ public class DateiManager {
 		}
 
 		public static Bild zufaelligerStein() {
-			return values()[random(4, 8)];
+			return values()[random(5, 7)];
 		}
 
 		public static Bild zufaelligeWiese() {
-			return values()[random(0, 4)];
+			return values()[random(1, 5)];
 		}
 
 		public static Bild zufaelligeSteinchen() {
@@ -231,15 +231,15 @@ public class DateiManager {
 			case WASSER:
 				return feldWasser;
 			case WIESE:
-				return feldGras0;
+				return zufaelligeWiese();
 			case BAUM:
-				return feldBaum0;
+				return Math.random() > 0.5 ? feldBaum0 : feldBaum1;
 			case STEINCHEN:
 				return feldSteinchen0;
 			case SCHOTTER:
 				return feldSchotter0;
 			case STEIN:
-				return feldStein0;
+				return zufaelligerStein();
 			case ERDE:
 				return feldErde0;
 			default:

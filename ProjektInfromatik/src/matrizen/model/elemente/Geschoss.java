@@ -9,9 +9,11 @@ import matrizen.model.Levelelement;
 public class Geschoss extends Levelelement {
 	private Typ t;
 	private boolean spieler;
+	private int schaden;
 	
-	public Geschoss(Typ t, Vektor pos, Vektor v, boolean spieler) {
+	public Geschoss(Typ t, int schaden, Vektor pos, Vektor v, boolean spieler) {
 		this.t = t;
+		this.schaden = schaden;
 		this.pos = pos;
 		this.spieler = spieler;
 		grafik = DateiManager.laden(DateiManager.Bild.zufaelligeGrafik(t));
@@ -24,6 +26,18 @@ public class Geschoss extends Levelelement {
 		g.drawImage(grafik, (int) pos.getX(), (int) pos.getY(), null);
 	}
 
+	public Typ getTyp() {
+		return t;
+	}
+
+	public boolean isSpieler() {
+		return spieler;
+	}
+
+	public int getSchaden() {
+		return schaden;
+	}
+
 	public enum Typ implements GrafikTyp {
 		kleinBlau(20),
 		kleinOrange(7),
@@ -33,6 +47,10 @@ public class Geschoss extends Levelelement {
 		
 		private Typ(int radius) {
 			this.radius = radius;
+		}
+
+		public float getRadius() {
+			return radius;
 		}
 	}
 }
