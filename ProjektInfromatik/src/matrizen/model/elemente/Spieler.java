@@ -103,10 +103,10 @@ public class Spieler extends Figur {
 	}
 
 	private void checkInput() {
-		for (int i = 0; i < 4; i++) {
+		for (int i = 0; i < 4; i++)
 			if (EingabeManager.istAktiv(i))
 				bewegen(Richtung.values()[i]);
-		}
+
 		if (EingabeManager.istAktiv(4))
 			schuss();
 	}
@@ -133,7 +133,7 @@ public class Spieler extends Figur {
 	private void bewegen(Richtung r) {
 		blick = r;
 		if (bewegungMoeglich(r) && cooldown[Richtung.getIndex(r)] == 0 && !(ges.getX() != 0 && ges.getY() != 0)
-				&& pos.equals(ziel) && ges.mag() < 1) {
+				&& ges.mag() < 1) {
 			EventManager.gibInstanz().eventUebergeben(new BewegungsEvent(new Vektor(xFeld, yFeld),
 					new Vektor(xFeld, yFeld).add(r.getVektor()).kopieren(), r));
 			xFeld += r.getVektor().getX();
@@ -157,8 +157,11 @@ public class Spieler extends Figur {
 	private boolean bewegungMoeglich(Richtung r) {
 		Vektor v = new Vektor(xFeld + r.getVektor().getX(), yFeld + r.getVektor().getY());
 		return v.getX() >= 0 && v.getY() >= 0 && v.getX() < Spiel.spalten && v.getY() < Spiel.zeilen
-				&& !Spiel.gibInstanz().getLevel().getFeld(v).isSolide() 
-				&& !Spiel.gibInstanz().getLevel().istGegner(v);
+				&& !Spiel.gibInstanz().getLevel().getFeld(v).isSolide() && !Spiel.gibInstanz().getLevel().istGegner(v);
+	}
+
+	public void aufsammeln(Item i) {
+		inventar.add(i);
 	}
 
 	public int getxFeld() {
@@ -177,7 +180,4 @@ public class Spieler extends Figur {
 		this.yFeld = yFeld;
 	}
 
-	public void aufsammeln(Item i) {
-		inventar.add(i);
-	}
 }

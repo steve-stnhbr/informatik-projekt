@@ -10,7 +10,7 @@ public abstract class Gegner extends Figur {
 
 	public abstract void angriff();
 
-	public static Levelelement erstellen(int t, int x, int y) {
+	public static Gegner erstellen(int t, int x, int y) {
 		switch(t) {
 		case 0: return new TestGegner(new Vektor(x, y));
 		default: return null;

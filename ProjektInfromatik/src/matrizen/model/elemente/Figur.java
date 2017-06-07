@@ -7,5 +7,9 @@ public abstract class Figur extends Levelelement {
 	
 	public void schaden(int i) {
 		leben -= i;
-	}	
+	}
+	
+	public int getLeben() {
+		return leben;
+	}
 }

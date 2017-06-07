@@ -1,5 +1,7 @@
 package matrizen.model;
 
+import static matrizen.view.SpielFenster.logger;
+
 import java.awt.Graphics2D;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -54,11 +56,15 @@ public class Level {
 			for (Levelelement l1 : liste) {
 				if (l0 instanceof Geschoss && l1 instanceof Figur) {
 					Geschoss g = (Geschoss) l0;
-					if (g.getPos().dist(l1.getPos()) < g.getTyp().getRadius()) {
+					if (g.getPos().dist(l1.getPos().kopieren().add(new Vektor(16, 16))) < g.getTyp().getRadius() + 16) {
 						if (g.isSpieler())
-							Spieler.gibInstanz().schaden(g.getSchaden());
+							((Figur) l1).schaden(g.getSchaden());		
 						else
-							((Figur) l1).schaden(g.getSchaden());
+							Spieler.gibInstanz().schaden(g.getSchaden());
+						liste.remove(g);
+						
+						if(((Figur)l1).getLeben() <= 0)
+							liste.remove(l1);
 					}
 				}
 
