@@ -6,6 +6,7 @@ import java.awt.image.BufferedImage;
 import matrizen.core.DateiManager;
 import matrizen.core.Vektor;
 import matrizen.model.elemente.GrafikTyp;
+
 public class Feld extends Grafisch {
 	private boolean solide;
 	private Typ t;
@@ -66,7 +67,8 @@ public class Feld extends Grafisch {
 		BAUM(true),
 		WEITER(false) {
 			public void beimBetreten() {
-				Spiel.gibInstanz().setLevel(Spiel.gibInstanz().getLevel().getNaechstesLevel());
+				if ((Spiel.gibInstanz().ticks > 1200 && Spiel.gibInstanz().tutorial) || !Spiel.gibInstanz().tutorial)
+					Spiel.gibInstanz().setLevel(Spiel.gibInstanz().getLevel().getNaechstesLevel());
 			}
 		},
 		STEIN(false),
@@ -80,7 +82,7 @@ public class Feld extends Grafisch {
 		private Typ(boolean solide) {
 			this.solide = solide;
 		}
-		
+
 		public void beimBetreten() {
 			return;
 		}

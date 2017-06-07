@@ -46,8 +46,8 @@ public class Item extends Gegenstand {
 			
 			@Override
 			public void beimAufheben() {
-				Spiel.gibInstanz().getLevel().setFeld((int) Utils.random(0, Spiel.spalten),
-						(int) Utils.random(Spiel.zeilen), Feld.Typ.WEITER);
+				Spiel.gibInstanz().getLevel().setFeld((int) Utils.random(1, Spiel.spalten - 1),
+						(int) Utils.random(1, Spiel.zeilen - (Spiel.gibInstanz().tutorial ? 1 : 2)), Feld.Typ.WEITER);
 			}
 		};
 		

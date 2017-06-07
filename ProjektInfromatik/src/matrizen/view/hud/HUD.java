@@ -1,4 +1,4 @@
-package matrizen.view;
+package matrizen.view.hud;
 
 import java.awt.Graphics2D;
 

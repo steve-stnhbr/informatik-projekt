@@ -19,7 +19,7 @@ public class Level {
 	public static final Level level1 = DateiManager.laden(DateiManager.Level.level1);
 	public static final Level level2 = DateiManager.laden(DateiManager.Level.level2);
 	public static final Level level3 = DateiManager.laden(DateiManager.Level.level3);
-	
+
 	private List<Levelelement> liste;
 	private Feld[][] felder;
 	private Level naechstesLevel;
@@ -53,35 +53,35 @@ public class Level {
 	}
 
 	private void positionUeberpruefen(Feld feld) {
-		if(Spieler.gibInstanz().getPos().kopieren().div(32).equals(feld.getRaster()))
-			feld.beimBetreten();		
+		if (Spieler.gibInstanz().getPos().kopieren().div(32).equals(feld.getRaster()))
+			feld.beimBetreten();
 	}
 
 	private void kollisionUeberpruefen(Levelelement l0) {
-			for (Levelelement l1 : liste) {
-				if (l0 instanceof Geschoss && l1 instanceof Figur) {
-					Geschoss g = (Geschoss) l0;
-					if (g.getPos().dist(l1.getPos().kopieren()) < g.getTyp().getRadius()) {
-						if (g.isSpieler())
-							((Figur) l1).schaden(g.getSchaden());
-						else
-							Spieler.gibInstanz().schaden(g.getSchaden());
-						liste.remove(g);
+		for (Levelelement l1 : liste) {
+			if (l0 instanceof Geschoss && l1 instanceof Figur) {
+				Geschoss g = (Geschoss) l0;
+				if (g.getPos().dist(l1.getPos().kopieren()) < g.getTyp().getRadius()) {
+					if (g.isSpieler())
+						((Figur) l1).schaden(g.getSchaden());
+					else
+						Spieler.gibInstanz().schaden(g.getSchaden());
+					liste.remove(g);
 
-						if (((Figur) l1).getLeben() <= 0) {
-							liste.remove(l1);
-							((Figur) l1).beimTod();
-							l1 = null;
-						}
+					if (((Figur) l1).getLeben() <= 0) {
+						liste.remove(l1);
+						((Figur) l1).beimTod();
+						l1 = null;
 					}
 				}
-
-				if (l1 instanceof Item
-						&& Spieler.gibInstanz().getPos().kopieren().div(32f).equals(l1.getPos().kopieren().div(32))) {
-					((Item) l1).beimAufheben();
-					liste.remove(l1);
-				}
 			}
+
+			if (l1 instanceof Item && (Spiel.gibInstanz().ticks > 800 || !Spiel.gibInstanz().tutorial)
+					&& Spieler.gibInstanz().getPos().kopieren().div(32f).equals(l1.getPos().kopieren().div(32))) {
+				((Item) l1).beimAufheben();
+				liste.remove(l1);
+			}
+		}
 	}
 
 	private void checkPosition(Levelelement l) {
@@ -157,6 +157,6 @@ public class Level {
 	}
 
 	public void setNaechstesLevel(Level naechstesLevel) {
-		this.naechstesLevel = naechstesLevel;		
+		this.naechstesLevel = naechstesLevel;
 	}
 }

@@ -14,14 +14,14 @@ import matrizen.model.elemente.Item.Typ;
 
 public class TestGegner extends Gegner {
 	public static final int maxLeben = 20;
-	
+
 	public TestGegner(Vektor pos) {
 		super();
 		super.schaden(-maxLeben);
 		this.pos = pos.kopieren().mult(32);
 		grafik = DateiManager.laden(DateiManager.Bild.figurGegener);
 	}
-	
+
 	public void angriff() {
 		new Geschoss(Geschoss.Typ.kleinBlau, 10, this.pos, Vektor.nullVektor, false);
 	}
@@ -34,6 +34,7 @@ public class TestGegner extends Gegner {
 
 	@Override
 	public void beimTod() {
-		Spiel.gibInstanz().getLevel().hinzufuegen(new Item(Typ.schluessel, this.pos.kopieren().div(32)));
+		if ((Spiel.gibInstanz().ticks > 600 && Spiel.gibInstanz().tutorial) || !Spiel.gibInstanz().tutorial)
+			Spiel.gibInstanz().getLevel().hinzufuegen(new Item(Typ.schluessel, this.pos.kopieren().div(32)));
 	}
 }

@@ -151,16 +151,17 @@ public class Spieler extends Figur {
 	/**
 	 * Diese Methode überprüft, ob die Bewegung, die der Spieler machen mag,
 	 * überhaupt möglich ist
-	 * 
-	 * @param r
-	 * @return
 	 */
 	private boolean bewegungMoeglich(Richtung r) {
 		Vektor v = new Vektor(xFeld + r.getVektor().getX(), yFeld + r.getVektor().getY());
 
-		return v.getX() >= 0 && v.getY() >= 0 && v.getX() < SpielFenster.hoehe / 32
-				&& v.getY() < SpielFenster.breite / 32 && !Spiel.gibInstanz().getLevel().getFeld(v).isSolide()
-				&& !Spiel.gibInstanz().getLevel().istGegner(v);
+		try {
+			return v.getX() >= 0 && v.getY() >= 0 && v.getX() < SpielFenster.hoehe / 32
+					&& v.getY() < SpielFenster.breite / 32 && !Spiel.gibInstanz().getLevel().getFeld(v).isSolide()
+					&& !Spiel.gibInstanz().getLevel().istGegner(v);
+		} catch (Exception e) {
+		}
+		return false;
 	}
 
 	public void aufsammeln(Item i) {
