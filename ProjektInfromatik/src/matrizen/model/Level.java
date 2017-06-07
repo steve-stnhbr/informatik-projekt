@@ -7,7 +7,9 @@ import java.util.concurrent.CopyOnWriteArrayList;
 import matrizen.core.DateiManager;
 import matrizen.core.Vektor;
 import matrizen.model.elemente.Figur;
+import matrizen.model.elemente.Gegner;
 import matrizen.model.elemente.Geschoss;
+import matrizen.model.elemente.Item;
 import matrizen.model.elemente.Spieler;
 import matrizen.view.SpielFenster;
 
@@ -34,7 +36,7 @@ public class Level {
 
 	public void zeichnen(Graphics2D g) {
 		kollisionUeberpruefen();
-		
+
 		for (Feld[] felds : felder) {
 			for (Feld feld : felds) {
 				feld.zeichnen(g);
@@ -48,24 +50,30 @@ public class Level {
 	}
 
 	private void kollisionUeberpruefen() {
-		for(Levelelement l0 : liste) {
-			for(Levelelement l1 : liste) {
-				if(l0 instanceof Geschoss && l1 instanceof Figur) {
+		for (Levelelement l0 : liste) {
+			for (Levelelement l1 : liste) {
+				if (l0 instanceof Geschoss && l1 instanceof Figur) {
 					Geschoss g = (Geschoss) l0;
-					if(g.getPos().dist(l1.getPos()) < g.getTyp().getRadius()) {
-						if(g.isSpieler())
+					if (g.getPos().dist(l1.getPos()) < g.getTyp().getRadius()) {
+						if (g.isSpieler())
 							Spieler.gibInstanz().schaden(g.getSchaden());
+						else
+							((Figur) l1).schaden(g.getSchaden());
 					}
+				}
+
+				if (l1 instanceof Item
+						&& Spieler.gibInstanz().getPos().kopieren().div(32f).equals(l1.getPos().kopieren().div(32))) {
+					Spieler.gibInstanz().aufsammeln((Item) l1);
+					liste.remove(l1);
 				}
 			}
 		}
 	}
 
 	private void checkPosition(Levelelement l) {
-		if (l.pos.getX() > SpielFenster.breite + 100 
-				|| l.pos.getY() > SpielFenster.hoehe + 100 
-				|| l.pos.getX() < -100
-				|| l.pos.getY() < -100)			
+		if (l.pos.getX() > SpielFenster.breite + 100 || l.pos.getY() > SpielFenster.hoehe + 100 || l.pos.getX() < -100
+				|| l.pos.getY() < -100)
 			liste.remove(l);
 
 	}
@@ -152,5 +160,12 @@ public class Level {
 
 	public Feld getFeld(Vektor v) {
 		return getFeld((int) v.getX(), (int) v.getY());
+	}
+
+	public boolean istGegner(Vektor v) {
+		for (Levelelement l : liste)
+			if (l instanceof Gegner && l.getPos().kopieren().div(32).equals(v))
+				return true;
+		return false;
 	}
 }

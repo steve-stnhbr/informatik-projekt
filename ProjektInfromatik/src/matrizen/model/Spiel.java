@@ -20,12 +20,9 @@ import matrizen.view.SpielFenster;
 
 /**
  * Dies ist die Hauptklasse, die auch den Input verwaltet
- * 
- * @author Stefan
- *
  */
 public class Spiel implements KeyListener {
-	public static final short zeilen = (short) 9, spalten = (short) 12;
+	public static final short zeilen = (short) 9, spalten = (short) 13;
 	public static final float feldLaenge = SpielFenster.breite / Spiel.spalten;
 	private static Spiel instanz;
 	private Level level;
@@ -35,11 +32,12 @@ public class Spiel implements KeyListener {
 	private Spiel() {
 		logger.log(java.util.logging.Level.INFO, "Spiel erstellt");
 		SpielFenster.gibInstanz().addKeyListener(this);
+		Spieler.gibInstanz().setxFeld((int) Math.floor(spalten / 2));
+		Spieler.gibInstanz().setyFeld((int) Math.floor(zeilen / 2));
 		level = Level.anfangsLevel;
-		level.hinzufuegen(new TestGegner(new Vektor(2, 7)));
 	}
 
-	public static Spiel gibInstanz() {
+	static public Spiel gibInstanz() {
 		if (instanz == null)
 			instanz = new Spiel();
 		return instanz;
@@ -56,7 +54,6 @@ public class Spiel implements KeyListener {
 	 */
 	@Override
 	public void keyPressed(KeyEvent e) {
-
 		switch (e.getKeyCode()) {
 		case VK_ESCAPE:
 			System.exit(0);
@@ -80,25 +77,11 @@ public class Spiel implements KeyListener {
 		case VK_SPACE:
 		case VK_Q:
 		case VK_E:
+		case VK_CONTROL:
+		case VK_NUMPAD0:
 			EingabeManager.aktivieren(EingabeManager.gibEingaben().length - 1);
 			break;
 		}
-
-		/*
-		 * int c = e.getKeyCode();
-		 * 
-		 * if (c == KeyEvent.VK_ESCAPE) System.exit(0); else if (c ==
-		 * config.getLinks())
-		 * EingabeManager.aktivieren(Input.getIndex(Input.bewegungLinks); else
-		 * if (c == config.getRechts())
-		 * EingabeManager.aktivieren(Input.getIndex(Input.bewegungRechts); else
-		 * if (c == config.getUnten())
-		 * EingabeManager.aktivieren(Input.getIndex(Input.bewegungRunter); else
-		 * if(c == config.getSchuss())
-		 * EingabeManager.aktivieren(Input.getIndex(Input.schuss); else if(c ==
-		 * config.getOben()) {
-		 * EingabeManager.aktivieren(Input.getIndex(Input.bewegungHoch); }
-		 */
 	}
 
 	public Level getLevel() {
@@ -117,17 +100,6 @@ public class Spiel implements KeyListener {
 		this.config = config;
 	}
 
-	public enum Input {
-		bewegungHoch, bewegungRunter, bewegungRechts, bewegungLinks, schuss;
-
-		public static int getIndex(Input in) {
-			for (int i = 0; i < values().length; i++)
-				if (values()[i] == in)
-					return i;
-			return -1;
-		}
-	}
-
 	@Override
 	public void keyTyped(KeyEvent e) {
 	}
@@ -140,26 +112,26 @@ public class Spiel implements KeyListener {
 			break;
 		case VK_W:
 		case VK_UP:
-			EingabeManager.deaktivieren(Input.getIndex(Input.bewegungHoch));
+			EingabeManager.deaktivieren(Richtung.getIndex(Richtung.OBEN));
 			break;
 		case VK_D:
 		case VK_RIGHT:
-			EingabeManager.deaktivieren(Input.getIndex(Input.bewegungRechts));
+			EingabeManager.deaktivieren(Richtung.getIndex(Richtung.RECHTS));
 			break;
 		case VK_S:
 		case VK_DOWN:
-			EingabeManager.deaktivieren(Input.getIndex(Input.bewegungRunter));
+			EingabeManager.deaktivieren(Richtung.getIndex(Richtung.UNTEN));
 			break;
 		case VK_A:
 		case VK_LEFT:
-			EingabeManager.deaktivieren(Input.getIndex(Input.bewegungLinks));
+			EingabeManager.deaktivieren(Richtung.getIndex(Richtung.LINKS));
 			break;
 		case VK_SPACE:
 		case VK_Q:
 		case VK_E:
-		case VK_CLEAR:
+		case VK_CONTROL:
 		case VK_NUMPAD0:
-			EingabeManager.deaktivieren(Input.getIndex(Input.schuss));
+			EingabeManager.deaktivieren(4);
 			break;
 		}
 	}

@@ -14,11 +14,12 @@ public class Item extends Gegenstand {
 		this.typ = t;
 		this.posIF = posIF;
 		this.grafik = DateiManager.laden(DateiManager.Bild.zufaelligeGrafik(t));
+		pos = posIF.kopieren().mult(32);
 	}
 
 	@Override
 	public void zeichnen(Graphics2D g) {
-		g.drawImage(grafik, (int) pos.getX(), (int) pos.getY(), null); 
+		g.drawImage(grafik, (int) pos.getX(), (int) pos.getY(), 32, 32, null); 
 	}
 
 	public enum Typ implements GrafikTyp {

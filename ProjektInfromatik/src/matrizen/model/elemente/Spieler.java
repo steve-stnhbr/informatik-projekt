@@ -35,10 +35,11 @@ public class Spieler extends Figur {
 
 	private Spieler() {
 		cooldown = new short[5];
-		grafik = DateiManager.laden(DateiManager.Bild.elementSpieler);
+		grafik = DateiManager.laden(DateiManager.Bild.figurSpieler);
+		pos = new Vektor((float) Math.floor(Spiel.spalten / 2) * 32, (float) Math.floor(Spiel.zeilen / 2) * 32);
 		ziel = pos;
 		inventar = new ArrayList<Item>();
-		animation = new BufferedImage[] { DateiManager.laden(DateiManager.Bild.elementSpielerAnim0) };
+		animation = new BufferedImage[] { DateiManager.laden(DateiManager.Bild.figurSpielerAnim0) };
 	}
 
 	public static Spieler gibInstanz() {
@@ -64,7 +65,7 @@ public class Spieler extends Figur {
 
 		if (Spiel.gibInstanz().ticks % 20 == 0) {
 			index++;
-			if(index == animation.length)
+			if (index == animation.length)
 				index = 0;
 		}
 
@@ -95,7 +96,7 @@ public class Spieler extends Figur {
 			 * 1) * 32); if(ziel.getY() > pos.getY())
 			 * ziel.setY((((int)pos.getY() / 32) - 1) * 32);
 			 */
-			
+
 			logger.log(Level.WARNING, "Ziel danach: " + ziel.toString());
 			logger.log(Level.WARNING, "Position danach: " + pos.toString());
 		}
@@ -112,7 +113,7 @@ public class Spieler extends Figur {
 
 	private void schuss() {
 		if (cooldown[4] == 0) {
-//			zauberstab.schuss();
+			// zauberstab.schuss();
 			Spiel.gibInstanz().getLevel().hinzufuegen(new Geschoss(Typ.stern, 10, this.pos,
 					new Vektor(blick.getVektor().getX(), blick.getVektor().getY()).mult(5), true));
 			cooldown[4] = delaySchuss;
@@ -156,11 +157,27 @@ public class Spieler extends Figur {
 	private boolean bewegungMoeglich(Richtung r) {
 		Vektor v = new Vektor(xFeld + r.getVektor().getX(), yFeld + r.getVektor().getY());
 		return v.getX() >= 0 && v.getY() >= 0 && v.getX() < Spiel.spalten && v.getY() < Spiel.zeilen
-				&& !Spiel.gibInstanz().getLevel().getFeld(v).isSolide();
+				&& !Spiel.gibInstanz().getLevel().getFeld(v).isSolide() 
+				&& !Spiel.gibInstanz().getLevel().istGegner(v);
 	}
 
-	public void schaden(int schaden) {
-		
+	public int getxFeld() {
+		return xFeld;
 	}
 
+	public void setxFeld(int xFeld) {
+		this.xFeld = xFeld;
+	}
+
+	public int getyFeld() {
+		return yFeld;
+	}
+
+	public void setyFeld(int yFeld) {
+		this.yFeld = yFeld;
+	}
+
+	public void aufsammeln(Item i) {
+		inventar.add(i);
+	}
 }

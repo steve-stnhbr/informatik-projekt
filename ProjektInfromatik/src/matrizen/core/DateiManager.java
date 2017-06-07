@@ -31,7 +31,7 @@ import matrizen.model.elemente.Item;
  *
  */
 public class DateiManager {
-	private static BufferedImage srcFeld, srcElement, srcPartikel;
+	private static BufferedImage srcFeld, srcFigur, srcPartikel, srcItem;
 	public final static String pfad = DateiManager.class.getProtectionDomain().getCodeSource().getLocation().toString()
 			.replace("/file:/", "").replace("file: /", "").replace("file:/", "");
 
@@ -98,10 +98,12 @@ public class DateiManager {
 		try {
 			if (srcFeld == null)
 				srcFeld = ImageIO.read(new File(pfad + "res/grafik/feld_res.png"));
-			if (srcElement == null)
-				srcElement = ImageIO.read(new File(pfad + "res/grafik/element_res.png"));
+			if (srcFigur == null)
+				srcFigur = ImageIO.read(new File(pfad + "res/grafik/figur_res.png"));
 			if (srcPartikel == null)
 				srcPartikel = ImageIO.read(new File(pfad + "res/grafik/partikel_res.png"));
+			if (srcItem == null)
+				srcItem = ImageIO.read(new File(pfad + "res/grafik/item_res.png"));
 		} catch (IOException e) {
 			logger.log(java.util.logging.Level.SEVERE, e.getMessage(), e);
 		}
@@ -155,9 +157,10 @@ public class DateiManager {
 		feldErde1(32, 160, srcFeld),
 		feldErde2(64, 160, srcFeld),
 		feldErde3(96, 160, srcFeld),
-		elementSpieler(0, 0, srcElement),
-		elementSpielerAnim0(32, 0, srcElement),
-		elementGegener(0, 32, srcElement),
+		figurSpieler(0, 0, srcFigur),
+		figurSpielerAnim0(32, 0, srcFigur),
+		figurGegener(0, 128, srcFigur),
+		itemSchluessel(0, 0, srcItem),
 		partikelMittelOrange(0, 0, srcPartikel),
 		partikelMittelBlau(32, 0, srcPartikel),
 		partikelKleinRot(32, 0, srcPartikel),
@@ -221,6 +224,8 @@ public class DateiManager {
 
 		private static Bild zufaelligesItem(Item.Typ t) {
 			switch (t) {
+			case schluessel:
+				return itemSchluessel;
 			default:
 				return nullGrafik;
 			}

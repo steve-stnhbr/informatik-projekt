@@ -11,11 +11,11 @@ public class TestGegner extends Gegner {
 	
 	public TestGegner(Vektor pos) {
 		this.pos = pos.kopieren().mult(32);
-		grafik = DateiManager.laden(DateiManager.Bild.elementGegener);
+		grafik = DateiManager.laden(DateiManager.Bild.figurGegener);
 	}
 	
 	public void angriff() {
-		new Geschoss(Geschoss.Typ.kleinBlau, this.pos, Vektor.nullVektor, false);
+		new Geschoss(Geschoss.Typ.kleinBlau, 10, this.pos, Vektor.nullVektor, false);
 	}
 
 	@Override
