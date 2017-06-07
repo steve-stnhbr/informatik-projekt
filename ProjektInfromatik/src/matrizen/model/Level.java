@@ -1,13 +1,12 @@
 package matrizen.model;
 
-import static matrizen.view.SpielFenster.logger;
-
 import java.awt.Graphics2D;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import matrizen.core.DateiManager;
 import matrizen.core.Vektor;
+import matrizen.model.Feld.Typ;
 import matrizen.model.elemente.Figur;
 import matrizen.model.elemente.Gegner;
 import matrizen.model.elemente.Geschoss;
@@ -16,12 +15,14 @@ import matrizen.model.elemente.Spieler;
 import matrizen.view.SpielFenster;
 
 public class Level {
-	// nur zum testen
-	public static final Level anfangsLevel = DateiManager.laden(DateiManager.Level.level1);
-	// TODO
+	public static final Level level0 = DateiManager.laden(DateiManager.Level.level0);
+	public static final Level level1 = DateiManager.laden(DateiManager.Level.level1);
+	public static final Level level2 = DateiManager.laden(DateiManager.Level.level2);
+	public static final Level level3 = DateiManager.laden(DateiManager.Level.level3);
+	
 	private List<Levelelement> liste;
 	private Feld[][] felder;
-	private Level levelOben, levelUnten, levelLinks, levelRechts;
+	private Level naechstesLevel;
 
 	public Level() {
 		this(new Feld[Spiel.zeilen][Spiel.spalten]);
@@ -37,44 +38,50 @@ public class Level {
 	}
 
 	public void zeichnen(Graphics2D g) {
-		kollisionUeberpruefen();
-
 		for (Feld[] felds : felder) {
 			for (Feld feld : felds) {
 				feld.zeichnen(g);
+				positionUeberpruefen(feld);
 			}
 		}
 
 		for (Levelelement l : liste) {
+			kollisionUeberpruefen(l);
 			l.zeichnen(g);
 			checkPosition(l);
 		}
 	}
 
-	private void kollisionUeberpruefen() {
-		for (Levelelement l0 : liste) {
+	private void positionUeberpruefen(Feld feld) {
+		if(Spieler.gibInstanz().getPos().kopieren().div(32).equals(feld.getRaster()))
+			feld.beimBetreten();		
+	}
+
+	private void kollisionUeberpruefen(Levelelement l0) {
 			for (Levelelement l1 : liste) {
 				if (l0 instanceof Geschoss && l1 instanceof Figur) {
 					Geschoss g = (Geschoss) l0;
-					if (g.getPos().dist(l1.getPos().kopieren().add(new Vektor(16, 16))) < g.getTyp().getRadius() + 16) {
+					if (g.getPos().dist(l1.getPos().kopieren()) < g.getTyp().getRadius()) {
 						if (g.isSpieler())
-							((Figur) l1).schaden(g.getSchaden());		
+							((Figur) l1).schaden(g.getSchaden());
 						else
 							Spieler.gibInstanz().schaden(g.getSchaden());
 						liste.remove(g);
-						
-						if(((Figur)l1).getLeben() <= 0)
+
+						if (((Figur) l1).getLeben() <= 0) {
 							liste.remove(l1);
+							((Figur) l1).beimTod();
+							l1 = null;
+						}
 					}
 				}
 
 				if (l1 instanceof Item
 						&& Spieler.gibInstanz().getPos().kopieren().div(32f).equals(l1.getPos().kopieren().div(32))) {
-					Spieler.gibInstanz().aufsammeln((Item) l1);
+					((Item) l1).beimAufheben();
 					liste.remove(l1);
 				}
 			}
-		}
 	}
 
 	private void checkPosition(Levelelement l) {
@@ -107,9 +114,7 @@ public class Level {
 	}
 
 	public boolean equals(Level other) {
-		return liste.equals(other.liste) && felder.equals(other.felder) && levelOben.equals(other.levelOben)
-				&& levelRechts.equals(other.levelRechts) && levelUnten.equals(other.levelUnten)
-				&& levelLinks.equals(other.levelLinks);
+		return liste.equals(other.liste) && felder.equals(other.felder) && naechstesLevel.equals(other.naechstesLevel);
 	}
 
 	public Feld getFeld(int x, int y) {
@@ -132,38 +137,6 @@ public class Level {
 		this.felder = felder;
 	}
 
-	public Level getLevelOben() {
-		return levelOben;
-	}
-
-	public void setLevelOben(Level levelOben) {
-		this.levelOben = levelOben;
-	}
-
-	public Level getLevelUnten() {
-		return levelUnten;
-	}
-
-	public void setLevelUnten(Level levelUnten) {
-		this.levelUnten = levelUnten;
-	}
-
-	public Level getLevelLinks() {
-		return levelLinks;
-	}
-
-	public void setLevelLinks(Level levelLinks) {
-		this.levelLinks = levelLinks;
-	}
-
-	public Level getLevelRechts() {
-		return levelRechts;
-	}
-
-	public void setLevelRechts(Level levelRechts) {
-		this.levelRechts = levelRechts;
-	}
-
 	public Feld getFeld(Vektor v) {
 		return getFeld((int) v.getX(), (int) v.getY());
 	}
@@ -173,5 +146,17 @@ public class Level {
 			if (l instanceof Gegner && l.getPos().kopieren().div(32).equals(v))
 				return true;
 		return false;
+	}
+
+	public void setFeld(int x, int y, Typ t) {
+		felder[x][y] = new Feld(t, new Vektor(x, y));
+	}
+
+	public Level getNaechstesLevel() {
+		return naechstesLevel;
+	}
+
+	public void setNaechstesLevel(Level naechstesLevel) {
+		this.naechstesLevel = naechstesLevel;		
 	}
 }

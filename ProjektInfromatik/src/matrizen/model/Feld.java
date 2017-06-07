@@ -1,24 +1,17 @@
 package matrizen.model;
 
 import java.awt.Graphics2D;
-import java.awt.Image;
 import java.awt.image.BufferedImage;
-import java.awt.image.ImageObserver;
 
 import matrizen.core.DateiManager;
 import matrizen.core.Vektor;
 import matrizen.model.elemente.GrafikTyp;
-import matrizen.view.SpielFenster;
-
 public class Feld extends Grafisch {
-	private static final float faktorX = SpielFenster.hoehe / Spiel.zeilen,
-			faktorY = SpielFenster.breite / Spiel.spalten;
 	private boolean solide;
 	private Typ t;
 	private Vektor raster;
 
 	public Feld(Typ t, Vektor raster) {
-		// this(t.gibGrafik(), t.solide);
 		this.t = t;
 		this.raster = raster;
 		grafik = DateiManager.laden(DateiManager.Bild.zufaelligeGrafik(t));
@@ -28,10 +21,6 @@ public class Feld extends Grafisch {
 	@Override
 	public void zeichnen(Graphics2D g) {
 		g.drawImage(grafik, (int) raster.getX() * 32, (int) raster.getY() * 32, 32, 32, null);
-		/*
-		g.drawImage(grafik, (int) (raster.getX() * Spiel.feldLaenge), (int) (raster.getY() * Spiel.feldLaenge),
-				(int) SpielFenster.breite / Spiel.spalten, (int) SpielFenster.hoehe / Spiel.zeilen, null);
-				*/
 	}
 
 	public String toString() {
@@ -58,11 +47,28 @@ public class Feld extends Grafisch {
 		this.t = t;
 	}
 
+	public Vektor getRaster() {
+		return raster;
+	}
+
+	public void setRaster(Vektor raster) {
+		this.raster = raster;
+	}
+
+	public void beimBetreten() {
+		t.beimBetreten();
+	}
+
 	public enum Typ implements GrafikTyp {
 		WIESE(false),
 		ERDE(false),
 		WASSER(true),
 		BAUM(true),
+		WEITER(false) {
+			public void beimBetreten() {
+				Spiel.gibInstanz().setLevel(Spiel.gibInstanz().getLevel().getNaechstesLevel());
+			}
+		},
 		STEIN(false),
 		STEINCHEN(true),
 		SCHOTTER(false),
@@ -73,6 +79,10 @@ public class Feld extends Grafisch {
 
 		private Typ(boolean solide) {
 			this.solide = solide;
+		}
+		
+		public void beimBetreten() {
+			return;
 		}
 
 		public BufferedImage gibGrafik() {

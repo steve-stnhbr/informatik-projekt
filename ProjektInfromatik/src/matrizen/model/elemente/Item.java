@@ -3,8 +3,11 @@ package matrizen.model.elemente;
 import java.awt.Graphics2D;
 
 import matrizen.core.DateiManager;
+import matrizen.core.Utils;
 import matrizen.core.Vektor;
+import matrizen.model.Feld;
 import matrizen.model.Gegenstand;
+import matrizen.model.Spiel;
 
 public class Item extends Gegenstand {
 	private Typ typ;
@@ -21,8 +24,35 @@ public class Item extends Gegenstand {
 	public void zeichnen(Graphics2D g) {
 		g.drawImage(grafik, (int) pos.getX(), (int) pos.getY(), 32, 32, null); 
 	}
+	
+	public void beimAufheben() {
+		typ.beimAufheben();
+	}
+
+	public Typ getTyp() {
+		return typ;
+	}
 
 	public enum Typ implements GrafikTyp {
-		schluessel;
+		herz {
+			
+			@Override
+			public void beimAufheben() {
+				Spieler.gibInstanz().leben += 20;
+			}
+		},
+		muenze,
+		schluessel {
+			
+			@Override
+			public void beimAufheben() {
+				Spiel.gibInstanz().getLevel().setFeld((int) Utils.random(0, Spiel.spalten),
+						(int) Utils.random(Spiel.zeilen), Feld.Typ.WEITER);
+			}
+		};
+		
+		public void beimAufheben() {
+			return;
+		}
 	}
 }

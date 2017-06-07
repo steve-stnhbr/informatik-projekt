@@ -12,4 +12,6 @@ public abstract class Figur extends Levelelement {
 	public int getLeben() {
 		return leben;
 	}
+
+	public abstract void beimTod();
 }

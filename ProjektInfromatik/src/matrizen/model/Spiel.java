@@ -9,6 +9,7 @@ import java.awt.Toolkit;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
+import matrizen.core.DateiManager;
 import matrizen.core.EingabeManager;
 import matrizen.core.Konfiguration;
 import matrizen.core.Richtung;
@@ -34,7 +35,14 @@ public class Spiel implements KeyListener {
 		SpielFenster.gibInstanz().addKeyListener(this);
 		Spieler.gibInstanz().setxFeld((int) Math.floor(spalten / 2));
 		Spieler.gibInstanz().setyFeld((int) Math.floor(zeilen / 2));
-		level = Level.anfangsLevel;
+		
+		Level.level0.setNaechstesLevel(Level.level1);
+		Level.level1.setNaechstesLevel(Level.level2);
+		Level.level2.setNaechstesLevel(Level.level3);
+		
+		level = Level.level0;
+		
+		
 	}
 
 	static public Spiel gibInstanz() {
@@ -134,5 +142,13 @@ public class Spiel implements KeyListener {
 			EingabeManager.deaktivieren(4);
 			break;
 		}
+	}
+
+	public void beenden() {
+		
+	}
+
+	public void aendereLevel(Richtung links) {
+		
 	}
 }

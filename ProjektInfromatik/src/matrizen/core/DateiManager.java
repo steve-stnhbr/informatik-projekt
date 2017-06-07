@@ -116,12 +116,12 @@ public class DateiManager {
 	 *
 	 */
 	public enum Level {
+		level0(inhaltLesen("/levels/level0.mld")),
 		level1(inhaltLesen("/levels/level1.mld")),
 		level2(inhaltLesen("/levels/level2.mld")),
 		level3(inhaltLesen("/levels/level3.mld")),
 		level4(inhaltLesen("/levels/level4.mld")),
-		level5(inhaltLesen("/levels/level5.mld")),
-		level6(inhaltLesen("/levels/level6.mld"));
+		level5(inhaltLesen("/levels/level5.mld"));
 
 		public String src;
 
@@ -146,9 +146,7 @@ public class DateiManager {
 		feldSteinchen0(0, 64, srcFeld),
 		feldSteinchen1(32, 64, srcFeld),
 		feldSchotter0(0, 96, srcFeld),
-		feldSchotter1(32, 96, srcFeld),
-		feldSchotter2(64, 96, srcFeld),
-		feldSchotter3(96, 96, srcFeld),
+		feldWeiter(32, 96, srcFeld),
 		feldBaum0(0, 128, srcFeld),
 		feldBaum1(32, 128, srcFeld),
 		feldWasser(64, 128, srcFeld),
@@ -161,6 +159,8 @@ public class DateiManager {
 		figurSpielerAnim0(32, 0, srcFigur),
 		figurGegener(0, 128, srcFigur),
 		itemSchluessel(0, 0, srcItem),
+		itemMuenze(0, 32, srcItem),
+		itemHerz(64, 0, srcItem),
 		partikelMittelOrange(0, 0, srcPartikel),
 		partikelMittelBlau(32, 0, srcPartikel),
 		partikelKleinRot(32, 0, srcPartikel),
@@ -224,6 +224,10 @@ public class DateiManager {
 
 		private static Bild zufaelligesItem(Item.Typ t) {
 			switch (t) {
+			case herz: 
+				return itemHerz;
+			case muenze:
+				return itemMuenze;
 			case schluessel:
 				return itemSchluessel;
 			default:
@@ -247,6 +251,8 @@ public class DateiManager {
 				return zufaelligerStein();
 			case ERDE:
 				return feldErde0;
+			case WEITER:
+				return feldWeiter;
 			default:
 				return nullGrafik;
 			}

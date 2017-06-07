@@ -19,6 +19,7 @@ import matrizen.core.event.BewegungsEvent;
 import matrizen.core.event.EventManager;
 import matrizen.model.Spiel;
 import matrizen.model.elemente.Geschoss.Typ;
+import matrizen.view.SpielFenster;
 
 /**
  * Diese Klasse repräsentiert den Spieler
@@ -156,12 +157,24 @@ public class Spieler extends Figur {
 	 */
 	private boolean bewegungMoeglich(Richtung r) {
 		Vektor v = new Vektor(xFeld + r.getVektor().getX(), yFeld + r.getVektor().getY());
-		return v.getX() >= 0 && v.getY() >= 0 && v.getX() < Spiel.spalten && v.getY() < Spiel.zeilen
-				&& !Spiel.gibInstanz().getLevel().getFeld(v).isSolide() && !Spiel.gibInstanz().getLevel().istGegner(v);
+
+		return v.getX() >= 0 && v.getY() >= 0 && v.getX() < SpielFenster.hoehe / 32
+				&& v.getY() < SpielFenster.breite / 32 && !Spiel.gibInstanz().getLevel().getFeld(v).isSolide()
+				&& !Spiel.gibInstanz().getLevel().istGegner(v);
 	}
 
 	public void aufsammeln(Item i) {
-		inventar.add(i);
+		switch (i.getTyp()) {
+		case herz:
+			leben += 20;
+		default:
+			inventar.add(i);
+		}
+	}
+
+	@Override
+	public void beimTod() {
+		Spiel.gibInstanz().beenden();
 	}
 
 	public int getxFeld() {
