@@ -45,6 +45,8 @@ public class Spiel implements KeyListener {
 	private Text text;
 	private boolean schiessen;
 	public boolean tutorial = true;
+	private boolean[] tutorials;
+	private int tutorialTick;
 
 	private Spiel() {
 		logger.log(java.util.logging.Level.INFO, "Spiel erstellt");
@@ -55,6 +57,8 @@ public class Spiel implements KeyListener {
 		Level.level1.setNaechstesLevel(Level.level2);
 		Level.level2.setNaechstesLevel(Level.level3);
 
+		tutorials = new boolean[6];
+		
 		schiessen = !tutorial;
 		level = Level.level1;
 		if (!tutorial)
@@ -68,6 +72,7 @@ public class Spiel implements KeyListener {
 	}
 
 	public void zeichnen(Graphics2D graphics) {
+		//TODO n‰chster Schritt des Tutorials erst nachdem momentanter Schritt beendet wurde
 		if (tutorial) {
 			if (ticks == 0) {
 				level = Level.level0;
@@ -75,9 +80,9 @@ public class Spiel implements KeyListener {
 			}
 			if (ticks == 75)
 				SpielFenster.gibInstanz().addKeyListener(this);
-			if (ticks == 200)
+			if (ticks == tutorialTick + 200)
 				text = new Text("Mit der Leertaste, E, Q oder STRG kannst du", "Partikel verschieﬂen");
-			if (ticks == 250)
+			if (ticks == tutorialTick + 250)
 				schiessen = true;
 
 			if (ticks == 400) {
@@ -113,6 +118,9 @@ public class Spiel implements KeyListener {
 			}
 		}
 
+		if (level.equals(Level.level1))
+			tutorials[2] = true;
+
 		level.zeichnen(graphics);
 		Spieler.gibInstanz().zeichnen(graphics);
 		if (text != null)
@@ -145,26 +153,37 @@ public class Spiel implements KeyListener {
 		case VK_W:
 		case VK_UP:
 			EingabeManager.aktivieren(Richtung.getIndex(Richtung.OBEN));
+			tutorials[0] = true;
+			tutorialTick = (int) ticks;
 			break;
 		case VK_D:
 		case VK_RIGHT:
 			EingabeManager.aktivieren(Richtung.getIndex(Richtung.RECHTS));
+			tutorials[0] = true;
+			tutorialTick = (int) ticks;
 			break;
 		case VK_S:
 		case VK_DOWN:
 			EingabeManager.aktivieren(Richtung.getIndex(Richtung.UNTEN));
+			tutorials[0] = true;
+			tutorialTick = (int) ticks;
 			break;
 		case VK_A:
 		case VK_LEFT:
 			EingabeManager.aktivieren(Richtung.getIndex(Richtung.LINKS));
+			tutorials[0] = true;
+			tutorialTick = (int) ticks;
 			break;
 		case VK_SPACE:
 		case VK_Q:
 		case VK_E:
 		case VK_CONTROL:
 		case VK_NUMPAD0:
-			if (schiessen)
+			if (schiessen) {
+				tutorials[1] = true;
+				tutorialTick = (int) ticks;
 				EingabeManager.aktivieren(EingabeManager.gibEingaben().length - 1);
+			}
 			break;
 		}
 	}
