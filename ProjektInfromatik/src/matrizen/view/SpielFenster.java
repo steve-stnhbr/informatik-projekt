@@ -39,7 +39,7 @@ public class SpielFenster extends JFrame {
 	 * ausgehend die andere Seite berechnet
 	 */
 	public static final int hoehe = getDefaultToolkit().getScreenSize().height / 3 * 2,
-			breite = hoehe * Spiel.spalten / Spiel.zeilen, ticks = 35;
+			breite = hoehe * Spiel.spalten / Spiel.zeilen, ticks = 30;
 	private static SpielFenster instanz;
 	private BufferedImage bImg;
 	private Graphics2D graphics;
@@ -55,6 +55,7 @@ public class SpielFenster extends JFrame {
 		setMinimumSize(new Dimension(breite, hoehe));
 		setLocation(new Point(getDefaultToolkit().getScreenSize().width / 2 - breite / 2,
 				getDefaultToolkit().getScreenSize().height / 2 - hoehe / 2));
+		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		listenerHinzufuegen();
 		bImg = new BufferedImage(Spiel.spalten * 32, Spiel.zeilen * 32, BufferedImage.TYPE_INT_RGB);
 		graphics = (Graphics2D) bImg.getGraphics();

@@ -24,18 +24,29 @@ public class MusikPlayer {
 	static private Clip clip;
 	static private Timer timer;
 	static private boolean weiter = true, wiederholen, zufall;
+	static private float volume = .5f;
 
 	private MusikPlayer() {
 	}
 
 	static public void setVolume(int i) {
-		if (i > 0 && i < 100 && clip.isControlSupported(FloatControl.Type.MASTER_GAIN))
-			((FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN)).setValue(i / 100);
+		setVolume(i / 100);
 	}
 
 	static public void setVolume(float i) {
-		if (i > 0 && i < 100)
-			((FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN)).setValue(i);
+		if (i >= 0 && i <= 1) {
+			volume = i;
+			if (clip.isControlSupported(FloatControl.Type.MASTER_GAIN)) {
+				FloatControl gainControl = (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN);
+				float range = gainControl.getMaximum() - gainControl.getMinimum();
+				float gain = (range * i) + gainControl.getMinimum();
+				gainControl.setValue(gain);
+			}
+		}
+	}
+
+	static public float getVolume() {
+		return volume;
 	}
 
 	static public void laden(AudioInputStream... s) {
@@ -60,6 +71,7 @@ public class MusikPlayer {
 		try {
 			logger.log(Level.INFO, "nächstes Lied wird abgespielt");
 			clip.open(momentanesLied);
+			setVolume(volume);
 			clip.start();
 			AudioFormat format = momentanesLied.getFormat();
 			long frames = momentanesLied.getFrameLength();
@@ -72,7 +84,7 @@ public class MusikPlayer {
 	static private void setTimer(long frameLength) {
 		timer = new Timer();
 		timer.scheduleAtFixedRate(new TimerTask() {
-			
+
 			@Override
 			public void run() {
 				if (wiederholen)
@@ -83,7 +95,7 @@ public class MusikPlayer {
 					abspielen();
 				this.cancel();
 			}
-				
+
 		}, (int) frameLength, 1);
 	}
 
