@@ -13,7 +13,7 @@ import matrizen.model.elemente.Item;
 import matrizen.model.elemente.Item.Typ;
 
 public class TestGegner extends Gegner {
-	public static final int maxLeben = 20;
+	public static final int maxLeben = 70;
 	private boolean tot;
 
 	public TestGegner(Vektor pos) {

@@ -67,7 +67,7 @@ public class Feld extends Grafikbasis {
 		BAUM(true),
 		WEITER(false) {
 			public void beimBetreten() {
-				if ((Spiel.gibInstanz().ticks > 1200 && Spiel.gibInstanz().tutorial) || !Spiel.gibInstanz().tutorial)
+				if ((Spiel.gibInstanz().kannTeleportieren && Spiel.gibInstanz().tutorial) || !Spiel.gibInstanz().tutorial)
 					Spiel.gibInstanz().setLevel(Spiel.gibInstanz().getLevel().getNaechstesLevel());
 			}
 		},

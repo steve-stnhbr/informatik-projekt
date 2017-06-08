@@ -44,8 +44,8 @@ public class Text {
 
 		try {
 			graphics.setFont(
-					Font.createFont(Font.TRUETYPE_FONT, new File(DateiManager.pfad + "res/schrift/schriftart.ttf"))
-							.deriveFont(20f));
+					Font.createFont(Font.TRUETYPE_FONT, new File(DateiManager.pfad + "res/schrift/prstartk.ttf"))
+							.deriveFont(9.125f));
 		} catch (FontFormatException | IOException e) {
 			e.printStackTrace();
 		}

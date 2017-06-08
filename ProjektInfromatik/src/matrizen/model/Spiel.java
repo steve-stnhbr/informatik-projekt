@@ -44,7 +44,7 @@ public class Spiel implements KeyListener {
 	public long ticks;
 	private Text text;
 	private boolean schiessen, gegnerErstellt;
-	public boolean tutorial = true, schluesselAufheben, gegnerKannSterben;
+	public boolean tutorial = true, schluesselAufheben, gegnerKannSterben, kannTeleportieren;
 	public boolean[] tutorials;
 	public int tutorialTick;
 	private static final int tutorialDelay = 35;
@@ -138,7 +138,7 @@ public class Spiel implements KeyListener {
 			} else if (ticks > tutorialTick + tutorialDelay && tutorials[2] && !tutorials[3]) {
 				text = new Text("Gegner lassen Gegenstände Fallen,", "wenn du sie erledigst");
 				gegnerKannSterben = true;
-			} else if (ticks > tutorialTick + tutorialDelay && ticks < tutorialTick + tutorialDelay * 1.75
+			} else if (ticks > tutorialTick + tutorialDelay / 1.5 && ticks < tutorialTick + tutorialDelay * 1.75
 					&& tutorials[3] && !tutorials[4]) {
 				text = new Text("Einer dieser Gegenstände ist dieser", "Schlüssel");
 			}
@@ -147,11 +147,13 @@ public class Spiel implements KeyListener {
 				schluesselAufheben = true;
 			} else if (ticks > tutorialTick + tutorialDelay && tutorials[4] && !tutorials[5]) {
 				text = new Text("Wenn du auf dieses Pad steigst, wirst", "du in das nächste Level teleportiert");
+				kannTeleportieren = true;
 			} else if (ticks > tutorialTick + tutorialDelay && tutorials[5] && !tutorials[6])
-				text = new Text("Die Herzen, die du hier siehst, regenerieren", "dein Leben wenn du sie aufhebst");
-			else if (ticks > tutorialTick + tutorialDelay && tutorials[6])
+				text = new Text("Die Herzen, die du hier siehst, regenerieren", "dein Leben, wenn du sie aufhebst");
+			else if (ticks > tutorialTick + tutorialDelay && ticks < tutorialTick + tutorialDelay * 1.75
+					&& tutorials[6])
 				text = new Text("Alles andere, was du über das Spiel wissen", "musst, erfährst du im weiteren Verlauf");
-			else if (ticks > tutorialTick + tutorialDelay * 1.5 && tutorials[6]) {
+			else if (ticks > tutorialTick + tutorialDelay * 1.75 && tutorials[6]) {
 				text = null;
 				tutorial = false;
 			}
