@@ -114,8 +114,9 @@ public class Spieler extends Figur {
 
 	private void schuss() {
 		if(Spiel.gibInstanz().tutorial) {
+			if (!Spiel.gibInstanz().tutorials[1])
+				Spiel.gibInstanz().tutorialTick = (int) Spiel.gibInstanz().ticks;
 			Spiel.gibInstanz().tutorials[1] = true;
-			Spiel.gibInstanz().tutorialTick = (int) Spiel.gibInstanz().ticks;
 		}
 		
 		if (cooldown[4] == 0) {

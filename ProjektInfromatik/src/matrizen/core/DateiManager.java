@@ -13,6 +13,9 @@ import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import javax.imageio.ImageIO;
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.UnsupportedAudioFileException;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -43,6 +46,16 @@ public class DateiManager {
 	 */
 	public static matrizen.model.Level laden(Level l) {
 		return LevelParser.parse(l.src);
+	}
+	
+	static public AudioInputStream laden(Musik l) {
+		try {
+			return AudioSystem.getAudioInputStream(l.src);
+		} catch (UnsupportedAudioFileException | IOException e) {
+			e.printStackTrace();
+		}
+		
+		return null;
 	}
 
 	/**
@@ -106,6 +119,33 @@ public class DateiManager {
 				srcItem = ImageIO.read(new File(pfad + "res/grafik/item_res.png"));
 		} catch (IOException e) {
 			logger.log(java.util.logging.Level.SEVERE, e.getMessage(), e);
+		}
+	}
+	
+	public enum Musik {
+		aurora("aurora.wav"),
+		awakening("awakening.wav"),
+		dreaming("dreaming.wav"),
+		frostfall("frostfall.wav"),
+		lake("lake.wav"),
+		maya("maya.wav"),
+		peril("peril.wav"),
+		sorrow("sorrow.wav"),
+		village("village.wav"), ;
+		
+		public File src;
+		
+		private Musik(String s) {
+			this.src = new File(pfad + "res/musik/" + s);
+		}		
+		
+		static public AudioInputStream[] alleLaden() {
+			AudioInputStream[] a = new AudioInputStream[values().length];
+			
+			for(int i = 0; i < a.length; i++)
+				a[i] = laden(values()[i]);
+			
+			return a;
 		}
 	}
 

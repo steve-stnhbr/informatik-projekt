@@ -15,10 +15,18 @@ import matrizen.model.Spiel;
 import matrizen.view.SpielFenster;
 
 public class Text {
+	private static final int schritt = 5;
+	int gW = Spiel.spalten * 32, gH = Spiel.zeilen * 32;
+	final int fX = (int) (gW * 0.01), fY = (int) (gH - gH * 0.175), w = (int) (gW * .98), h = (int) (gH * .13);
+	int x = fX, y;
 	private String[] string;
+	private int richtung;
 
-	public Text(String... string) {
+	public Text(int richtung, String... string) {
+		this.richtung = richtung;
 		this.string = string;
+		
+		y = richtung == 1 ? fY + h + 20 : fY;
 	}
 
 	/*
@@ -33,19 +41,18 @@ public class Text {
 	 */
 
 	public void zeichnen(Graphics2D graphics) {
-		// TODO
-		int gW = Spiel.spalten * 32, gH = Spiel.zeilen * 32;
-		int x = (int) (gW * 0.01), y = (int) (gH - gH * 0.175), w = (int) (gW * .98), h = (int) (gH * .13);
+		
+		
 		graphics.setStroke(new BasicStroke(.5f));
 		graphics.setColor(Color.black);
 		graphics.fillRoundRect(x, y, w, h, 10, 10);
 		graphics.setColor(Color.white);
 		graphics.drawRoundRect(x, y, w, h, 10, 10);
-
+		
 		try {
 			graphics.setFont(
 					Font.createFont(Font.TRUETYPE_FONT, new File(DateiManager.pfad + "res/schrift/prstartk.ttf"))
-							.deriveFont(9.125f));
+							.deriveFont(9.25f));
 		} catch (FontFormatException | IOException e) {
 			e.printStackTrace();
 		}
@@ -55,6 +62,13 @@ public class Text {
 		for (int i = 0; i < string.length; i++) {
 			graphics.drawString(string[i], x + 10, y + (i + 1) * 15);
 		}
+		
+		if(y > fY && richtung == 1)
+			y -= schritt;
+		else if(richtung == -1)
+			y += schritt;
+		else
+			y = fY;
 	}
 
 }

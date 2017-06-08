@@ -66,19 +66,22 @@ public class Level {
 					if (g.isSpieler()) {
 						((Figur) l1).schaden(g.getSchaden());
 						if (l1 instanceof TestGegner && Spiel.gibInstanz().tutorials[1]) {
+							if (!Spiel.gibInstanz().tutorials[2])
+								Spiel.gibInstanz().tutorialTick = (int) Spiel.gibInstanz().ticks;
 							Spiel.gibInstanz().tutorials[2] = true;
-							Spiel.gibInstanz().tutorialTick = (int) Spiel.gibInstanz().ticks;
 						}
 					} else
 						Spieler.gibInstanz().schaden(g.getSchaden());
 					liste.remove(g);
 
 					if (((Figur) l1).getLeben() <= 0) {
-						if (Spiel.gibInstanz().tutorial && Spiel.gibInstanz().tutorials[2] && Spiel.gibInstanz().gegnerKannSterben) {
+						if (Spiel.gibInstanz().tutorial && Spiel.gibInstanz().tutorials[2]
+								&& Spiel.gibInstanz().gegnerKannSterben) {
+							if (!Spiel.gibInstanz().tutorials[3])
+								Spiel.gibInstanz().tutorialTick = (int) Spiel.gibInstanz().ticks;
 							Spiel.gibInstanz().tutorials[3] = true;
-							Spiel.gibInstanz().tutorialTick = (int) Spiel.gibInstanz().ticks;
 						}
-						if (Spiel.gibInstanz().tutorial && Spiel.gibInstanz().gegnerKannSterben) {
+						if (Spiel.gibInstanz().tutorial && Spiel.gibInstanz().gegnerKannSterben || !Spiel.gibInstanz().tutorial) {
 							liste.remove(l1);
 							((Figur) l1).beimTod();
 							l1 = null;
@@ -91,11 +94,13 @@ public class Level {
 					&& Spieler.gibInstanz().getPos().kopieren().div(32f).equals(l1.getPos().kopieren().div(32))) {
 				((Item) l1).beimAufheben();
 				if (((Item) l1).getTyp() == Item.Typ.schluessel) {
+					if (!Spiel.gibInstanz().tutorials[4])
+						Spiel.gibInstanz().tutorialTick = (int) Spiel.gibInstanz().ticks;
 					Spiel.gibInstanz().tutorials[4] = true;
-					Spiel.gibInstanz().tutorialTick = (int) Spiel.gibInstanz().ticks;
 				} else if (((Item) l1).getTyp() == Item.Typ.herz) {
+					if (!Spiel.gibInstanz().tutorials[6])
+						Spiel.gibInstanz().tutorialTick = (int) Spiel.gibInstanz().ticks;
 					Spiel.gibInstanz().tutorials[6] = true;
-					Spiel.gibInstanz().tutorialTick = (int) Spiel.gibInstanz().ticks;
 				}
 				liste.remove(l1);
 			}

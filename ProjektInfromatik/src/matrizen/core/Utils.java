@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import javax.sound.sampled.AudioInputStream;
 import javax.xml.bind.ValidationException;
 
 public class Utils {
@@ -69,5 +70,14 @@ public class Utils {
 			}
 		else
 			return true;
+	}
+
+	public static <E> List<E> arrayToList(E[] e) {
+		List<E> l = new ArrayList<E>();
+		
+		for(E i : e)
+			l.add(i);
+		
+		return l;
 	}
 }
