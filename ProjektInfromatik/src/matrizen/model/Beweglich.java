@@ -2,7 +2,7 @@ package matrizen.model;
 
 import matrizen.core.Vektor;
 
-public abstract class Beweglich extends Grafisch {
+public abstract class Beweglich extends Grafikbasis {
 	protected Vektor pos = Vektor.nullVektor, ges = Vektor.nullVektor, bes = Vektor.nullVektor;
 
 	public void kraftAusueben(Vektor v) {

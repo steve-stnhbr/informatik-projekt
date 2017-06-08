@@ -113,6 +113,11 @@ public class Spieler extends Figur {
 	}
 
 	private void schuss() {
+		if(Spiel.gibInstanz().tutorial) {
+			Spiel.gibInstanz().tutorials[1] = true;
+			Spiel.gibInstanz().tutorialTick = (int) Spiel.gibInstanz().ticks;
+		}
+		
 		if (cooldown[4] == 0) {
 			// zauberstab.schuss();
 			Spiel.gibInstanz().getLevel().hinzufuegen(new Geschoss(Typ.stern, 10, this.pos,

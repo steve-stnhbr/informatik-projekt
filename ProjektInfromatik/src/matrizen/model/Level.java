@@ -12,6 +12,7 @@ import matrizen.model.elemente.Gegner;
 import matrizen.model.elemente.Geschoss;
 import matrizen.model.elemente.Item;
 import matrizen.model.elemente.Spieler;
+import matrizen.model.gegner.TestGegner;
 import matrizen.view.SpielFenster;
 
 public class Level {
@@ -62,23 +63,40 @@ public class Level {
 			if (l0 instanceof Geschoss && l1 instanceof Figur) {
 				Geschoss g = (Geschoss) l0;
 				if (g.getPos().dist(l1.getPos().kopieren()) < g.getTyp().getRadius()) {
-					if (g.isSpieler())
+					if (g.isSpieler()) {
 						((Figur) l1).schaden(g.getSchaden());
-					else
+						if (l1 instanceof TestGegner && Spiel.gibInstanz().tutorials[1]) {
+							Spiel.gibInstanz().tutorials[2] = true;
+							Spiel.gibInstanz().tutorialTick = (int) Spiel.gibInstanz().ticks;
+						}
+					} else
 						Spieler.gibInstanz().schaden(g.getSchaden());
 					liste.remove(g);
 
 					if (((Figur) l1).getLeben() <= 0) {
-						liste.remove(l1);
-						((Figur) l1).beimTod();
-						l1 = null;
+						if (Spiel.gibInstanz().tutorial && Spiel.gibInstanz().tutorials[2] && Spiel.gibInstanz().gegnerKannSterben) {
+							Spiel.gibInstanz().tutorials[3] = true;
+							Spiel.gibInstanz().tutorialTick = (int) Spiel.gibInstanz().ticks;
+						}
+						if (Spiel.gibInstanz().tutorial && Spiel.gibInstanz().gegnerKannSterben) {
+							liste.remove(l1);
+							((Figur) l1).beimTod();
+							l1 = null;
+						}
 					}
 				}
 			}
 
-			if (l1 instanceof Item && (Spiel.gibInstanz().ticks > 800 || !Spiel.gibInstanz().tutorial)
+			if (l1 instanceof Item && (Spiel.gibInstanz().schluesselAufheben || !Spiel.gibInstanz().tutorial)
 					&& Spieler.gibInstanz().getPos().kopieren().div(32f).equals(l1.getPos().kopieren().div(32))) {
 				((Item) l1).beimAufheben();
+				if (((Item) l1).getTyp() == Item.Typ.schluessel) {
+					Spiel.gibInstanz().tutorials[4] = true;
+					Spiel.gibInstanz().tutorialTick = (int) Spiel.gibInstanz().ticks;
+				} else if (((Item) l1).getTyp() == Item.Typ.herz) {
+					Spiel.gibInstanz().tutorials[6] = true;
+					Spiel.gibInstanz().tutorialTick = (int) Spiel.gibInstanz().ticks;
+				}
 				liste.remove(l1);
 			}
 		}
@@ -114,7 +132,7 @@ public class Level {
 	}
 
 	public boolean equals(Level other) {
-		return liste.equals(other.liste) && felder.equals(other.felder) && naechstesLevel.equals(other.naechstesLevel);
+		return liste.equals(other.liste) && felder.equals(other.felder);
 	}
 
 	public Feld getFeld(int x, int y) {

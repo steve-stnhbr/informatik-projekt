@@ -4,9 +4,9 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 
 import matrizen.core.Vektor;
-import matrizen.model.Grafisch;
+import matrizen.model.Grafikbasis;
 
-public class LebensAnzeige extends Grafisch {
+public class LebensAnzeige extends Grafikbasis {
 	public static final int breite = 50, hoehe = 10;
 	private int maxLeben, leben;
 	private Vektor pos;

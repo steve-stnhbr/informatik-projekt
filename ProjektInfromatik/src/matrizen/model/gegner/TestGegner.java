@@ -14,6 +14,7 @@ import matrizen.model.elemente.Item.Typ;
 
 public class TestGegner extends Gegner {
 	public static final int maxLeben = 20;
+	private boolean tot;
 
 	public TestGegner(Vektor pos) {
 		super();
@@ -34,7 +35,8 @@ public class TestGegner extends Gegner {
 
 	@Override
 	public void beimTod() {
-		if ((Spiel.gibInstanz().ticks > 600 && Spiel.gibInstanz().tutorial) || !Spiel.gibInstanz().tutorial)
+		if (!tot)
 			Spiel.gibInstanz().getLevel().hinzufuegen(new Item(Typ.schluessel, this.pos.kopieren().div(32)));
+		tot = true;
 	}
 }

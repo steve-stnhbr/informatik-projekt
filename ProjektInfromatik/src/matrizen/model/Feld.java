@@ -7,7 +7,7 @@ import matrizen.core.DateiManager;
 import matrizen.core.Vektor;
 import matrizen.model.elemente.GrafikTyp;
 
-public class Feld extends Grafisch {
+public class Feld extends Grafikbasis {
 	private boolean solide;
 	private Typ t;
 	private Vektor raster;

@@ -43,10 +43,11 @@ public class Spiel implements KeyListener {
 	private Konfiguration config;
 	public long ticks;
 	private Text text;
-	private boolean schiessen;
-	public boolean tutorial = true;
-	private boolean[] tutorials;
-	private int tutorialTick;
+	private boolean schiessen, gegnerErstellt;
+	public boolean tutorial = true, schluesselAufheben, gegnerKannSterben;
+	public boolean[] tutorials;
+	public int tutorialTick;
+	private static final int tutorialDelay = 35;
 
 	private Spiel() {
 		logger.log(java.util.logging.Level.INFO, "Spiel erstellt");
@@ -57,8 +58,8 @@ public class Spiel implements KeyListener {
 		Level.level1.setNaechstesLevel(Level.level2);
 		Level.level2.setNaechstesLevel(Level.level3);
 
-		tutorials = new boolean[6];
-		
+		tutorials = new boolean[7];
+
 		schiessen = !tutorial;
 		level = Level.level1;
 		if (!tutorial)
@@ -72,60 +73,89 @@ public class Spiel implements KeyListener {
 	}
 
 	public void zeichnen(Graphics2D graphics) {
-		//TODO nächster Schritt des Tutorials erst nachdem momentanter Schritt beendet wurde
-		if (tutorial) {
-			if (ticks == 0) {
-				level = Level.level0;
-				text = new Text("Bewege dich mit den WASD-Tasten oder Pfeil-", "tasten druch die Welt");
-			}
-			if (ticks == 75)
-				SpielFenster.gibInstanz().addKeyListener(this);
-			if (ticks == tutorialTick + 200)
-				text = new Text("Mit der Leertaste, E, Q oder STRG kannst du", "Partikel verschießen");
-			if (ticks == tutorialTick + 250)
-				schiessen = true;
-
-			if (ticks == 400) {
-				text = new Text("Diese Partikel fügen den Gegnern Schaden zu,", "wenn du sie triffst");
-			}
-			if (ticks == 600) {
-				text = new Text("Gegner lassen Gegenstände Fallen,", "wenn du sie erledigst");
-				level.hinzufuegen(new TestGegner(new Vektor(2, 3)));
-			}
-			if (ticks == 800) {
-				text = new Text("Einer dieser Gegenstände ist dieser", "Schlüssel");
-				if (gegnerEntfernen())
-					level.hinzufuegen(new Item(Item.Typ.schluessel, new Vektor(7, 4)));
-			}
-			if (ticks == 1000) {
-				text = new Text("Dieser Schlüssel erstellt ein Tele-", "Pad, wenn du ihn aufhebst");
-				if (!level.getListe().isEmpty() && level.getListe().get(0) instanceof Item) {
-					List<Levelelement> l = level.getListe();
-					if (l.size() > 0)
-						l.remove(0);
-					level.setListe(l);
-
-					level.setFeld(6, 3, Feld.Typ.WEITER);
-				}
-			}
-			if (ticks == 1200)
-				text = new Text("Wenn du auf dieses Pad steigst, wirst", "du in das nächste Level teleportiert");
-			if (ticks == 1400)
-				text = new Text("Alles andere, was du über das Spiel wissen", "musst, erfährst du im weiteren Verlauf");
-			if (ticks == 1600) {
-				text = null;
-				tutorial = false;
-			}
-		}
+		tutorialAbarbeiten();
 
 		if (level.equals(Level.level1))
-			tutorials[2] = true;
+			tutorials[5] = true;
 
 		level.zeichnen(graphics);
 		Spieler.gibInstanz().zeichnen(graphics);
 		if (text != null)
 			text.zeichnen(graphics);
 		ticks++;
+	}
+
+	/*
+	 * private void tutorialAbarbeiten() { if (tutorial) { if (ticks == 0) {
+	 * level = Level.level0; text = new
+	 * Text("Bewege dich mit den WASD-Tasten oder Pfeil-",
+	 * "tasten druch die Welt"); } if (ticks == 75)
+	 * SpielFenster.gibInstanz().addKeyListener(this); if (ticks == 200) { text
+	 * = new Text("Mit der Leertaste, E, Q oder STRG kannst du",
+	 * "Partikel verschießen"); schiessen = true; }
+	 * 
+	 * if (ticks == 400) { text = new
+	 * Text("Diese Partikel fügen den Gegnern Schaden zu,",
+	 * "wenn du sie triffst"); } if (ticks == 600) { text = new
+	 * Text("Gegner lassen Gegenstände Fallen,", "wenn du sie erledigst");
+	 * level.hinzufuegen(new TestGegner(new Vektor(2, 3))); } if (ticks == 800)
+	 * { text = new Text("Einer dieser Gegenstände ist dieser", "Schlüssel"); if
+	 * (gegnerEntfernen()) level.hinzufuegen(new Item(Item.Typ.schluessel, new
+	 * Vektor(7, 4))); } if (ticks == 1000) { text = new
+	 * Text("Dieser Schlüssel erstellt ein Tele-", "Pad, wenn du ihn aufhebst");
+	 * 
+	 * } if (ticks == 1200) { text = new
+	 * Text("Wenn du auf dieses Pad steigst, wirst",
+	 * "du in das nächste Level teleportiert"); if (!level.getListe().isEmpty()
+	 * && level.getListe().get(0) instanceof Item) { List<Levelelement> l =
+	 * level.getListe(); if (l.size() > 0) l.remove(0); level.setListe(l);
+	 * 
+	 * level.setFeld(6, 3, Feld.Typ.WEITER); } } if (ticks == 1400) text = new
+	 * Text("Die Herzen, die du hier siehst, regenerieren",
+	 * "dein Leben wenn du sie aufhebst"); if (ticks == 1600) text = new
+	 * Text("Alles andere, was du über das Spiel wissen",
+	 * "musst, erfährst du im weiteren Verlauf"); if (ticks == 1800) { text =
+	 * null; tutorial = false; } }
+	 * 
+	 * }
+	 */
+
+	private void tutorialAbarbeiten() {
+		if (tutorial) {
+			if (ticks == 0) {
+				level = Level.level0;
+				text = new Text("Bewege dich mit den WASD-Tasten oder Pfeil-", "tasten druch die Welt");
+				SpielFenster.gibInstanz().addKeyListener(this);
+			} else if (ticks > tutorialTick + tutorialDelay && tutorials[0] && !tutorials[1]) {
+				text = new Text("Mit der Leertaste, E, Q oder STRG kannst du", "Partikel verschießen");
+				schiessen = true;
+			} else if (ticks > tutorialTick + tutorialDelay && tutorials[1] && !tutorials[2]) {
+				text = new Text("Diese Partikel fügen den Gegnern Schaden zu,", "wenn du sie triffst");
+				if (!gegnerErstellt) {
+					level.hinzufuegen(new TestGegner(new Vektor(2, 3)));
+					gegnerErstellt = true;
+				}
+			} else if (ticks > tutorialTick + tutorialDelay && tutorials[2] && !tutorials[3]) {
+				text = new Text("Gegner lassen Gegenstände Fallen,", "wenn du sie erledigst");
+				gegnerKannSterben = true;
+			} else if (ticks > tutorialTick + tutorialDelay && ticks < tutorialTick + tutorialDelay * 1.75
+					&& tutorials[3] && !tutorials[4]) {
+				text = new Text("Einer dieser Gegenstände ist dieser", "Schlüssel");
+			}
+			if (ticks > tutorialTick + tutorialDelay * 1.75 && tutorials[3] && !tutorials[4]) {
+				text = new Text("Dieser Schlüssel erstellt ein Tele-", "Pad, wenn du ihn aufhebst");
+				schluesselAufheben = true;
+			} else if (ticks > tutorialTick + tutorialDelay && tutorials[4] && !tutorials[5]) {
+				text = new Text("Wenn du auf dieses Pad steigst, wirst", "du in das nächste Level teleportiert");
+			} else if (ticks > tutorialTick + tutorialDelay && tutorials[5] && !tutorials[6])
+				text = new Text("Die Herzen, die du hier siehst, regenerieren", "dein Leben wenn du sie aufhebst");
+			else if (ticks > tutorialTick + tutorialDelay && tutorials[6])
+				text = new Text("Alles andere, was du über das Spiel wissen", "musst, erfährst du im weiteren Verlauf");
+			else if (ticks > tutorialTick + tutorialDelay * 1.5 && tutorials[6]) {
+				text = null;
+				tutorial = false;
+			}
+		}
 	}
 
 	private boolean gegnerEntfernen() {
@@ -180,8 +210,6 @@ public class Spiel implements KeyListener {
 		case VK_CONTROL:
 		case VK_NUMPAD0:
 			if (schiessen) {
-				tutorials[1] = true;
-				tutorialTick = (int) ticks;
 				EingabeManager.aktivieren(EingabeManager.gibEingaben().length - 1);
 			}
 			break;
