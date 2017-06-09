@@ -1,17 +1,20 @@
 package matrizen.model;
 
-import static java.awt.event.KeyEvent.getKeyText;
 import static java.awt.event.KeyEvent.VK_ESCAPE;
 import static matrizen.view.SpielFenster.logger;
 
+import java.awt.Color;
+import java.awt.Font;
+import java.awt.FontFormatException;
 import java.awt.Graphics2D;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.IOException;
 
 import matrizen.core.DateiManager;
 import matrizen.core.EingabeManager;
-import matrizen.core.Konfiguration;
 import matrizen.core.MusikPlayer;
 import matrizen.core.Richtung;
 import matrizen.core.Utils;
@@ -31,13 +34,14 @@ public class Spiel implements KeyListener {
 	public static final float feldLaenge = SpielFenster.breite / Spiel.spalten;
 	private static Spiel instanz;
 	private Level level;
-	public long ticks;
+	public long ticks = -200;
 	private Text text;
 	private boolean schiessen, gegnerErstellt, nichtZeichnen;
 	public boolean tutorial = !DateiManager.config.isGespielt(), schluesselAufheben, gegnerKannSterben,
 			kannTeleportieren;
 	public boolean[] tutorials;
 	public int tutorialTick;
+	private BufferedImage schrift;
 	private static final int tutorialDelay = 100;
 
 	private final int[] links = DateiManager.config.getLinks(), rechts = DateiManager.config.getRechts(),
@@ -75,15 +79,36 @@ public class Spiel implements KeyListener {
 	}
 
 	public void zeichnen(Graphics2D graphics) {
-		tutorialAbarbeiten();
+		if (ticks < 0) {
+			try {
+				if (schrift == null) {
+					schrift = new BufferedImage(Spiel.spalten * 32, Spiel.zeilen * 32, BufferedImage.TYPE_INT_RGB);
+					((Graphics2D) schrift.getGraphics()).setColor(Color.black);
+					((Graphics2D) schrift.getGraphics()).fillRect(0, 0, Spiel.spalten * 32, Spiel.zeilen * 32);
+					((Graphics2D) schrift.getGraphics()).setColor(Color.black);
+					((Graphics2D) schrift.getGraphics()).setFont(Font
+							.createFont(Font.TRUETYPE_FONT, new File(DateiManager.pfad + "res/schrift/prstartk.ttf"))
+							.deriveFont(5));
+					((Graphics2D) schrift.getGraphics()).setColor(Color.white);
+					((Graphics2D) schrift.getGraphics()).drawString("troll-karl", (int) (Spiel.spalten * 16 + ticks * 0.5), Spiel.zeilen * 16);
+				}
+				float r = (200 - ticks) / 10;
+				int xy = (int) ticks, w = (int) (Spiel.spalten * 32 * r), h = (int) (Spiel.zeilen * 32 * r);
+				graphics.drawImage(schrift, xy, xy, w, h, null);
+			} catch (FontFormatException | IOException e) {
+				e.printStackTrace();
+			}
+		} else {
+			tutorialAbarbeiten();
 
-		if (level.equals(Level.level1))
-			tutorials[5] = true;
+			if (level.equals(Level.level1))
+				tutorials[5] = true;
 
-		level.zeichnen(graphics);
-		Spieler.gibInstanz().zeichnen(graphics);
-		if (text != null)
-			text.zeichnen(graphics);
+			level.zeichnen(graphics);
+			Spieler.gibInstanz().zeichnen(graphics);
+			if (text != null)
+				text.zeichnen(graphics);
+		}
 		ticks++;
 	}
 
@@ -216,8 +241,7 @@ public class Spiel implements KeyListener {
 		if (c == VK_ESCAPE) {
 			AnfangsFenster.gibInstanz().inhaltAendern(StartPanel.gibInstanz());
 			SpielFenster.gibInstanz().stop();
-		}
-		else if (c == oben[0] || c == oben[1])
+		} else if (c == oben[0] || c == oben[1])
 			EingabeManager.deaktivieren(Richtung.getIndex(Richtung.OBEN));
 		else if (c == rechts[0] || c == rechts[1])
 			EingabeManager.deaktivieren(Richtung.getIndex(Richtung.RECHTS));

@@ -101,8 +101,8 @@ public class DateiManager {
 		}
 		return null;
 	}
-	
-	public static void dateiSchreiben(String s, File f) {		
+
+	public static void dateiSchreiben(String s, File f) {
 		try {
 			FileWriter w = new FileWriter(f);
 			w.write(s);
@@ -115,6 +115,10 @@ public class DateiManager {
 
 	public static Konfiguration configLaden() {
 		return ConfigParser.parse(inhaltLesen("#@#/config/config.ini"));
+	}
+
+	public static void configSchreiben() {
+		dateiSchreiben(ConfigParser.write(config), new File(pfad + "res/config/config.ini"));
 	}
 
 	/**

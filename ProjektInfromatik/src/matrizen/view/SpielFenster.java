@@ -9,20 +9,15 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
 import java.awt.image.BufferedImage;
-import java.util.logging.ConsoleHandler;
-import java.util.logging.Filter;
-import java.util.logging.Handler;
 import java.util.logging.Level;
-import java.util.logging.LogRecord;
 import java.util.logging.Logger;
 
 import javax.swing.JFrame;
 import javax.swing.Timer;
 
-import matrizen.core.EingabeManager;
-import matrizen.core.Richtung;
+import matrizen.core.DateiManager;
+import matrizen.core.MusikPlayer;
 import matrizen.model.Spiel;
-import matrizen.model.elemente.Spieler;
 
 /**
  * Diese Klasse kümmert sich um die Darstellung des Spiels auf dem Bildschirm
@@ -142,7 +137,9 @@ public class SpielFenster extends JFrame {
 	public void stop() {
 		removeKeyListener(Spiel.gibInstanz());
 		timer.stop();
+		MusikPlayer.stop();
 		setVisible(false);
+		DateiManager.configSchreiben();
 	}
 
 	/**

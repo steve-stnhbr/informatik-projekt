@@ -80,6 +80,10 @@ public class MusikPlayer {
 			logger.log(Level.SEVERE, e.getMessage(), e);
 		}
 	}
+	
+	static public void stop() {
+		clip.stop();
+	}
 
 	static private void setTimer(long frameLength) {
 		timer = new Timer();
