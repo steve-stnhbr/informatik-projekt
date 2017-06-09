@@ -1,68 +1,141 @@
 package matrizen.core;
 
-import static java.awt.event.KeyEvent.*;
+import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
- * Klasse, mit der die Steuerung angepasst werden kann!
- * Hier werden die "KeyCodes" der Java-API Klasse 
- * <code>java.awt.event.KeyEvent</code> mit Integern gespeichert
- * Es wird möglicherweise die Möglichkeit hinzugefügt, eigene Konfigurationen zu erstellen!
+ * Klasse, mit der die Steuerung angepasst werden kann! Hier werden die
+ * "KeyCodes" der Java-API Klasse <code>java.awt.event.KeyEvent</code> mit
+ * Integern gespeichert Es wird möglicherweise die Möglichkeit hinzugefügt,
+ * eigene Konfigurationen zu erstellen!
  * 
  * @author Stefan
  */
 public class Konfiguration {
-	public static final Konfiguration standardWASD = new Konfiguration(VK_W, VK_D, VK_S, VK_A, VK_SPACE),
-			standardPfeil = new Konfiguration(VK_UP, VK_RIGHT, VK_DOWN, VK_LEFT, VK_SPACE);
-	private int rechts, links, oben, unten, schuss;
+	private int[] rechts, links, oben, unten, schuss;
+	private List<File> aktiveMusik, inaktiveMusik;
+	private File grafiken;
+	private boolean gespielt;
 
-	public Konfiguration() {}
-
-	public Konfiguration(int oben, int rechts, int unten, int links, int schuss) {
-		super();
-		this.rechts = rechts;
-		this.links = links;
-		this.oben = oben;
-		this.unten = unten;
-		this.schuss = schuss;
+	public Konfiguration() {
+		rechts = new int[2];
+		links = new int[2];
+		oben = new int[2];
+		unten = new int[2];
+		schuss = new int[2];
+		aktiveMusik = inaktiveMusik = new ArrayList<File>();
 	}
 
-	public int getRechts() {
+	public Konfiguration setRechts(int i0, int i1) {
+		rechts[0] = i0;
+		rechts[1] = i1;
+		return this;
+	}
+
+	public Konfiguration setLinks(int i0, int i1) {
+		links[0] = i0;
+		links[1] = i1;
+		return this;
+	}
+
+	public Konfiguration setOben(int i0, int i1) {
+		oben[0] = i0;
+		oben[1] = i1;
+		return this;
+	}
+
+	public Konfiguration setUnten(int i0, int i1) {
+		unten[0] = i0;
+		unten[1] = i1;
+		return this;
+	}
+
+	public Konfiguration setSchuss(int i0, int i1) {
+		schuss[0] = i0;
+		schuss[1] = i1;
+		return this;
+	}
+
+	public int[] getRechts() {
 		return rechts;
 	}
 
-	public void setRechts(int rechts) {
+	public Konfiguration setRechts(int[] rechts) {
 		this.rechts = rechts;
+		return this;
 	}
 
-	public int getLinks() {
+	public int[] getLinks() {
 		return links;
 	}
 
-	public void setLinks(int links) {
+	public Konfiguration setLinks(int[] links) {
 		this.links = links;
+		return this;
 	}
 
-	public int getOben() {
+	public int[] getOben() {
 		return oben;
 	}
 
-	public void setOben(int oben) {
+	public Konfiguration setOben(int[] oben) {
 		this.oben = oben;
+		return this;
 	}
 
-	public int getUnten() {
+	public int[] getUnten() {
 		return unten;
 	}
 
-	public void setUnten(int unten) {
+	public Konfiguration setUnten(int[] unten) {
 		this.unten = unten;
+		return this;
 	}
 
-	public int getSchuss() {
+	public int[] getSchuss() {
 		return schuss;
 	}
 
-	public void setSchuss(int schuss) {
+	public Konfiguration setSchuss(int[] schuss) {
 		this.schuss = schuss;
+		return this;
 	}
+
+	public List<File> getAktiveMusik() {
+		return aktiveMusik;
+	}
+
+	public Konfiguration setAktiveMusik(List<File> aktiveMusik) {
+		this.aktiveMusik = aktiveMusik;
+		return this;
+	}
+
+	public List<File> getInaktiveMusik() {
+		return inaktiveMusik;
+	}
+
+	public Konfiguration setInaktiveMusik(List<File> inaktiveMusik) {
+		this.inaktiveMusik = inaktiveMusik;
+		return this;
+	}
+
+	public File getGrafiken() {
+		return grafiken;
+	}
+
+	public Konfiguration setGrafiken(File grafiken) {
+		this.grafiken = grafiken;
+		return this;
+	}
+
+	public boolean isGespielt() {
+		return gespielt;
+	}
+
+	public Konfiguration setGespielt(boolean gespielt) {
+		this.gespielt = gespielt;
+		return this;
+	}
+
 }

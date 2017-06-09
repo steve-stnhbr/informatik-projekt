@@ -1,11 +1,13 @@
 package matrizen.model;
 
-import static java.awt.event.KeyEvent.*;
+import static java.awt.event.KeyEvent.getKeyText;
+import static java.awt.event.KeyEvent.VK_ESCAPE;
 import static matrizen.view.SpielFenster.logger;
 
 import java.awt.Graphics2D;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.io.File;
 
 import matrizen.core.DateiManager;
 import matrizen.core.EingabeManager;
@@ -18,6 +20,8 @@ import matrizen.model.elemente.Spieler;
 import matrizen.model.gegner.TestGegner;
 import matrizen.view.SpielFenster;
 import matrizen.view.hud.Text;
+import matrizen.vorhinein.AnfangsFenster;
+import matrizen.vorhinein.StartPanel;
 
 /**
  * Dies ist die Hauptklasse, die auch den Input verwaltet
@@ -27,15 +31,18 @@ public class Spiel implements KeyListener {
 	public static final float feldLaenge = SpielFenster.breite / Spiel.spalten;
 	private static Spiel instanz;
 	private Level level;
-	private Konfiguration config;
 	public long ticks;
 	private Text text;
 	private boolean schiessen, gegnerErstellt, nichtZeichnen;
-	public boolean tutorial = false,
-			schluesselAufheben, gegnerKannSterben, kannTeleportieren;
+	public boolean tutorial = !DateiManager.config.isGespielt(), schluesselAufheben, gegnerKannSterben,
+			kannTeleportieren;
 	public boolean[] tutorials;
 	public int tutorialTick;
 	private static final int tutorialDelay = 100;
+
+	private final int[] links = DateiManager.config.getLinks(), rechts = DateiManager.config.getRechts(),
+			oben = DateiManager.config.getOben(), unten = DateiManager.config.getUnten(),
+			schuss = DateiManager.config.getSchuss();
 
 	private Spiel() {
 		logger.log(java.util.logging.Level.INFO, "Spiel erstellt");
@@ -78,9 +85,6 @@ public class Spiel implements KeyListener {
 		if (text != null)
 			text.zeichnen(graphics);
 		ticks++;
-
-		if (nichtZeichnen)
-			graphics.fillRect(0, 0, Spiel.spalten * 32, Spiel.zeilen * 32);
 	}
 
 	private void tutorialAbarbeiten() {
@@ -89,19 +93,19 @@ public class Spiel implements KeyListener {
 				level = Level.level0;
 				text = new Text(1, "Mit der esc-Taste kannst du das Spiel immer", "schließen");
 			} else if (ticks == tutorialDelay) {
-				text = new Text(0, "Mit den \"Bild\"-Tasten kannst du die Laut-", "stärke der Musik anpassen");
+				text = new Text(0, "Mit den \"Bild\"-Tasten kannst du die ", "Lautstärke der Musik anpassen");
 				SpielFenster.gibInstanz().addKeyListener(new KeyListener() {
 
 					@Override
 					public void keyTyped(KeyEvent e) {
 						switch (e.getKeyCode()) {
-						case VK_PAGE_DOWN:
-							MusikPlayer.setVolume(MusikPlayer.getVolume() - .025f);
+						case KeyEvent.VK_PAGE_UP:
+							MusikPlayer.setVolume(MusikPlayer.getVolume() + .025f);
 							logger.log(java.util.logging.Level.FINE,
 									"Lautstärke auf " + MusikPlayer.getVolume() + " gestellt");
 							break;
-						case VK_PAGE_UP:
-							MusikPlayer.setVolume(MusikPlayer.getVolume() + .025f);
+						case KeyEvent.VK_PAGE_DOWN:
+							MusikPlayer.setVolume(MusikPlayer.getVolume() - .025f);
 							logger.log(java.util.logging.Level.FINE,
 									"Lautstärke auf " + MusikPlayer.getVolume() + " gestellt");
 							break;
@@ -117,10 +121,11 @@ public class Spiel implements KeyListener {
 					}
 				});
 			} else if (ticks == tutorialDelay * 2) {
+				// TODO
 				text = new Text(0, "Bewege dich mit den WASD-Tasten oder Pfeil-", "tasten druch die Welt");
 				SpielFenster.gibInstanz().addKeyListener(this);
 			} else if (ticks > tutorialTick + tutorialDelay && tutorials[0] && !tutorials[1]) {
-				text = new Text(0, "Mit der Leertaste, E, Q, STRG oder NUMPAD0,", "kannst du Partikel verschießen");
+				text = new Text(0, "Mit und E und Strg kannst du", "Partikel verschießen");
 				schiessen = true;
 			} else if (ticks > tutorialTick + tutorialDelay && tutorials[1] && !tutorials[2]) {
 				text = new Text(0, "Diese Partikel fügen den Gegnern Schaden zu,", "wenn du sie triffst");
@@ -153,9 +158,10 @@ public class Spiel implements KeyListener {
 				text = new Text(-1, "                 Viel Spaß!");
 				tutorialTick = (int) ticks;
 				tutorial = false;
-			} else if (ticks > tutorialTick + 20 && tutorials[6]) {
+			} else if (ticks > tutorialTick + 200 && tutorials[6]) {
 				text = null;
 				tutorialTick = 0;
+				DateiManager.config.setGespielt(true);
 			}
 		}
 	}
@@ -165,72 +171,39 @@ public class Spiel implements KeyListener {
 	 */
 	@Override
 	public void keyPressed(KeyEvent e) {
-		switch (e.getKeyCode()) {
-		case VK_ESCAPE:
-			System.exit(0);
-			break;
-		case VK_W:
-		case VK_UP:
+		int c = e.getKeyCode();
+		if (c == oben[0] || c == oben[1]) {
 			EingabeManager.aktivieren(Richtung.getIndex(Richtung.OBEN));
 			if (!tutorials[0])
 				tutorialTick = (int) ticks;
 			tutorials[0] = true;
-			break;
-		case VK_D:
-		case VK_RIGHT:
+		} else if (c == rechts[0] || c == rechts[1]) {
 			EingabeManager.aktivieren(Richtung.getIndex(Richtung.RECHTS));
 			if (!tutorials[0])
 				tutorialTick = (int) ticks;
 			tutorials[0] = true;
-			break;
-		case VK_S:
-		case VK_DOWN:
+		} else if (c == unten[0] || c == unten[1]) {
 			EingabeManager.aktivieren(Richtung.getIndex(Richtung.UNTEN));
 			if (!tutorials[0])
 				tutorialTick = (int) ticks;
 			tutorials[0] = true;
-			break;
-		case VK_A:
-		case VK_LEFT:
+		} else if (c == links[0] || c == links[1]) {
 			EingabeManager.aktivieren(Richtung.getIndex(Richtung.LINKS));
 			if (!tutorials[0])
 				tutorialTick = (int) ticks;
 			tutorials[0] = true;
-			break;
-		case VK_SPACE:
-		case VK_Q:
-		case VK_E:
-		case VK_CONTROL:
-		case VK_NUMPAD0:
+		} else if (c == schuss[0] || c == schuss[1]) {
 			if (schiessen) {
 				EingabeManager.aktivieren(EingabeManager.gibEingaben().length - 1);
 			}
-			break;
-		case VK_PAGE_DOWN:
+		} else if (c == KeyEvent.VK_PAGE_DOWN) {
 			MusikPlayer.setVolume(MusikPlayer.getVolume() - .025f);
 			logger.log(java.util.logging.Level.FINE, "Lautstärke auf " + MusikPlayer.getVolume() + " gestellt");
-			break;
-		case VK_PAGE_UP:
+		} else if (c == KeyEvent.VK_PAGE_UP) {
 			MusikPlayer.setVolume(MusikPlayer.getVolume() + .025f);
 			logger.log(java.util.logging.Level.FINE, "Lautstärke auf " + MusikPlayer.getVolume() + " gestellt");
-			break;
 		}
-	}
 
-	public Level getLevel() {
-		return level;
-	}
-
-	public void setLevel(Level level) {
-		this.level = level;
-	}
-
-	public Konfiguration getConfig() {
-		return config;
-	}
-
-	public void setConfig(Konfiguration config) {
-		this.config = config;
 	}
 
 	@Override
@@ -239,37 +212,32 @@ public class Spiel implements KeyListener {
 
 	@Override
 	public void keyReleased(KeyEvent e) {
-		switch (e.getKeyCode()) {
-		case VK_ESCAPE:
-			System.exit(0);
-			break;
-		case VK_W:
-		case VK_UP:
-			EingabeManager.deaktivieren(Richtung.getIndex(Richtung.OBEN));
-			break;
-		case VK_D:
-		case VK_RIGHT:
-			EingabeManager.deaktivieren(Richtung.getIndex(Richtung.RECHTS));
-			break;
-		case VK_S:
-		case VK_DOWN:
-			EingabeManager.deaktivieren(Richtung.getIndex(Richtung.UNTEN));
-			break;
-		case VK_A:
-		case VK_LEFT:
-			EingabeManager.deaktivieren(Richtung.getIndex(Richtung.LINKS));
-			break;
-		case VK_SPACE:
-		case VK_Q:
-		case VK_E:
-		case VK_CONTROL:
-		case VK_NUMPAD0:
-			EingabeManager.deaktivieren(4);
-			break;
+		int c = e.getKeyCode();
+		if (c == VK_ESCAPE) {
+			AnfangsFenster.gibInstanz().inhaltAendern(StartPanel.gibInstanz());
+			SpielFenster.gibInstanz().stop();
 		}
+		else if (c == oben[0] || c == oben[1])
+			EingabeManager.deaktivieren(Richtung.getIndex(Richtung.OBEN));
+		else if (c == rechts[0] || c == rechts[1])
+			EingabeManager.deaktivieren(Richtung.getIndex(Richtung.RECHTS));
+		else if (c == unten[0] || c == unten[1])
+			EingabeManager.deaktivieren(Richtung.getIndex(Richtung.UNTEN));
+		else if (c == links[0] || c == links[1])
+			EingabeManager.deaktivieren(Richtung.getIndex(Richtung.LINKS));
+		else if (c == schuss[0] || c == schuss[1])
+			EingabeManager.deaktivieren(4);
 	}
 
 	public void beenden() {
 
+	}
+
+	public Level getLevel() {
+		return level;
+	}
+
+	public void setLevel(Level level) {
+		this.level = level;
 	}
 }

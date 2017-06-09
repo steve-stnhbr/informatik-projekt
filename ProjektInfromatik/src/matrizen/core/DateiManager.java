@@ -7,6 +7,7 @@ import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -22,6 +23,7 @@ import org.json.JSONObject;
 
 import matrizen.model.Feld;
 import matrizen.model.Levelelement;
+import matrizen.model.Spiel;
 import matrizen.model.elemente.Gegner;
 import matrizen.model.elemente.Geschoss;
 import matrizen.model.elemente.GrafikTyp;
@@ -37,6 +39,7 @@ public class DateiManager {
 	private static BufferedImage srcFeld, srcFigur, srcPartikel, srcItem;
 	public final static String pfad = DateiManager.class.getProtectionDomain().getCodeSource().getLocation().toString()
 			.replace("/file:/", "").replace("file: /", "").replace("file:/", "");
+	public static final Konfiguration config = configLaden();
 
 	/**
 	 * lässt zu, dass aus der Datei ein Level-Objekt erstellt wird
@@ -47,14 +50,27 @@ public class DateiManager {
 	public static matrizen.model.Level laden(Level l) {
 		return LevelParser.parse(l.src);
 	}
-	
+
+	static public Object laden(File f, Class<?> clazz) {
+		try {
+			if (clazz == Konfiguration.class)
+				return ConfigParser.parse(inhaltLesen(f));
+			else if (clazz == Musik.class)
+				return AudioSystem.getAudioInputStream(f);
+		} catch (Exception e) {
+			logger.log(java.util.logging.Level.WARNING, e.getMessage(), e);
+		}
+
+		return null;
+	}
+
 	static public AudioInputStream laden(Musik l) {
 		try {
 			return AudioSystem.getAudioInputStream(l.src);
 		} catch (UnsupportedAudioFileException | IOException e) {
 			e.printStackTrace();
 		}
-		
+
 		return null;
 	}
 
@@ -79,11 +95,26 @@ public class DateiManager {
 	 */
 	public static String inhaltLesen(String s) {
 		try {
-			return inhaltLesen(new File(pfad + "/res/" + s));
+			return inhaltLesen(new File(s.replace("#@#", pfad + "/res/")));
 		} catch (IOException e) {
 			logger.log(java.util.logging.Level.SEVERE, e.getMessage(), e);
 		}
 		return null;
+	}
+	
+	public static void dateiSchreiben(String s, File f) {		
+		try {
+			FileWriter w = new FileWriter(f);
+			w.write(s);
+			w.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		} finally {
+		}
+	}
+
+	public static Konfiguration configLaden() {
+		return ConfigParser.parse(inhaltLesen("#@#/config/config.ini"));
 	}
 
 	/**
@@ -110,18 +141,18 @@ public class DateiManager {
 	static {
 		try {
 			if (srcFeld == null)
-				srcFeld = ImageIO.read(new File(pfad + "res/grafik/feld_res.png"));
+				srcFeld = ImageIO.read(new File(config.getGrafiken(), "feld_res.png"));
 			if (srcFigur == null)
-				srcFigur = ImageIO.read(new File(pfad + "res/grafik/figur_res.png"));
+				srcFigur = ImageIO.read(new File(config.getGrafiken(), "figur_res.png"));
 			if (srcPartikel == null)
-				srcPartikel = ImageIO.read(new File(pfad + "res/grafik/partikel_res.png"));
+				srcPartikel = ImageIO.read(new File(config.getGrafiken(), "partikel_res.png"));
 			if (srcItem == null)
-				srcItem = ImageIO.read(new File(pfad + "res/grafik/item_res.png"));
+				srcItem = ImageIO.read(new File(config.getGrafiken(), "item_res.png"));
 		} catch (IOException e) {
 			logger.log(java.util.logging.Level.SEVERE, e.getMessage(), e);
 		}
 	}
-	
+
 	public enum Musik {
 		aurora("aurora.wav"),
 		awakening("awakening.wav"),
@@ -131,21 +162,29 @@ public class DateiManager {
 		maya("maya.wav"),
 		peril("peril.wav"),
 		sorrow("sorrow.wav"),
-		village("village.wav"), ;
-		
+		village("village.wav"),;
+
 		public File src;
-		
+
 		private Musik(String s) {
 			this.src = new File(pfad + "res/musik/" + s);
-		}		
-		
+		}
+
 		static public AudioInputStream[] alleLaden() {
 			AudioInputStream[] a = new AudioInputStream[values().length];
-			
-			for(int i = 0; i < a.length; i++)
+
+			for (int i = 0; i < a.length; i++)
 				a[i] = laden(values()[i]);
-			
+
 			return a;
+		}
+
+		public static List<File> aktiveLaden() {
+			return config.getAktiveMusik();
+		}
+
+		public static List<File> inaktiveLaden() {
+			return config.getInaktiveMusik();
 		}
 	}
 
@@ -156,12 +195,12 @@ public class DateiManager {
 	 *
 	 */
 	public enum Level {
-		level0(inhaltLesen("/levels/level0.mld")),
-		level1(inhaltLesen("/levels/level1.mld")),
-		level2(inhaltLesen("/levels/level2.mld")),
-		level3(inhaltLesen("/levels/level3.mld")),
-		level4(inhaltLesen("/levels/level4.mld")),
-		level5(inhaltLesen("/levels/level5.mld"));
+		level0(inhaltLesen("#@#/levels/level0.mld")),
+		level1(inhaltLesen("#@#/levels/level1.mld")),
+		level2(inhaltLesen("#@#/levels/level2.mld")),
+		level3(inhaltLesen("#@#/levels/level3.mld")),
+		level4(inhaltLesen("#@#/levels/level4.mld")),
+		level5(inhaltLesen("#@#/levels/level5.mld"));
 
 		public String src;
 
@@ -264,7 +303,7 @@ public class DateiManager {
 
 		private static Bild zufaelligesItem(Item.Typ t) {
 			switch (t) {
-			case herz: 
+			case herz:
 				return itemHerz;
 			case muenze:
 				return itemMuenze;
@@ -383,21 +422,43 @@ public class DateiManager {
 		 * @param str
 		 * @return
 		 */
-		public static List<Konfiguration> parse(String str) {
-			List<Konfiguration> list = new ArrayList<Konfiguration>();
+		public static Konfiguration parse(String str) {
+			Konfiguration c = new Konfiguration();
 			JSONObject obj = new JSONObject(str);
-			JSONArray arr = obj.getJSONArray("configs");
+			List<File> aMusik = new ArrayList<>(), iMusik = new ArrayList<>();
 
-			for (int i = 0; i < arr.length(); i++) {
-				JSONObject ob = arr.getJSONObject(i);
+			JSONArray a = obj.getJSONArray("oben");
+			c.setOben(a.getInt(0), a.getInt(1));
+			a = obj.getJSONArray("rechts");
+			c.setRechts(a.getInt(0), a.getInt(1));
+			a = obj.getJSONArray("unten");
+			c.setUnten(a.getInt(0), a.getInt(1));
+			a = obj.getJSONArray("links");
+			c.setLinks(a.getInt(0), a.getInt(1));
+			a = obj.getJSONArray("schuss");
+			c.setSchuss(a.getInt(0), a.getInt(1));
 
-				list.add(new Konfiguration(ob.getInt("oben"), ob.getInt("rechts"), ob.getInt("unten"),
-						ob.getInt("links"), ob.getInt("schuss")));
+			a = obj.getJSONArray("aMusik");
+
+			for (int i = 0; i < a.length(); i++) {
+				aMusik.add(new File(a.getString(i)));
 			}
 
-			logger.log(java.util.logging.Level.FINEST, "Konfigurationen " + list + " aus " + str + " ausgelesen");
+			c.setAktiveMusik(aMusik);
 
-			return list;
+			a = obj.getJSONArray("iMusik");
+
+			for (int i = 0; i < a.length(); i++) {
+				iMusik.add(new File(a.getString(i)));
+			}
+
+			c.setInaktiveMusik(iMusik);
+
+			c.setGespielt(obj.getBoolean("gespielt"));
+
+			c.setGrafiken(new File(obj.getString("grafik")));
+
+			return c;
 		}
 
 		/**
@@ -407,14 +468,18 @@ public class DateiManager {
 		 * @param l
 		 * @return
 		 */
-		public static String write(List<Konfiguration> l) {
+		public static String write(Konfiguration k) {
 			JSONObject obj = new JSONObject();
-			JSONArray arr = new JSONArray();
 
-			for (Konfiguration k : l) {
-				arr.put(new JSONObject().put("oben", k.getOben()).put("rechts", k.getRechts())
-						.put("unten", k.getUnten()).put("links", k.getLinks()).put("schuss", k.getSchuss()));
-			}
+			obj.put("oben", new JSONArray(k.getOben()));
+			obj.put("rechts", new JSONArray(k.getRechts()));
+			obj.put("unten", new JSONArray(k.getUnten()));
+			obj.put("links", new JSONArray(k.getLinks()));
+			obj.put("schuss", new JSONArray(k.getSchuss()));
+			obj.put("iMuisk", new JSONArray(k.getInaktiveMusik()));
+			obj.put("aMusik", new JSONArray(k.getAktiveMusik()));
+			obj.put("grafik", k.getGrafiken().getAbsolutePath());
+			obj.put("gespielt", k.isGespielt());
 
 			return obj.toString();
 		}

@@ -55,7 +55,7 @@ public class SpielFenster extends JFrame {
 		setMinimumSize(new Dimension(breite, hoehe));
 		setLocation(new Point(getDefaultToolkit().getScreenSize().width / 2 - breite / 2,
 				getDefaultToolkit().getScreenSize().height / 2 - hoehe / 2));
-		setDefaultCloseOperation(EXIT_ON_CLOSE);
+		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 		listenerHinzufuegen();
 		bImg = new BufferedImage(Spiel.spalten * 32, Spiel.zeilen * 32, BufferedImage.TYPE_INT_RGB);
 		graphics = (Graphics2D) bImg.getGraphics();
@@ -64,8 +64,7 @@ public class SpielFenster extends JFrame {
 			frame++;
 		});
 		logger.log(Level.CONFIG, "SpielFenster erstellt");
-
-		setVisible(true);
+		setVisible(false);
 	}
 
 	/**
@@ -134,14 +133,16 @@ public class SpielFenster extends JFrame {
 	 * Startet den Timer und damit das Spiel
 	 */
 	public void start() {
-		logger.setFilter(new Filter() {
-			@Override
-			public boolean isLoggable(LogRecord record) {
-				return true;
-			}
-		});
 		logger.log(Level.CONFIG, "Spiel gestartet!");
+		addKeyListener(Spiel.gibInstanz());
+		setVisible(true);
 		timer.start();
+	}
+	
+	public void stop() {
+		removeKeyListener(Spiel.gibInstanz());
+		timer.stop();
+		setVisible(false);
 	}
 
 	/**
@@ -155,17 +156,7 @@ public class SpielFenster extends JFrame {
 		return instanz;
 	}
 
-	public static void main(String[] args) {
-		// zeit, millisekunde, level, nachticht, neue zeile
-		// ändert die formatierung der Konsole, des logs
-		System.setProperty("java.util.logging.SimpleFormatter.format", "%1$tT:%tL-%4$s: %5$s%6$s%n");
-		// ändert die wichtigkeit des loggers
-		logger.setLevel(Level.FINE);
-		Handler handler = new ConsoleHandler();
-		handler.setLevel(Level.FINE);
-		logger.addHandler(handler);
-		// erstellt die instanz des SpielFensters
+	public static void init() {
 		instanz = new SpielFenster();
-		instanz.start();
 	}
 }
