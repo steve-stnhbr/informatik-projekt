@@ -62,30 +62,44 @@ public class Level {
 		for (Levelelement l1 : liste) {
 			if (l0 instanceof Geschoss && l1 instanceof Figur) {
 				Geschoss g = (Geschoss) l0;
-				if (g.getPos().dist(l1.getPos().kopieren()) < g.getTyp().getRadius()) {
-					if (g.isSpieler()) {
-						((Figur) l1).schaden(g.getSchaden());
-						if (l1 instanceof TestGegner && Spiel.gibInstanz().tutorials[1]) {
-							if (!Spiel.gibInstanz().tutorials[2])
-								Spiel.gibInstanz().tutorialTick = (int) Spiel.gibInstanz().ticks;
-							Spiel.gibInstanz().tutorials[2] = true;
-						}
-					} else
-						Spieler.gibInstanz().schaden(g.getSchaden());
-					liste.remove(g);
+				Figur f = (Figur) l1;
 
-					if (((Figur) l1).getLeben() <= 0) {
-						if (Spiel.gibInstanz().tutorial && Spiel.gibInstanz().tutorials[2]
-								&& Spiel.gibInstanz().gegnerKannSterben) {
-							if (!Spiel.gibInstanz().tutorials[3])
-								Spiel.gibInstanz().tutorialTick = (int) Spiel.gibInstanz().ticks;
-							Spiel.gibInstanz().tutorials[3] = true;
+				if (g.isAktiv()) {
+
+					if (g.isSpieler()) {
+						if (g.getPos().dist(f.getPos()) <= g.getTyp().getRadius()) {
+							if (l1 instanceof TestGegner && Spiel.gibInstanz().tutorials[1]) {
+								if (!Spiel.gibInstanz().tutorials[2])
+									Spiel.gibInstanz().tutorialTick = (int) Spiel.gibInstanz().ticks;
+								Spiel.gibInstanz().tutorials[2] = true;
+							}
+
+							f.schaden(g.getSchaden());
+							liste.remove(g);
 						}
-						if (Spiel.gibInstanz().tutorial && Spiel.gibInstanz().gegnerKannSterben || !Spiel.gibInstanz().tutorial) {
-							liste.remove(l1);
-							((Figur) l1).beimTod();
-							l1 = null;
+					} else {
+						if (g.getPos().dist(Spieler.gibInstanz().getPos()) <= g.getTyp().getRadius()) {
+							Spieler.gibInstanz().schaden(g.getSchaden());
+							liste.remove(g);
 						}
+					}
+				} else {
+					liste.remove(g);
+					g = null;
+				}
+
+				if (((Figur) l1).getLeben() <= 0) {
+					if (Spiel.gibInstanz().tutorial && Spiel.gibInstanz().tutorials[2]
+							&& Spiel.gibInstanz().gegnerKannSterben) {
+						if (!Spiel.gibInstanz().tutorials[3])
+							Spiel.gibInstanz().tutorialTick = (int) Spiel.gibInstanz().ticks;
+						Spiel.gibInstanz().tutorials[3] = true;
+					}
+					if (Spiel.gibInstanz().tutorial && Spiel.gibInstanz().gegnerKannSterben
+							|| !Spiel.gibInstanz().tutorial) {
+						liste.remove(l1);
+						((Figur) l1).beimTod();
+						l1 = null;
 					}
 				}
 			}
@@ -105,6 +119,7 @@ public class Level {
 				liste.remove(l1);
 			}
 		}
+
 	}
 
 	private void checkPosition(Levelelement l) {

@@ -34,14 +34,13 @@ public class Spiel implements KeyListener {
 	public static final float feldLaenge = SpielFenster.breite / Spiel.spalten;
 	private static Spiel instanz;
 	private Level level;
-	public long ticks = -200;
+	public long ticks = -75;
 	private Text text;
-	private boolean schiessen, gegnerErstellt, nichtZeichnen;
-	public boolean tutorial = !DateiManager.config.isGespielt(), schluesselAufheben, gegnerKannSterben,
+	public boolean tutorial = (DateiManager.config.getTutorial() == 0), schluesselAufheben, gegnerKannSterben,
 			kannTeleportieren;
+	private boolean schiessen, gegnerErstellt;
 	public boolean[] tutorials;
 	public int tutorialTick;
-	private BufferedImage schrift;
 	private static final int tutorialDelay = 100;
 
 	private final int[] links = DateiManager.config.getLinks(), rechts = DateiManager.config.getRechts(),
@@ -60,7 +59,7 @@ public class Spiel implements KeyListener {
 		MusikPlayer.setZufall(true);
 		MusikPlayer.setWiederholen(true);
 		MusikPlayer.setWeiter(true);
-		MusikPlayer.laden(DateiManager.Musik.alleLaden());
+		MusikPlayer.laden(DateiManager.Musik.aktiveMusikLaden());
 		MusikPlayer.naechstesLied();
 		MusikPlayer.abspielen();
 
@@ -81,20 +80,11 @@ public class Spiel implements KeyListener {
 	public void zeichnen(Graphics2D graphics) {
 		if (ticks < 0) {
 			try {
-				if (schrift == null) {
-					schrift = new BufferedImage(Spiel.spalten * 32, Spiel.zeilen * 32, BufferedImage.TYPE_INT_RGB);
-					((Graphics2D) schrift.getGraphics()).setColor(Color.black);
-					((Graphics2D) schrift.getGraphics()).fillRect(0, 0, Spiel.spalten * 32, Spiel.zeilen * 32);
-					((Graphics2D) schrift.getGraphics()).setColor(Color.black);
-					((Graphics2D) schrift.getGraphics()).setFont(Font
-							.createFont(Font.TRUETYPE_FONT, new File(DateiManager.pfad + "res/schrift/prstartk.ttf"))
-							.deriveFont(5));
-					((Graphics2D) schrift.getGraphics()).setColor(Color.white);
-					((Graphics2D) schrift.getGraphics()).drawString("troll-karl", (int) (Spiel.spalten * 16 + ticks * 0.5), Spiel.zeilen * 16);
-				}
-				float r = (200 - ticks) / 10;
-				int xy = (int) ticks, w = (int) (Spiel.spalten * 32 * r), h = (int) (Spiel.zeilen * 32 * r);
-				graphics.drawImage(schrift, xy, xy, w, h, null);
+				graphics.setFont(
+						Font.createFont(Font.TRUETYPE_FONT, new File(DateiManager.pfad + "res/schrift/prstartk.ttf"))
+								.deriveFont(20f));
+				graphics.setColor(Color.white);
+				graphics.drawString("trollkarl", Spiel.spalten * 16 - 75, Spiel.zeilen * 16 - 40);
 			} catch (FontFormatException | IOException e) {
 				e.printStackTrace();
 			}
@@ -109,6 +99,7 @@ public class Spiel implements KeyListener {
 			if (text != null)
 				text.zeichnen(graphics);
 		}
+
 		ticks++;
 	}
 
@@ -146,8 +137,7 @@ public class Spiel implements KeyListener {
 					}
 				});
 			} else if (ticks == tutorialDelay * 2) {
-				// TODO
-				text = new Text(0, "Bewege dich mit den WASD-Tasten oder Pfeil-", "tasten druch die Welt");
+				text = new Text(0, "Bewege dich mit den WASD-Tasten oder Pfeil-", "tasten durch die Welt");
 				SpielFenster.gibInstanz().addKeyListener(this);
 			} else if (ticks > tutorialTick + tutorialDelay && tutorials[0] && !tutorials[1]) {
 				text = new Text(0, "Mit und E und Strg kannst du", "Partikel verschießen");
@@ -183,10 +173,10 @@ public class Spiel implements KeyListener {
 				text = new Text(-1, "                 Viel Spaß!");
 				tutorialTick = (int) ticks;
 				tutorial = false;
-			} else if (ticks > tutorialTick + 200 && tutorials[6]) {
+			} else if (ticks > tutorialTick + 20 && tutorials[6]) {
 				text = null;
 				tutorialTick = 0;
-				DateiManager.config.setGespielt(true);
+				DateiManager.config.setTutorial((short) 1);
 			}
 		}
 	}
@@ -228,7 +218,6 @@ public class Spiel implements KeyListener {
 			MusikPlayer.setVolume(MusikPlayer.getVolume() + .025f);
 			logger.log(java.util.logging.Level.FINE, "Lautstärke auf " + MusikPlayer.getVolume() + " gestellt");
 		}
-
 	}
 
 	@Override

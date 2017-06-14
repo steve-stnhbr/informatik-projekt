@@ -85,6 +85,10 @@ public class Vektor {
 		return this;
 	}
 
+	public float skalar(Vektor o) {
+		return (x + o.x) * (y + o.y);
+	}
+
 	public float mag() {
 		return (float) Math.sqrt(x * x + y * y);
 	}
@@ -123,6 +127,11 @@ public class Vektor {
 
 	public enum Rechenmethode {
 		kopieren, hinzufuegen;
+	}
+
+	public Vektor normalize() {
+		div(mag());
+		return this;
 	}
 
 }

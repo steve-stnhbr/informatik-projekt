@@ -5,6 +5,7 @@ import static matrizen.view.SpielFenster.logger;
 
 import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
@@ -23,7 +24,6 @@ import org.json.JSONObject;
 
 import matrizen.model.Feld;
 import matrizen.model.Levelelement;
-import matrizen.model.Spiel;
 import matrizen.model.elemente.Gegner;
 import matrizen.model.elemente.Geschoss;
 import matrizen.model.elemente.GrafikTyp;
@@ -40,6 +40,7 @@ public class DateiManager {
 	public final static String pfad = DateiManager.class.getProtectionDomain().getCodeSource().getLocation().toString()
 			.replace("/file:/", "").replace("file: /", "").replace("file:/", "");
 	public static final Konfiguration config = configLaden();
+	public static final Werte werte = werteLaden();
 
 	/**
 	 * lässt zu, dass aus der Datei ein Level-Objekt erstellt wird
@@ -51,6 +52,19 @@ public class DateiManager {
 		return LevelParser.parse(l.src);
 	}
 
+	private static Werte werteLaden() {
+		Werte w = new Werte();
+
+		JSONObject obj = new JSONObject(inhaltLesen("#@#/werte/werte.cfg"));
+		String[] s = JSONObject.getNames(obj);
+
+		for (int i = 0; i < s.length; i++) {
+			w.put(s[i], obj.getInt(s[i]));
+		}
+
+		return w;
+	}
+
 	static public Object laden(File f, Class<?> clazz) {
 		try {
 			if (clazz == Konfiguration.class)
@@ -59,16 +73,6 @@ public class DateiManager {
 				return AudioSystem.getAudioInputStream(f);
 		} catch (Exception e) {
 			logger.log(java.util.logging.Level.WARNING, e.getMessage(), e);
-		}
-
-		return null;
-	}
-
-	static public AudioInputStream laden(Musik l) {
-		try {
-			return AudioSystem.getAudioInputStream(l.src);
-		} catch (UnsupportedAudioFileException | IOException e) {
-			e.printStackTrace();
 		}
 
 		return null;
@@ -104,21 +108,20 @@ public class DateiManager {
 
 	public static void dateiSchreiben(String s, File f) {
 		try {
-			FileWriter w = new FileWriter(f);
+			BufferedWriter w = new BufferedWriter(new FileWriter(f));
 			w.write(s);
 			w.close();
 		} catch (IOException e) {
 			e.printStackTrace();
-		} finally {
 		}
 	}
 
 	public static Konfiguration configLaden() {
-		return ConfigParser.parse(inhaltLesen("#@#/config/config.ini"));
+		return ConfigParser.parse(inhaltLesen("#@#/config/config.cfg"));
 	}
 
 	public static void configSchreiben() {
-		dateiSchreiben(ConfigParser.write(config), new File(pfad + "res/config/config.ini"));
+		dateiSchreiben(ConfigParser.write(config), new File(pfad + "res/config/config.cfg"));
 	}
 
 	/**
@@ -139,6 +142,7 @@ public class DateiManager {
 
 		logger.log(java.util.logging.Level.FINEST, "Inhalt: " + builder.toString() + " aus Datei " + f + " gelesen");
 		reader.close();
+
 		return builder.toString();
 	}
 
@@ -157,38 +161,41 @@ public class DateiManager {
 		}
 	}
 
-	public enum Musik {
-		aurora("aurora.wav"),
-		awakening("awakening.wav"),
-		dreaming("dreaming.wav"),
-		frostfall("frostfall.wav"),
-		lake("lake.wav"),
-		maya("maya.wav"),
-		peril("peril.wav"),
-		sorrow("sorrow.wav"),
-		village("village.wav"),;
-
-		public File src;
-
-		private Musik(String s) {
-			this.src = new File(pfad + "res/musik/" + s);
-		}
-
-		static public AudioInputStream[] alleLaden() {
-			AudioInputStream[] a = new AudioInputStream[values().length];
-
-			for (int i = 0; i < a.length; i++)
-				a[i] = laden(values()[i]);
-
-			return a;
-		}
-
+	public static class Musik {
 		public static List<File> aktiveLaden() {
 			return config.getAktiveMusik();
 		}
 
 		public static List<File> inaktiveLaden() {
 			return config.getInaktiveMusik();
+		}
+
+		public static AudioInputStream[] aktiveMusikLaden() {
+			List<AudioInputStream> a = new ArrayList<>();
+			for (File f : aktiveLaden()) {
+				try {
+					a.add(AudioSystem.getAudioInputStream(f));
+				} catch (UnsupportedAudioFileException | IOException e) {
+					e.printStackTrace();
+				}
+			}
+
+			System.out.println(a);
+
+			return a.toArray(new AudioInputStream[a.size()]);
+		}
+
+		public static List<AudioInputStream> inaktiveMusikLaden() {
+			List<AudioInputStream> a = new ArrayList<>();
+			for (File f : inaktiveLaden()) {
+				try {
+					a.add(AudioSystem.getAudioInputStream(f));
+				} catch (UnsupportedAudioFileException | IOException e) {
+					e.printStackTrace();
+				}
+			}
+
+			return a;
 		}
 	}
 
@@ -442,7 +449,7 @@ public class DateiManager {
 			a = obj.getJSONArray("schuss");
 			c.setSchuss(a.getInt(0), a.getInt(1));
 
-			a = obj.getJSONArray("aMusik");
+			a = obj.getJSONArray("aktiv");
 
 			for (int i = 0; i < a.length(); i++) {
 				aMusik.add(new File(a.getString(i)));
@@ -450,7 +457,7 @@ public class DateiManager {
 
 			c.setAktiveMusik(aMusik);
 
-			a = obj.getJSONArray("iMusik");
+			a = obj.getJSONArray("inaktiv");
 
 			for (int i = 0; i < a.length(); i++) {
 				iMusik.add(new File(a.getString(i)));
@@ -458,7 +465,7 @@ public class DateiManager {
 
 			c.setInaktiveMusik(iMusik);
 
-			c.setGespielt(obj.getBoolean("gespielt"));
+			c.setTutorial((short) obj.getInt("tutorial"));
 
 			c.setGrafiken(new File(obj.getString("grafik")));
 
@@ -480,10 +487,10 @@ public class DateiManager {
 			obj.put("unten", new JSONArray(k.getUnten()));
 			obj.put("links", new JSONArray(k.getLinks()));
 			obj.put("schuss", new JSONArray(k.getSchuss()));
-			obj.put("iMuisk", new JSONArray(k.getInaktiveMusik()));
-			obj.put("aMusik", new JSONArray(k.getAktiveMusik()));
+			obj.put("inaktiv", new JSONArray(k.getInaktiveMusik()));
+			obj.put("aktiv", new JSONArray(k.getAktiveMusik()));
 			obj.put("grafik", k.getGrafiken().getAbsolutePath());
-			obj.put("gespielt", k.isGespielt());
+			obj.put("tutorial", k.getTutorial());
 
 			return obj.toString();
 		}

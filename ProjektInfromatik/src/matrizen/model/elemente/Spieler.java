@@ -1,5 +1,7 @@
 package matrizen.model.elemente;
 
+import static matrizen.core.DateiManager.werte;
+
 import static matrizen.view.SpielFenster.logger;
 
 import java.awt.Graphics2D;
@@ -18,7 +20,9 @@ import matrizen.core.Vektor;
 import matrizen.core.event.BewegungsEvent;
 import matrizen.core.event.EventManager;
 import matrizen.model.Spiel;
+import matrizen.model.Zauberstab;
 import matrizen.model.elemente.Geschoss.Typ;
+import matrizen.model.zauberstaebe.EinfachSchwacherStab;
 import matrizen.view.SpielFenster;
 
 /**
@@ -27,12 +31,15 @@ import matrizen.view.SpielFenster;
 public class Spieler extends Figur {
 	private static Spieler instanz;
 
+	public final int maxLeben = werte.get("spieler_leben"), angriff = werte.get("spieler_angriff");
+
 	private Vektor ziel;
 	private int index, xFeld, yFeld;
-	short delay = 7, delaySchuss = 20;
+	private short delay = (short) werte.get("spieler_gehen");
 	private short[] cooldown;
 	private Richtung blick = Richtung.OBEN;
 	private List<Item> inventar;
+	private Zauberstab stab;
 
 	private Spieler() {
 		cooldown = new short[5];
@@ -41,6 +48,7 @@ public class Spieler extends Figur {
 		ziel = pos;
 		inventar = new ArrayList<Item>();
 		animation = new BufferedImage[] { DateiManager.laden(DateiManager.Bild.figurSpielerAnim0) };
+		stab = new EinfachSchwacherStab();
 	}
 
 	public static Spieler gibInstanz() {
@@ -53,6 +61,8 @@ public class Spieler extends Figur {
 	public void zeichnen(Graphics2D g) {
 		super.aktualisieren();
 		checkInput();
+
+		System.out.println(cooldown[4]);
 
 		if (ges.mag() == 0)
 			g.drawImage(grafik, (int) pos.getX(), (int) pos.getY(), (int) 32, (int) 32, null);
@@ -113,17 +123,15 @@ public class Spieler extends Figur {
 	}
 
 	private void schuss() {
-		if(Spiel.gibInstanz().tutorial) {
+		if (Spiel.gibInstanz().tutorial) {
 			if (!Spiel.gibInstanz().tutorials[1])
 				Spiel.gibInstanz().tutorialTick = (int) Spiel.gibInstanz().ticks;
 			Spiel.gibInstanz().tutorials[1] = true;
 		}
-		
+
 		if (cooldown[4] == 0) {
-			// zauberstab.schuss();
-			Spiel.gibInstanz().getLevel().hinzufuegen(new Geschoss(Typ.stern, 10, this.pos,
-					new Vektor(blick.getVektor().getX(), blick.getVektor().getY()).mult(5), true));
-			cooldown[4] = delaySchuss;
+			stab.schuss();
+			cooldown[4] = (short) stab.getDelay();
 		}
 	}
 
@@ -198,6 +206,14 @@ public class Spieler extends Figur {
 
 	public void setyFeld(int yFeld) {
 		this.yFeld = yFeld;
+	}
+
+	public Richtung getBlick() {
+		return blick;
+	}
+
+	public void setBlick(Richtung blick) {
+		this.blick = blick;
 	}
 
 }

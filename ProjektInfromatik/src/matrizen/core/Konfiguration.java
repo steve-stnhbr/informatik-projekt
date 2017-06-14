@@ -16,7 +16,7 @@ public class Konfiguration {
 	private int[] rechts, links, oben, unten, schuss;
 	private List<File> aktiveMusik, inaktiveMusik;
 	private File grafiken;
-	private boolean gespielt;
+	private short tutorial;
 
 	public Konfiguration() {
 		rechts = new int[2];
@@ -129,13 +129,13 @@ public class Konfiguration {
 		return this;
 	}
 
-	public boolean isGespielt() {
-		return gespielt;
+	public Konfiguration setTutorial(short tutorial) {
+		this.tutorial = tutorial;
+		return this;
 	}
 
-	public Konfiguration setGespielt(boolean gespielt) {
-		this.gespielt = gespielt;
-		return this;
+	public short getTutorial() {
+		return tutorial;
 	}
 
 }

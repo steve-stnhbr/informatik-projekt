@@ -1,10 +1,11 @@
 package matrizen.vorhinein;
 
-import java.awt.Container;
+import java.awt.Dimension;
 import java.io.File;
 import java.io.IOException;
 
 import javax.imageio.ImageIO;
+import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
@@ -14,13 +15,13 @@ import javax.swing.filechooser.FileFilter;
 
 import matrizen.core.DateiManager;
 
-public class GrafikPanel extends JPanel implements Informierbar {
+public class GrafikPanel extends JPanel implements Informierbar, Benennbar {
 	private static final long serialVersionUID = 7295990738900352673L;
 	private static GrafikPanel instanz;
 
 	private File ordner;
-	private JLabel lGElement, lGFigur, lGFeld, lGItem, lGPartikel;
-	private JLabel lGrafik, lElement, lFigur, lFeld, lItem, lPartikel;
+	private JLabel lGFigur, lGFeld, lGItem, lGPartikel;
+	private JLabel lFigur, lFeld, lItem, lPartikel;
 	private JButton bInfo, bLaden, bAbbruch, bWeiter;
 
 	private GrafikPanel() {
@@ -28,6 +29,10 @@ public class GrafikPanel extends JPanel implements Informierbar {
 		initComponents();
 		initListeners();
 		addComponents();
+
+		setPreferredSize(new Dimension(380, 510));
+
+		setVisible(true);
 	}
 
 	private void initContent() {
@@ -35,26 +40,39 @@ public class GrafikPanel extends JPanel implements Informierbar {
 	}
 
 	private void initComponents() {
-		lGrafik = new JLabel("f:");
-		lElement = new JLabel("Levelelement:");
+		initIcons();
+
 		lFigur = new JLabel("Figuren:");
 		lFeld = new JLabel("Felder:");
+		lItem = new JLabel("Items");
 		lPartikel = new JLabel("Partikel:");
-
-		try {
-			lGElement = new JLabel(new ImageIcon(ImageIO.read(new File(ordner, "element_res.png"))));
-			lGFigur = new JLabel(new ImageIcon(ImageIO.read(new File(ordner, "figur_res.png"))));
-			lGFeld = new JLabel(new ImageIcon(ImageIO.read(new File(ordner, "feld_res.png"))));
-			lGItem = new JLabel(new ImageIcon(ImageIO.read(new File(ordner, "item_res.png"))));
-			lGPartikel = new JLabel(new ImageIcon(ImageIO.read(new File(ordner, "partikel_res.png"))));
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
 
 		bInfo = new JButton("Info");
 		bLaden = new JButton("Grafiken laden...");
 		bAbbruch = new JButton(AnfangsFenster.textAbbruch);
 		bWeiter = new JButton(AnfangsFenster.textWeiter);
+	}
+
+	private void initIcons() {
+		try {
+			ImageIcon iFigur = new ImageIcon(ImageIO.read(new File(ordner, "figur_res.png"))),
+					iFeld = new ImageIcon(ImageIO.read(new File(ordner, "feld_res.png"))),
+					iItem = new ImageIcon(ImageIO.read(new File(ordner, "item_res.png"))),
+					iPartikel = new ImageIcon(ImageIO.read(new File(ordner, "partikel_res.png")));
+			lGFigur = new JLabel(iFigur);
+			lGFeld = new JLabel(iFeld);
+			lGItem = new JLabel(iItem);
+			lGPartikel = new JLabel(iPartikel);
+
+			int w = (getWidth() - 10) / 4, h = w * iItem.getIconHeight() / iFigur.getIconWidth();
+
+			lGFigur.setSize(w, h);
+			lGFeld.setSize(w, h);
+			lGItem.setSize(w, h);
+			lGPartikel.setSize(w, h);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 
 	private void initListeners() {
@@ -78,22 +96,51 @@ public class GrafikPanel extends JPanel implements Informierbar {
 					return false;
 				}
 			});
+
+			f.setMultiSelectionEnabled(false);
+
+			int t = f.showOpenDialog(this);
+
+			if (t == JFileChooser.APPROVE_OPTION)
+				ordner = f.getSelectedFile();
+		});
+
+		bAbbruch.addActionListener((e) -> {
+			AnfangsFenster.gibInstanz().inhaltAendern(EinstellungsPanel.gibInstanz());
+
+			instanz = null;
+		});
+
+		bWeiter.addActionListener((e) -> {
+			DateiManager.config.setGrafiken(ordner);
+			AnfangsFenster.gibInstanz().inhaltAendern(EinstellungsPanel.gibInstanz());
 		});
 	}
 
 	private void addComponents() {
-		add(lGrafik);
-		add(lElement);
-		add(lFigur);
-		add(lFeld);
-		add(lItem);
-		add(lPartikel);
+		JPanel pItem = new JPanel(), pFigur = new JPanel(), pFeld = new JPanel(), pPartikel = new JPanel();
 
-		add(lGElement);
-		add(lGFigur);
-		add(lGFeld);
-		add(lGItem);
-		add(lGPartikel);
+		pItem.setLayout(new BoxLayout(pItem, BoxLayout.Y_AXIS));
+		pFigur.setLayout(new BoxLayout(pFigur, BoxLayout.Y_AXIS));
+		pFeld.setLayout(new BoxLayout(pFeld, BoxLayout.Y_AXIS));
+		pPartikel.setLayout(new BoxLayout(pPartikel, BoxLayout.Y_AXIS));
+
+		pItem.add(lItem);
+		pItem.add(lGItem);
+
+		pFigur.add(lFigur);
+		pFigur.add(lGFigur);
+
+		pFeld.add(lFeld);
+		pFeld.add(lGFeld);
+
+		pPartikel.add(lPartikel);
+		pPartikel.add(lGPartikel);
+
+		add(pItem);
+		add(pFigur);
+		add(pFeld);
+		add(pPartikel);
 
 		add(bLaden);
 		add(bAbbruch);
@@ -110,6 +157,15 @@ public class GrafikPanel extends JPanel implements Informierbar {
 	public String getInfoText() {
 		// TODO
 		return null;
+	}
+
+	public void standard() {
+		DateiManager.config.setGrafiken(new File(DateiManager.pfad + "res/grafik"));
+	}
+
+	@Override
+	public String gibName() {
+		return "Grafikeinstellungen";
 	}
 
 }

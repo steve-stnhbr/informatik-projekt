@@ -1,10 +1,11 @@
 package matrizen.vorhinein;
 
+import java.awt.Dimension;
+
 import javax.swing.JButton;
 import javax.swing.JPanel;
-import javax.swing.SwingUtilities;
 
-public class EinstellungsPanel extends JPanel {
+public class EinstellungsPanel extends JPanel implements Benennbar {
 	private static final long serialVersionUID = 572488133142487870L;
 	static private EinstellungsPanel instanz;
 
@@ -14,7 +15,9 @@ public class EinstellungsPanel extends JPanel {
 		initComponents();
 		initListeners();
 		addComponents();
-		AnfangsFenster.gibInstanz().pack();
+
+		setPreferredSize(new Dimension(208, 215));
+
 		setVisible(true);
 	}
 
@@ -56,9 +59,14 @@ public class EinstellungsPanel extends JPanel {
 		add(bZurueck);
 	}
 
-	public static EinstellungsPanel getInstanz() {
+	public static EinstellungsPanel gibInstanz() {
 		if (instanz == null)
 			instanz = new EinstellungsPanel();
 		return instanz;
+	}
+
+	@Override
+	public String gibName() {
+		return "Einstellung auswählen";
 	}
 }

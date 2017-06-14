@@ -129,17 +129,19 @@ public class SpielFenster extends JFrame {
 	 */
 	public void start() {
 		logger.log(Level.CONFIG, "Spiel gestartet!");
+		Spiel.gibInstanz().tutorial = (DateiManager.config.getTutorial() == 0);
 		addKeyListener(Spiel.gibInstanz());
 		setVisible(true);
 		timer.start();
 	}
-	
+
 	public void stop() {
 		removeKeyListener(Spiel.gibInstanz());
 		timer.stop();
 		MusikPlayer.stop();
 		setVisible(false);
 		DateiManager.configSchreiben();
+		instanz = null;
 	}
 
 	/**
