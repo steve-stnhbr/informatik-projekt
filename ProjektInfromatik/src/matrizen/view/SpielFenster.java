@@ -45,6 +45,7 @@ public class SpielFenster extends JFrame {
 		setSize(breite, hoehe);
 		setResizable(false);
 		setUndecorated(true);
+		setIconImage(DateiManager.iconLaden());
 		setPreferredSize(new Dimension(breite, hoehe));
 		setMaximumSize(new Dimension(breite, hoehe));
 		setMinimumSize(new Dimension(breite, hoehe));

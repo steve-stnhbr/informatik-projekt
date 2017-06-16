@@ -22,7 +22,8 @@ public class AnfangsFenster extends JFrame {
 	private AnfangsFenster() {
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		addListeners();
-		 setResizable(false);
+		setResizable(false);
+		setIconImage(DateiManager.iconLaden());
 		setVisible(true);
 	}
 

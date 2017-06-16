@@ -3,6 +3,7 @@ package matrizen.core;
 import static matrizen.core.Utils.random;
 import static matrizen.view.SpielFenster.logger;
 
+import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -72,6 +73,16 @@ public class DateiManager {
 			obj.put(s, werte.get(s));
 
 		dateiSchreiben(obj.toString(), new File(pfad + "res/werte/werte.cfg"));
+	}
+
+	public static Image iconLaden() {
+		try {
+			return ImageIO.read(new File(pfad + "res/grafik/icon.png"));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+		return null;
 	}
 
 	static public Object laden(File f, Class<?> clazz) {
