@@ -1,4 +1,4 @@
-package matrizen.vorhinein;
+package matrizen.view.einstellung;
 
 import java.awt.Dimension;
 import java.awt.event.ItemEvent;

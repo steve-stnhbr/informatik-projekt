@@ -65,6 +65,15 @@ public class DateiManager {
 		return w;
 	}
 
+	public static void werteSchreiben() {
+		JSONObject obj = new JSONObject();
+
+		for (String s : werte.getMap().keySet())
+			obj.put(s, werte.get(s));
+
+		dateiSchreiben(obj.toString(), new File(pfad + "res/werte/werte.cfg"));
+	}
+
 	static public Object laden(File f, Class<?> clazz) {
 		try {
 			if (clazz == Konfiguration.class)
@@ -248,6 +257,9 @@ public class DateiManager {
 		figurSpieler(0, 0, srcFigur),
 		figurSpielerAnim0(32, 0, srcFigur),
 		figurGegener(0, 128, srcFigur),
+		figurDrache(32, 128, srcFigur),
+		figurRitter(64, 128, srcFigur),
+		figurRitterDrehung(96, 128, srcFigur),
 		itemSchluessel(0, 0, srcItem),
 		itemMuenze(0, 32, srcItem),
 		itemHerz(64, 0, srcItem),

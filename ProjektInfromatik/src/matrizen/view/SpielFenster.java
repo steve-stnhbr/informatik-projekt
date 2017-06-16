@@ -34,7 +34,7 @@ public class SpielFenster extends JFrame {
 	 * ausgehend die andere Seite berechnet
 	 */
 	public static final int hoehe = getDefaultToolkit().getScreenSize().height / 3 * 2,
-			breite = hoehe * Spiel.spalten / Spiel.zeilen, ticks = 30;
+			breite = hoehe * Spiel.spalten / Spiel.zeilen;
 	private static SpielFenster instanz;
 	private BufferedImage bImg;
 	private Graphics2D graphics;
@@ -54,7 +54,7 @@ public class SpielFenster extends JFrame {
 		listenerHinzufuegen();
 		bImg = new BufferedImage(Spiel.spalten * 32, Spiel.zeilen * 32, BufferedImage.TYPE_INT_RGB);
 		graphics = (Graphics2D) bImg.getGraphics();
-		timer = new Timer(ticks, (e) -> {
+		timer = new Timer(DateiManager.werte.get("tick"), (e) -> {
 			aktualisieren();
 			frame++;
 		});
@@ -130,6 +130,7 @@ public class SpielFenster extends JFrame {
 	public void start() {
 		logger.log(Level.CONFIG, "Spiel gestartet!");
 		Spiel.gibInstanz().tutorial = (DateiManager.config.getTutorial() == 0);
+		timer.setDelay(DateiManager.werte.get("tick"));
 		addKeyListener(Spiel.gibInstanz());
 		setVisible(true);
 		timer.start();
@@ -141,6 +142,7 @@ public class SpielFenster extends JFrame {
 		MusikPlayer.stop();
 		setVisible(false);
 		DateiManager.configSchreiben();
+		DateiManager.werteSchreiben();
 		instanz = null;
 	}
 

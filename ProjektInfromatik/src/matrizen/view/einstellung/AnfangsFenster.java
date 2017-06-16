@@ -1,4 +1,4 @@
-package matrizen.vorhinein;
+package matrizen.view.einstellung;
 
 import java.awt.Toolkit;
 import java.awt.event.WindowEvent;
@@ -22,7 +22,7 @@ public class AnfangsFenster extends JFrame {
 	private AnfangsFenster() {
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		addListeners();
-		setResizable(false);
+		 setResizable(false);
 		setVisible(true);
 	}
 

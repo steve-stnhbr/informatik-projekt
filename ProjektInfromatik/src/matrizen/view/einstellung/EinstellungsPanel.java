@@ -1,4 +1,4 @@
-package matrizen.vorhinein;
+package matrizen.view.einstellung;
 
 import java.awt.Dimension;
 
@@ -9,14 +9,14 @@ public class EinstellungsPanel extends JPanel implements Benennbar {
 	private static final long serialVersionUID = 572488133142487870L;
 	static private EinstellungsPanel instanz;
 
-	private JButton bMusik, bEingabe, bGrafiken, bStandard, bZurueck;
+	private JButton bMusik, bEingabe, bGrafiken, bWerte, bStandard, bZurueck;
 
 	public EinstellungsPanel() {
 		initComponents();
 		initListeners();
 		addComponents();
 
-		setPreferredSize(new Dimension(208, 215));
+		setPreferredSize(new Dimension(208, 238));
 
 		setVisible(true);
 	}
@@ -25,6 +25,7 @@ public class EinstellungsPanel extends JPanel implements Benennbar {
 		bMusik = new JButton("Musik-Optionen");
 		bEingabe = new JButton("Eingabe verwalten");
 		bGrafiken = new JButton("Grafiken ändern");
+		bWerte = new JButton("Werte bearbeiten");
 		bStandard = new JButton("Standard zurücksetzen");
 		bZurueck = new JButton("zurück");
 	}
@@ -45,6 +46,10 @@ public class EinstellungsPanel extends JPanel implements Benennbar {
 			AnfangsFenster.gibInstanz().repaint();
 		});
 
+		bWerte.addActionListener((e) -> {
+			AnfangsFenster.gibInstanz().inhaltAendern(WertePanel.gibInstanz());
+		});
+
 		bZurueck.addActionListener((e) -> {
 			AnfangsFenster.gibInstanz().inhaltAendern(StartPanel.gibInstanz());
 			AnfangsFenster.gibInstanz().repaint();
@@ -55,6 +60,7 @@ public class EinstellungsPanel extends JPanel implements Benennbar {
 		add(bMusik);
 		add(bEingabe);
 		add(bGrafiken);
+		add(bWerte);
 		add(bStandard);
 		add(bZurueck);
 	}

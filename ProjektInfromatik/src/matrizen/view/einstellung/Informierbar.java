@@ -1,4 +1,4 @@
-package matrizen.vorhinein;
+package matrizen.view.einstellung;
 
 public interface Informierbar {
 	

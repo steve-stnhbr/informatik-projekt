@@ -17,11 +17,11 @@ import matrizen.model.elemente.Geschoss;
 import matrizen.model.elemente.Geschoss.Typ;
 import matrizen.model.elemente.Spieler;
 
-public class StatueGegner extends Gegner {
+public class DracheGegner extends Gegner {
 	public final int maxLeben = werte.get("drache_leben"), schaden = werte.get("drache_schaden"),
-			delayAngriff = werte.get("drache_angriff"), weite = werte.get("drache_weite");
+			delayAngriff = werte.get("drache_delay_angriff"), weite = werte.get("drache_weite");
 
-	public StatueGegner(Vektor vektor) {
+	public DracheGegner(Vektor vektor) {
 		grafik = DateiManager.laden(Bild.figurGegener);
 		leben = 200;
 		pos = vektor.mult(32);
@@ -42,7 +42,7 @@ public class StatueGegner extends Gegner {
 	public void zeichnen(Graphics2D g) {
 		g.drawImage(grafik, (int) pos.getX(), (int) pos.getY(), 32, 32, null);
 
-		if (Spiel.gibInstanz().ticks % delayAngriff == 0)
+		if (delayAngriff != 0 && Spiel.gibInstanz().ticks % delayAngriff == 0)
 			angriff();
 	}
 

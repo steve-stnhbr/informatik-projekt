@@ -31,11 +31,11 @@ import matrizen.view.SpielFenster;
 public class Spieler extends Figur {
 	private static Spieler instanz;
 
-	public final int maxLeben = werte.get("spieler_leben"), angriff = werte.get("spieler_angriff");
+	public final int maxLeben = werte.get("spieler_leben"), angriff = werte.get("spieler_delay_angriff");
 
 	private Vektor ziel;
 	private int index, xFeld, yFeld;
-	private short delay = (short) werte.get("spieler_gehen");
+	private short delay = (short) werte.get("spieler_delay_bewegung");
 	private short[] cooldown;
 	private Richtung blick = Richtung.OBEN;
 	private List<Item> inventar;
@@ -49,6 +49,7 @@ public class Spieler extends Figur {
 		inventar = new ArrayList<Item>();
 		animation = new BufferedImage[] { DateiManager.laden(DateiManager.Bild.figurSpielerAnim0) };
 		stab = new EinfachSchwacherStab();
+		leben = maxLeben;
 	}
 
 	public static Spieler gibInstanz() {
@@ -65,9 +66,9 @@ public class Spieler extends Figur {
 		System.out.println(cooldown[4]);
 
 		if (ges.mag() == 0)
-			g.drawImage(grafik, (int) pos.getX(), (int) pos.getY(), (int) 32, (int) 32, null);
+			g.drawImage(bildDrehen(grafik), (int) pos.getX(), (int) pos.getY(), (int) 32, (int) 32, null);
 		else
-			g.drawImage(animation[index], (int) pos.getX(), (int) pos.getY(), 32, 32, null);
+			g.drawImage(bildDrehen(animation[index]), (int) pos.getX(), (int) pos.getY(), 32, 32, null);
 
 		for (int i = 0; i < cooldown.length; i++) {
 			if (cooldown[i] > 0)
@@ -140,9 +141,10 @@ public class Spieler extends Figur {
 		transform.rotate(Math.toRadians(blick.getWinkel()), grafik.getWidth() / 2, grafik.getHeight() / 2);
 
 		AffineTransformOp operation = new AffineTransformOp(transform, AffineTransformOp.TYPE_BILINEAR);
-
-		// return operation.filter(grafik, null);
-		return grafik;
+		if (ges.kopieren().normalize().equals(blick.getVektor()) || ges.equals(Vektor.nullVektor))
+			return operation.filter(grafik, null);
+		else
+			return grafik;
 	}
 
 	private void bewegen(Richtung r) {

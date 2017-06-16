@@ -9,7 +9,6 @@ import java.awt.FontFormatException;
 import java.awt.Graphics2D;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 
@@ -22,9 +21,10 @@ import matrizen.core.Vektor;
 import matrizen.model.elemente.Spieler;
 import matrizen.model.gegner.TestGegner;
 import matrizen.view.SpielFenster;
+import matrizen.view.einstellung.AnfangsFenster;
+import matrizen.view.einstellung.StartPanel;
+import matrizen.view.hud.HUD;
 import matrizen.view.hud.Text;
-import matrizen.vorhinein.AnfangsFenster;
-import matrizen.vorhinein.StartPanel;
 
 /**
  * Dies ist die Hauptklasse, die auch den Input verwaltet
@@ -46,6 +46,7 @@ public class Spiel implements KeyListener {
 	private final int[] links = DateiManager.config.getLinks(), rechts = DateiManager.config.getRechts(),
 			oben = DateiManager.config.getOben(), unten = DateiManager.config.getUnten(),
 			schuss = DateiManager.config.getSchuss();
+	private HUD hud;
 
 	private Spiel() {
 		logger.log(java.util.logging.Level.INFO, "Spiel erstellt");
@@ -67,6 +68,9 @@ public class Spiel implements KeyListener {
 
 		schiessen = !tutorial;
 		level = Level.level1;
+		
+		hud = HUD.gibInstanz();
+		
 		if (!tutorial)
 			SpielFenster.gibInstanz().addKeyListener(this);
 	}
@@ -96,6 +100,7 @@ public class Spiel implements KeyListener {
 
 			level.zeichnen(graphics);
 			Spieler.gibInstanz().zeichnen(graphics);
+			hud.zeichnen(graphics);
 			if (text != null)
 				text.zeichnen(graphics);
 		}
