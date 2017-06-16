@@ -19,7 +19,8 @@ import matrizen.model.elemente.Spieler;
 
 public class DracheGegner extends Gegner {
 	public final int maxLeben = werte.get("drache_leben"), schaden = werte.get("drache_schaden"),
-			delayAngriff = werte.get("drache_delay_angriff"), weite = werte.get("drache_weite");
+			delayAngriff = werte.get("drache_delay_angriff"), weite = werte.get("drache_weite"),
+			partikelGeschw = werte.get("drache_partikel_geschw");
 
 	public DracheGegner(Vektor vektor) {
 		grafik = DateiManager.laden(Bild.figurGegener);
@@ -30,7 +31,7 @@ public class DracheGegner extends Gegner {
 	@Override
 	public void angriff() {
 		Spiel.gibInstanz().getLevel().hinzufuegen(new Geschoss(Typ.feuer, schaden, weite, pos,
-				pos.kopieren().sub(Spieler.gibInstanz().getPos()).mult(7f), false));
+				pos.kopieren().sub(Spieler.gibInstanz().getPos()).mult(partikelGeschw), false));
 	}
 
 	@Override

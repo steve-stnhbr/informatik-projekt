@@ -15,7 +15,7 @@ import matrizen.model.elemente.Spieler;
 public class RitterGegner extends Gegner {
 	public final int maxLeben = werte.get("ritter_leben"), delayAngriff = werte.get("ritter_delay_angriff"),
 			drehGeschw = werte.get("ritter_drehung"), schaden = werte.get("ritter_schaden"),
-			delayBewegung = werte.get("ritter_delay_bewegung"), geschw = werte.get("ritter_bewgeschw");
+			delayBewegung = werte.get("ritter_delay_bewegung"), geschw = werte.get("ritter_bewegung_geschw");
 	private int drehung;
 
 	public RitterGegner(Vektor feldPos) {
