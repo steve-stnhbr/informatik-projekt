@@ -4,6 +4,7 @@ import java.awt.Toolkit;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.io.File;
+import java.io.IOException;
 import java.util.logging.ConsoleHandler;
 import java.util.logging.Handler;
 import java.util.logging.Level;
@@ -83,10 +84,16 @@ public class AnfangsFenster extends JFrame {
 		Handler handler = new ConsoleHandler();
 		handler.setLevel(Level.FINE);
 
-		if (!new File(DateiManager.pfad + "res/.m").exists())
+		if (!new File(DateiManager.pfad + "res/.m").exists()) {
 			DateiManager.initConfig();
+			try {
+				new File(DateiManager.pfad + "res/.m").createNewFile();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
 
-			SpielFenster.logger.addHandler(handler);
+		SpielFenster.logger.addHandler(handler);
 		SpielFenster.init();
 		init();
 	}
