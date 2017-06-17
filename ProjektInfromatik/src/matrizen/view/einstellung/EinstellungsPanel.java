@@ -5,6 +5,8 @@ import java.awt.Dimension;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 
+import matrizen.core.DateiManager;
+
 public class EinstellungsPanel extends JPanel implements Benennbar {
 	private static final long serialVersionUID = 572488133142487870L;
 	static private EinstellungsPanel instanz;
@@ -53,6 +55,10 @@ public class EinstellungsPanel extends JPanel implements Benennbar {
 		bZurueck.addActionListener((e) -> {
 			AnfangsFenster.gibInstanz().inhaltAendern(StartPanel.gibInstanz());
 			AnfangsFenster.gibInstanz().repaint();
+		});
+		
+		bStandard.addActionListener((e) -> {
+			DateiManager.standardConfig();
 		});
 	}
 

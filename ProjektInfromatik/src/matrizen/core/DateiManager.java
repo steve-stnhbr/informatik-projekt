@@ -556,6 +556,7 @@ public class DateiManager {
 	}
 
 	public static void standardConfig() {
+		initConfig();
 		config.setLinks(KeyEvent.VK_LEFT, KeyEvent.VK_A);
 		config.setRechts(KeyEvent.VK_RIGHT, KeyEvent.VK_D);
 		config.setOben(KeyEvent.VK_UP, KeyEvent.VK_W);
