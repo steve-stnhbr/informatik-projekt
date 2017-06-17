@@ -44,6 +44,7 @@ public class DateiManager {
 			.replace("/file:/", "").replace("file: /", "").replace("file:/", "");
 	public static final Konfiguration config = configLaden();
 	public static final Werte werte = werteLaden();
+	public static boolean init = false;
 
 	/**
 	 * lässt zu, dass aus der Datei ein Level-Objekt erstellt wird
@@ -169,17 +170,34 @@ public class DateiManager {
 	}
 
 	static {
-		try {
-			if (srcFeld == null)
-				srcFeld = ImageIO.read(new File(config.getGrafiken(), "feld_res.png"));
-			if (srcFigur == null)
-				srcFigur = ImageIO.read(new File(config.getGrafiken(), "figur_res.png"));
-			if (srcPartikel == null)
-				srcPartikel = ImageIO.read(new File(config.getGrafiken(), "partikel_res.png"));
-			if (srcItem == null)
-				srcItem = ImageIO.read(new File(config.getGrafiken(), "item_res.png"));
-		} catch (IOException e) {
-			logger.log(java.util.logging.Level.SEVERE, e.getMessage(), e);
+		if (init) {
+			try {
+
+				if (srcFeld == null)
+					srcFeld = ImageIO.read(new File(config.getGrafiken(), "feld_res.png"));
+				if (srcFigur == null)
+					srcFigur = ImageIO.read(new File(config.getGrafiken(), "figur_res.png"));
+				if (srcPartikel == null)
+					srcPartikel = ImageIO.read(new File(config.getGrafiken(), "partikel_res.png"));
+				if (srcItem == null)
+					srcItem = ImageIO.read(new File(config.getGrafiken(), "item_res.png"));
+			} catch (IOException e) {
+				logger.log(java.util.logging.Level.SEVERE, e.getMessage(), e);
+			}
+		} else {
+			try {
+
+				if (srcFeld == null)
+					srcFeld = ImageIO.read(new File(pfad + "res/grafik/feld_res.png"));
+				if (srcFigur == null)
+					srcFigur = ImageIO.read(new File(pfad + "res/grafik/figur_res.png"));
+				if (srcPartikel == null)
+					srcPartikel = ImageIO.read(new File(pfad + "res/grafik/partikel_res.png"));
+				if (srcItem == null)
+					srcItem = ImageIO.read(new File(pfad + "res/grafik/item_res.png"));
+			} catch (IOException e) {
+				logger.log(java.util.logging.Level.SEVERE, e.getMessage(), e);
+			}
 		}
 	}
 
@@ -534,7 +552,7 @@ public class DateiManager {
 				new File(DateiManager.pfad + "res/musik/frostfall.wav"),
 				new File(DateiManager.pfad + "res/musik/peril.wav")));
 
-		config.setGrafiken(new File(DateiManager.pfad + "res/grafiken"));
+		config.setGrafiken(new File(DateiManager.pfad + "res/grafik"));
 	}
 
 	public static void standardConfig() {

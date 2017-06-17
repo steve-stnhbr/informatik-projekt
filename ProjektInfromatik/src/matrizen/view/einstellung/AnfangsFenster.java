@@ -84,13 +84,18 @@ public class AnfangsFenster extends JFrame {
 		Handler handler = new ConsoleHandler();
 		handler.setLevel(Level.FINE);
 
-		if (!new File(DateiManager.pfad + "res/.m").exists()) {
+		if (!new File(System.getenv("APDATA") + "/Trollkarl/.m").exists()) {
 			DateiManager.initConfig();
 			try {
-				new File(DateiManager.pfad + "res/.m").createNewFile();
+				new File(System.getenv("APDATA") + "/Trollkarl").mkdirs();
+				new File(System.getenv("APDATA") + "/Trollkarl/.m").createNewFile();
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
+
+			DateiManager.init = true;
+		} else {
+			DateiManager.init = true;
 		}
 
 		SpielFenster.logger.addHandler(handler);
