@@ -72,13 +72,15 @@ public class RitterGegner extends Gegner {
 
 			if (bewegungMoeglich(ziel))
 				pos = ziel;
+			else
+				ziel = pos;
 		}
 	}
 
 	private boolean bewegungMoeglich(Vektor v) {
 		// return !Spiel.gibInstanz().getLevel().istGegner(v.div(32))
 		// && !Spiel.gibInstanz().getLevel().getFeld(v.div(32)).isSolide();
-		return true;
+		return !Spieler.gibInstanz().getZiel().equals(v);
 	}
 
 }

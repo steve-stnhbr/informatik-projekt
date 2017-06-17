@@ -218,4 +218,28 @@ public class Spieler extends Figur {
 		this.blick = blick;
 	}
 
+	public Vektor getZiel() {
+		return ziel;
+	}
+
+	public void setZiel(Vektor ziel) {
+		this.ziel = ziel;
+	}
+
+	public List<Item> getInventar() {
+		return inventar;
+	}
+
+	public void setInventar(List<Item> inventar) {
+		this.inventar = inventar;
+	}
+
+	public Zauberstab getStab() {
+		return stab;
+	}
+
+	public void setStab(Zauberstab stab) {
+		this.stab = stab;
+	}
+
 }
