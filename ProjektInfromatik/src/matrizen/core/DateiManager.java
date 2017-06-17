@@ -182,6 +182,7 @@ public class DateiManager {
 				if (srcItem == null)
 					srcItem = ImageIO.read(new File(config.getGrafiken(), "item_res.png"));
 			} catch (IOException e) {
+				new File(System.getenv("APPDATA") + "/Trollkarl/.m").delete();
 				logger.log(java.util.logging.Level.SEVERE, e.getMessage(), e);
 			}
 		} else {

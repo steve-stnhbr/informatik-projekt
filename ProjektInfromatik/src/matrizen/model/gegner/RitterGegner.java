@@ -17,11 +17,13 @@ public class RitterGegner extends Gegner {
 			drehGeschw = werte.get("ritter_drehung"), schaden = werte.get("ritter_schaden"),
 			delayBewegung = werte.get("ritter_delay_bewegung"), geschw = werte.get("ritter_bewegung_geschw");
 	private int drehung;
+	private Vektor ziel;
 
 	public RitterGegner(Vektor feldPos) {
 		pos = feldPos.mult(32);
 		grafik = DateiManager.laden(Bild.figurRitter);
 		animation = new BufferedImage[] { DateiManager.laden(Bild.figurRitterDrehung) };
+		ziel = pos;
 	}
 
 	@Override
@@ -45,10 +47,13 @@ public class RitterGegner extends Gegner {
 		else
 			g.drawImage(grafik, (int) pos.getX(), (int) pos.getY(), 32, 32, null);
 
-		if (Spiel.gibInstanz().ticks % delayBewegung == 0)
+		if (Spiel.gibInstanz().ticks % delayBewegung == 0 && pos.equals(ziel))
 			bewegen();
 		if (Spiel.gibInstanz().ticks % delayAngriff == 0)
 			angriff();
+
+		if (ziel.equals(pos))
+			bes = ziel.kopieren().sub(pos);
 
 		if (drehung > 0)
 			drehung -= drehGeschw;
@@ -57,9 +62,23 @@ public class RitterGegner extends Gegner {
 	}
 
 	private void bewegen() {
-		Vektor zS = Spieler.gibInstanz().getPos().kopieren().sub(pos);
-		zS.div(32);
-		bes = zS.mult(geschw);
+		if (pos.equals(ziel) && Spieler.gibInstanz().getPos().dist(pos) > 32) {
+			Vektor z = Spieler.gibInstanz().getPos().kopieren().sub(pos);
+
+			if (Math.abs(z.getX()) > Math.abs(z.getY()))
+				ziel = new Vektor(Math.signum(z.getX()), 0).mult(32).add(pos);
+			else
+				ziel = new Vektor(0, Math.signum(z.getY())).mult(32).add(pos);
+
+			if (bewegungMoeglich(ziel))
+				pos = ziel;
+		}
+	}
+
+	private boolean bewegungMoeglich(Vektor v) {
+		// return !Spiel.gibInstanz().getLevel().istGegner(v.div(32))
+		// && !Spiel.gibInstanz().getLevel().getFeld(v.div(32)).isSolide();
+		return true;
 	}
 
 }
