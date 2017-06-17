@@ -4,6 +4,7 @@ import static matrizen.core.Utils.random;
 import static matrizen.view.SpielFenster.logger;
 
 import java.awt.Image;
+import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -12,6 +13,7 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
@@ -518,6 +520,30 @@ public class DateiManager {
 			return obj.toString();
 		}
 
+	}
+
+	public static void initConfig() {
+		config.setAktiveMusik(Arrays.<File>asList(new File(DateiManager.pfad + "res/musik/awakening.wav"),
+				new File(DateiManager.pfad + "res/musik/aurora.wav"),
+				new File(DateiManager.pfad + "res/musik/village.wav"),
+				new File(DateiManager.pfad + "res/musik/sorrow.wav"),
+				new File(DateiManager.pfad + "res/musik/dreaming.wav"),
+				new File(DateiManager.pfad + "res/musik/maya.wav")));
+
+		config.setInaktiveMusik(Arrays.<File>asList(new File(DateiManager.pfad + "res/musik/lake.wav"),
+				new File(DateiManager.pfad + "res/musik/frostfall.wav"),
+				new File(DateiManager.pfad + "res/musik/peril.wav")));
+
+		config.setGrafiken(new File(DateiManager.pfad + "res/grafiken"));
+	}
+
+	public static void standardConfig() {
+		config.setLinks(KeyEvent.VK_LEFT, KeyEvent.VK_A);
+		config.setRechts(KeyEvent.VK_RIGHT, KeyEvent.VK_D);
+		config.setOben(KeyEvent.VK_UP, KeyEvent.VK_W);
+		config.setUnten(KeyEvent.VK_DOWN, KeyEvent.VK_S);
+		config.setSchuss(KeyEvent.VK_E, KeyEvent.VK_CONTROL);
+		config.setTutorial((short) 0);
 	}
 
 }

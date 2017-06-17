@@ -3,6 +3,7 @@ package matrizen.view.einstellung;
 import java.awt.Toolkit;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
+import java.io.File;
 import java.util.logging.ConsoleHandler;
 import java.util.logging.Handler;
 import java.util.logging.Level;
@@ -81,7 +82,11 @@ public class AnfangsFenster extends JFrame {
 		SpielFenster.logger.setLevel(Level.FINE);
 		Handler handler = new ConsoleHandler();
 		handler.setLevel(Level.FINE);
-		SpielFenster.logger.addHandler(handler);
+
+		if (!new File(DateiManager.pfad + "res/.m").exists())
+			DateiManager.initConfig();
+
+			SpielFenster.logger.addHandler(handler);
 		SpielFenster.init();
 		init();
 	}
