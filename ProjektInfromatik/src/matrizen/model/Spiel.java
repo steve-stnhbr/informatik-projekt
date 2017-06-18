@@ -260,6 +260,10 @@ public class Spiel implements KeyListener {
 			EingabeManager.deaktivieren(4);
 	}
 
+	public static void reset() {
+		instanz = null;
+	}
+
 	public void beenden() {
 		beendet = true;
 	}

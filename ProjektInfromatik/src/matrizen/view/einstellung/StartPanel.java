@@ -44,7 +44,7 @@ public class StartPanel extends JPanel implements Benennbar {
 		bStart.addActionListener((e) -> {
 			((JFrame) SwingUtilities.getWindowAncestor(this)).setVisible(false);
 			if (Spiel.gibInstanz().beendet)
-				SpielFenster.init();
+				Spiel.reset();
 			Spiel.gibInstanz().tutorial = cTutorial.isSelected();
 			SpielFenster.gibInstanz().start();
 		});

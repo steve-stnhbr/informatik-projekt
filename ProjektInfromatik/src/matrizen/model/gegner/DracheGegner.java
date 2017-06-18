@@ -15,6 +15,7 @@ import matrizen.model.Spiel;
 import matrizen.model.elemente.Gegner;
 import matrizen.model.elemente.Geschoss;
 import matrizen.model.elemente.Geschoss.Typ;
+import matrizen.model.elemente.Item;
 import matrizen.model.elemente.Spieler;
 
 public class DracheGegner extends Gegner {
@@ -36,6 +37,7 @@ public class DracheGegner extends Gegner {
 
 	@Override
 	public void beimTod() {
+		Spiel.gibInstanz().getLevel().hinzufuegen(new Item(Item.Typ.schluessel, pos.div(32)));
 
 	}
 
