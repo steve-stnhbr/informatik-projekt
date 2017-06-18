@@ -70,7 +70,8 @@ public class MusikPlayer {
 	static public void abspielen() {
 		try {
 			logger.log(Level.INFO, "nächstes Lied wird abgespielt");
-			clip.open(momentanesLied);
+			if (!clip.isOpen())
+				clip.open(momentanesLied);
 			setVolume(volume);
 			clip.start();
 			AudioFormat format = momentanesLied.getFormat();

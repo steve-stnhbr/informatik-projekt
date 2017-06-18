@@ -60,7 +60,6 @@ public class StartPanel extends JPanel implements Benennbar {
 
 		cTutorial.addActionListener((e) -> {
 			DateiManager.config.setTutorial((short) (cTutorial.isSelected() ? 0 : 2));
-			System.out.println(DateiManager.config.getTutorial());
 		});
 
 	}

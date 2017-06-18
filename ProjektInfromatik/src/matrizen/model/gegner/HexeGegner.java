@@ -51,6 +51,12 @@ public class HexeGegner extends Gegner {
 			angriff();
 		else if (Spiel.gibInstanz().ticks % spezialDelay == 0)
 			spezialAttacke();
+
+		if (pos.dist(ziel) < bes.mag()) {
+			bes.mult(0);
+			pos = ziel;
+		}
+
 	}
 
 	private void spezialAttacke() {
@@ -68,19 +74,18 @@ public class HexeGegner extends Gegner {
 
 	private void bewegen() {
 		if (pos.equals(ziel) && Spieler.gibInstanz().getPos().dist(pos) > Spiel.feldLaenge) {
-			Vektor z = Spieler.gibInstanz().getPos().kopieren().sub(pos);
+			Vektor v = Spieler.gibInstanz().getPos().kopieren().sub(pos), z = Vektor.nullVektor;
 
-			if (Math.abs(z.getX()) > Math.abs(z.getY()))
-				ziel = new Vektor(Math.signum(z.getX()), 0).mult(Spiel.feldLaenge).add(pos);
+			if (Math.abs(v.getX()) > Math.abs(v.getY()))
+				z = new Vektor(Math.signum(v.getX()), 0).mult(Spiel.feldLaenge).add(pos);
 			else
-				ziel = new Vektor(0, Math.signum(z.getY())).mult(Spiel.feldLaenge).add(pos);
+				z = new Vektor(0, Math.signum(v.getY())).mult(Spiel.feldLaenge).add(pos);
 
 			blick = Richtung.getRichtung(pos, ziel);
 
-			if (bewegungMoeglich(ziel))
-				pos = ziel;
-			else
-				ziel = pos;
+			if (bewegungMoeglich(z))
+				ziel = z;
+
 		}
 	}
 
@@ -97,9 +102,16 @@ public class HexeGegner extends Gegner {
 	}
 
 	@Override
-	public void angriff() {
+	public boolean angriff() {
 		Spiel.gibInstanz().getLevel().hinzufuegen(
 				new Geschoss(Typ.kleinOrange, schaden, weite, pos, new Vektor(1, 0).mult(partikelGeschw), this));
+		Spiel.gibInstanz().getLevel().hinzufuegen(
+				new Geschoss(Typ.kleinOrange, schaden, weite, pos, new Vektor(-1, 0).mult(partikelGeschw), this));
+		Spiel.gibInstanz().getLevel().hinzufuegen(
+				new Geschoss(Typ.kleinOrange, schaden, weite, pos, new Vektor(0, -1).mult(partikelGeschw), this));
+		Spiel.gibInstanz().getLevel().hinzufuegen(
+				new Geschoss(Typ.kleinOrange, schaden, weite, pos, new Vektor(0, 1).mult(partikelGeschw), this));
+		return true;
 	}
 
 	@Override
@@ -111,6 +123,10 @@ public class HexeGegner extends Gegner {
 		// return !Spiel.gibInstanz().getLevel().istGegner(v.div(32))
 		// && !Spiel.gibInstanz().getLevel().getFeld(v.div(32)).isSolide();
 		return !Spieler.gibInstanz().getZiel().equals(v);
+	}
+
+	public Vektor getZiel() {
+		return ziel;
 	}
 
 }

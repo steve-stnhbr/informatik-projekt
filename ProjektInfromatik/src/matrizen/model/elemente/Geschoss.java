@@ -5,6 +5,7 @@ import java.awt.Graphics2D;
 import matrizen.core.DateiManager;
 import matrizen.core.Vektor;
 import matrizen.model.Levelelement;
+import matrizen.model.Spiel;
 
 public class Geschoss extends Levelelement {
 	private final Vektor start;
@@ -28,7 +29,7 @@ public class Geschoss extends Levelelement {
 	public void zeichnen(Graphics2D g) {
 		super.aktualisieren();
 		if (aktiv)
-			g.drawImage(grafik, (int) pos.getX(), (int) pos.getY(), null);
+			g.drawImage(grafik, (int) pos.getX(), (int) pos.getY(), Spiel.feldLaenge, Spiel.feldLaenge, null);
 
 		if (start.dist(pos) >= weite && weite != 0)
 			aktiv = false;

@@ -148,6 +148,10 @@ public class SpielFenster extends JFrame {
 		instanz = null;
 	}
 
+	public static void reset() {
+		Spiel.reset();
+	}
+
 	public Timer getTimer() {
 		return timer;
 	}

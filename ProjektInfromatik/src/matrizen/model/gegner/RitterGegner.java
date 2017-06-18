@@ -19,7 +19,7 @@ import matrizen.model.elemente.Spieler;
 public class RitterGegner extends Gegner {
 	public final int maxLeben = werte.get("ritter_leben"), delayAngriff = werte.get("ritter_delay_angriff"),
 			drehGeschw = werte.get("ritter_drehung_geschw"), schaden = werte.get("ritter_schaden"),
-			delayBewegung = werte.get("ritter_delay_bewegung"), geschw = werte.get("ritter_bewegung_geschw");
+			delayBewegung = werte.get("ritter_delay_bewegung"), bewegungGeschw = werte.get("ritter_bewegung_geschw");
 	private int drehung;
 	private Vektor ziel;
 	private BufferedImage drehBild;
@@ -33,14 +33,18 @@ public class RitterGegner extends Gegner {
 		drehBild = DateiManager.laden(Bild.figurRitterDrehung);
 		ziel = pos;
 		blick = Richtung.OBEN;
+		leben = maxLeben;
 	}
 
 	@Override
-	public void angriff() {
+	public boolean angriff() {
 		if (Spieler.gibInstanz().getPos().dist(pos) <= Spiel.feldLaenge) {
 			drehung = 360;
 			Spieler.gibInstanz().schaden(schaden);
+			return true;
 		}
+
+		return false;
 	}
 
 	@Override
@@ -51,20 +55,23 @@ public class RitterGegner extends Gegner {
 	@Override
 	public void zeichnen(Graphics2D g) {
 		super.aktualisieren();
-		if (drehung > 0)
+		System.out.println(pos);
+		if (drehung >= 0)
 			g.drawImage(bildDrehen(drehBild, Math.toRadians(drehung)), (int) pos.getX(), (int) pos.getY(),
 					(int) Spiel.feldLaenge, (int) Spiel.feldLaenge, null);
 		else
 			g.drawImage(bildDrehen(grafik, Math.toRadians(blick.getWinkel())), (int) pos.getX(), (int) pos.getY(),
 					(int) Spiel.feldLaenge, (int) Spiel.feldLaenge, null);
 
-		if (Spiel.gibInstanz().ticks % delayBewegung == 0 && pos.equals(ziel))
+		if (Spiel.gibInstanz().ticks % delayAngriff == 0 && !angriff())
+			;
+		else if (Spiel.gibInstanz().ticks % delayBewegung == 0 && pos.equals(ziel))
 			bewegen();
-		if (Spiel.gibInstanz().ticks % delayAngriff == 0)
-			angriff();
 
-		if (ziel.equals(pos))
-			bes = ziel.kopieren().sub(pos);
+		if (ziel.dist(pos) < ges.mag()) {
+			ges = Vektor.nullVektor;
+			pos = ziel;
+		}
 
 		if (drehung > 0)
 			drehung -= drehGeschw;
@@ -82,19 +89,20 @@ public class RitterGegner extends Gegner {
 
 	private void bewegen() {
 		if (pos.equals(ziel) && Spieler.gibInstanz().getPos().dist(pos) > Spiel.feldLaenge && drehung == 0) {
-			Vektor z = Spieler.gibInstanz().getPos().kopieren().sub(pos);
+			Vektor v = Spieler.gibInstanz().getPos().kopieren().sub(pos), z = Vektor.nullVektor;
 
-			if (Math.abs(z.getX()) > Math.abs(z.getY()))
-				ziel = new Vektor(Math.signum(z.getX()), 0).mult(Spiel.feldLaenge).add(pos);
+			if (Math.abs(v.getX()) > Math.abs(v.getY()))
+				z = new Vektor(Math.signum(v.getX()), 0).mult(Spiel.feldLaenge).add(pos);
 			else
-				ziel = new Vektor(0, Math.signum(z.getY())).mult(Spiel.feldLaenge).add(pos);
+				z = new Vektor(0, Math.signum(v.getY())).mult(Spiel.feldLaenge).add(pos);
 
 			blick = Richtung.getRichtung(pos, ziel);
 
-			if (bewegungMoeglich(ziel))
-				pos = ziel;
-			else
-				ziel = pos;
+			if (bewegungMoeglich(z))
+				ziel = z;
+			
+			if (!ziel.equals(pos))
+				ges = ziel.kopieren().sub(pos).normalize().mult(bewegungGeschw / 10);
 		}
 	}
 
@@ -104,6 +112,10 @@ public class RitterGegner extends Gegner {
 		// &&
 		// !Spiel.gibInstanz().getLevel().getFeld(v.div(Spiel.feldLaenge)).isSolide();
 		return !Spieler.gibInstanz().getZiel().equals(v) && !Spiel.gibInstanz().getLevel().istGegner(v, this);
+	}
+	
+	public Vektor getZiel() {
+		return ziel;
 	}
 
 }

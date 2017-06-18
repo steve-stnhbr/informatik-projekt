@@ -7,7 +7,8 @@ import matrizen.model.gegner.RitterGegner;
 
 public abstract class Gegner extends Figur {
 
-	public abstract void angriff();
+	public abstract boolean angriff();
+	public abstract Vektor getZiel();
 
 	public static Gegner erstellen(int t, int x, int y) {
 		switch (t) {

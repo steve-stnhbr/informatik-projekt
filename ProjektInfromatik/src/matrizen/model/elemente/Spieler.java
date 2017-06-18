@@ -64,6 +64,9 @@ public class Spieler extends Figur {
 	public void zeichnen(Graphics2D g) {
 		super.aktualisieren();
 		checkInput();
+		
+		if (leben > maxLeben)
+			leben = maxLeben;
 
 		if (leben <= 0)
 			Spiel.gibInstanz().beenden();

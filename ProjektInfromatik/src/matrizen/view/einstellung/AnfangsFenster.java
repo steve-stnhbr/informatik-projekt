@@ -11,6 +11,8 @@ import java.util.logging.Level;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.UIManager;
+import javax.swing.UnsupportedLookAndFeelException;
 
 import matrizen.core.DateiManager;
 import matrizen.view.SpielFenster;
@@ -111,6 +113,15 @@ public class AnfangsFenster extends JFrame {
 		setBounds(Toolkit.getDefaultToolkit().getScreenSize().width / 2 - getSize().width / 2,
 				Toolkit.getDefaultToolkit().getScreenSize().height / 2 - getSize().height / 2, getSize().width,
 				getSize().height);
+		try {
+			UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());
+		} catch (UnsupportedLookAndFeelException e) {
+			e.printStackTrace();
+		} catch (ClassNotFoundException e) {
+		} catch (InstantiationException e) {
+		} catch (IllegalAccessException e) {
+		}
+
 		setVisible(true);
 	}
 

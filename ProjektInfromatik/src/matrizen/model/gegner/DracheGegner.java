@@ -30,9 +30,10 @@ public class DracheGegner extends Gegner {
 	}
 
 	@Override
-	public void angriff() {
+	public boolean angriff() {
 		Spiel.gibInstanz().getLevel().hinzufuegen(new Geschoss(Typ.feuer, schaden, weite, pos,
 				Spieler.gibInstanz().getPos().kopieren().sub(pos).normalize().mult(partikelGeschw), this));
+		return true;
 	}
 
 	@Override
@@ -63,6 +64,10 @@ public class DracheGegner extends Gegner {
 
 		return Math.atan2(v1.getY(), v1.getX()) - Math.atan2(v2.getY(), v2.getX());
 		// return -Math.atan2(v1.kreuz(v2), v1.skalar(v2));
+	}
+	
+	public Vektor getZiel() {
+		return pos;
 	}
 
 }

@@ -186,29 +186,37 @@ public class Level {
 	}
 
 	public boolean istGegner(Vektor v, Figur f) {
-		for (Levelelement l : liste)
+		for (Levelelement l : liste) {
 			if (f != null)
-				if (l instanceof Gegner && l.getPos().kopieren().div(Spiel.feldLaenge).equals(v) && !l.equals(f))
+				if (l instanceof Gegner
+						&& (l.getPos().kopieren().div(Spiel.feldLaenge).equals(v) || ((Gegner) l).getZiel().equals(v))
+						&& !l.equals(f))
 					return true;
 				else
 					;
-			else if (l instanceof Gegner && l.getPos().kopieren().div(Spiel.feldLaenge).equals(v))
+			else if (l instanceof Gegner
+					&& (l.getPos().kopieren().div(Spiel.feldLaenge).equals(v) || ((Gegner) l).getZiel().equals(v)))
 				return true;
+		}
 
 		return false;
 	}
 
+	// TODO
 	public boolean istGegnerSpieler(Vektor v, Figur f) {
-		for (Levelelement l : liste)
+		for (Levelelement l : liste) {
 			if (f != null)
-				if (l instanceof Gegner && l.getPos().kopieren().div(Spiel.feldLaenge).equals(v) && !l.equals(f)
-						&& !(l instanceof FledermausGegner))
+				if (l instanceof Gegner
+						&& (l.getPos().kopieren().div(Spiel.feldLaenge).equals(v) || ((Gegner) l).getZiel().equals(v))
+						&& !l.equals(f) && !(l instanceof FledermausGegner))
 					return true;
 				else
 					;
-			else if (l instanceof Gegner && l.getPos().kopieren().div(Spiel.feldLaenge).equals(v)
+			else if (l instanceof Gegner
+					&& (l.getPos().kopieren().div(Spiel.feldLaenge).equals(v) || ((Gegner) l).getZiel().equals(v))
 					&& !(l instanceof FledermausGegner))
 				return true;
+		}
 
 		return false;
 	}

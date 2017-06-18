@@ -1,5 +1,6 @@
 package matrizen.view.einstellung;
 
+import java.awt.Component;
 import java.awt.Dimension;
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -10,6 +11,8 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.event.TableModelListener;
+import javax.swing.plaf.TableUI;
+import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableModel;
 
 import matrizen.core.DateiManager;

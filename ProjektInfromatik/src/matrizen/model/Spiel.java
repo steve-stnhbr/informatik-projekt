@@ -248,6 +248,8 @@ public class Spiel implements KeyListener {
 		if (c == VK_ESCAPE) {
 			AnfangsFenster.gibInstanz().inhaltAendern(StartPanel.gibInstanz());
 			SpielFenster.gibInstanz().stop();
+			if(beendet)
+				SpielFenster.reset();
 		} else if (c == oben[0] || c == oben[1])
 			EingabeManager.deaktivieren(Richtung.getIndex(Richtung.OBEN));
 		else if (c == rechts[0] || c == rechts[1])
@@ -261,7 +263,6 @@ public class Spiel implements KeyListener {
 	}
 
 	public static void reset() {
-		MusikPlayer.stop();
 		instanz = null;
 	}
 
