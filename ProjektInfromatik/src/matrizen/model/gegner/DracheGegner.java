@@ -32,13 +32,12 @@ public class DracheGegner extends Gegner {
 	@Override
 	public void angriff() {
 		Spiel.gibInstanz().getLevel().hinzufuegen(new Geschoss(Typ.feuer, schaden, weite, pos,
-				Spieler.gibInstanz().getPos().kopieren().sub(pos).normalize().mult(partikelGeschw), false));
+				Spieler.gibInstanz().getPos().kopieren().sub(pos).normalize().mult(partikelGeschw), this));
 	}
 
 	@Override
 	public void beimTod() {
 		Spiel.gibInstanz().getLevel().hinzufuegen(new Item(Item.Typ.schluessel, pos.div(32)));
-
 	}
 
 	@Override

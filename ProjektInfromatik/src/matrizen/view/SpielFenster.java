@@ -53,7 +53,8 @@ public class SpielFenster extends JFrame {
 				getDefaultToolkit().getScreenSize().height / 2 - hoehe / 2));
 		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 		listenerHinzufuegen();
-		bImg = new BufferedImage(Spiel.spalten * 32, Spiel.zeilen * 32, BufferedImage.TYPE_INT_RGB);
+		bImg = new BufferedImage((int) (Spiel.spalten * Spiel.feldLaenge), (int) (Spiel.zeilen * Spiel.feldLaenge),
+				BufferedImage.TYPE_INT_RGB);
 		graphics = (Graphics2D) bImg.getGraphics();
 		timer = new Timer(DateiManager.werte.get("tick"), (e) -> {
 			aktualisieren();

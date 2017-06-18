@@ -12,6 +12,7 @@ import matrizen.model.elemente.Gegner;
 import matrizen.model.elemente.Geschoss;
 import matrizen.model.elemente.Item;
 import matrizen.model.elemente.Spieler;
+import matrizen.model.gegner.FledermausGegner;
 import matrizen.model.gegner.HexeGegner;
 import matrizen.view.SpielFenster;
 
@@ -54,7 +55,7 @@ public class Level {
 	}
 
 	private void positionUeberpruefen(Feld feld) {
-		if (Spieler.gibInstanz().getPos().kopieren().div(32).equals(feld.getRaster()))
+		if (Spieler.gibInstanz().getPos().kopieren().div(Spiel.feldLaenge).equals(feld.getRaster()))
 			feld.beimBetreten();
 	}
 
@@ -109,7 +110,8 @@ public class Level {
 			}
 
 			if (l1 instanceof Item && (Spiel.gibInstanz().schluesselAufheben || !Spiel.gibInstanz().tutorial)
-					&& Spieler.gibInstanz().getPos().kopieren().div(32f).equals(l1.getPos().kopieren().div(32))) {
+					&& Spieler.gibInstanz().getPos().kopieren().div(Spiel.feldLaenge)
+							.equals(l1.getPos().kopieren().div(Spiel.feldLaenge))) {
 				((Item) l1).beimAufheben();
 				if (((Item) l1).getTyp() == Item.Typ.schluessel) {
 					if (!Spiel.gibInstanz().tutorials[4])
@@ -183,10 +185,31 @@ public class Level {
 		return getFeld((int) v.getX(), (int) v.getY());
 	}
 
-	public boolean istGegner(Vektor v) {
+	public boolean istGegner(Vektor v, Figur f) {
 		for (Levelelement l : liste)
-			if (l instanceof Gegner && l.getPos().kopieren().div(32).equals(v))
+			if (f != null)
+				if (l instanceof Gegner && l.getPos().kopieren().div(Spiel.feldLaenge).equals(v) && !l.equals(f))
+					return true;
+				else
+					;
+			else if (l instanceof Gegner && l.getPos().kopieren().div(Spiel.feldLaenge).equals(v))
 				return true;
+
+		return false;
+	}
+
+	public boolean istGegnerSpieler(Vektor v, Figur f) {
+		for (Levelelement l : liste)
+			if (f != null)
+				if (l instanceof Gegner && l.getPos().kopieren().div(Spiel.feldLaenge).equals(v) && !l.equals(f)
+						&& !(l instanceof FledermausGegner))
+					return true;
+				else
+					;
+			else if (l instanceof Gegner && l.getPos().kopieren().div(Spiel.feldLaenge).equals(v)
+					&& !(l instanceof FledermausGegner))
+				return true;
+
 		return false;
 	}
 
@@ -200,5 +223,9 @@ public class Level {
 
 	public void setNaechstesLevel(Level naechstesLevel) {
 		this.naechstesLevel = naechstesLevel;
+	}
+
+	public void entfernen(Levelelement l) {
+		liste.remove(l);
 	}
 }

@@ -55,10 +55,10 @@ public class GrafikPanel extends JPanel implements Informierbar, Benennbar {
 
 	private void initIcons() {
 		try {
-			ImageIcon iFigur = new ImageIcon(ImageIO.read(new File(ordner, "figur_res.png"))),
-					iFeld = new ImageIcon(ImageIO.read(new File(ordner, "feld_res.png"))),
-					iItem = new ImageIcon(ImageIO.read(new File(ordner, "item_res.png"))),
-					iPartikel = new ImageIcon(ImageIO.read(new File(ordner, "partikel_res.png")));
+			ImageIcon iFigur = new ImageIcon(ImageIO.read(new File(ordner, "figur.png"))),
+					iFeld = new ImageIcon(ImageIO.read(new File(ordner, "feld.png"))),
+					iItem = new ImageIcon(ImageIO.read(new File(ordner, "items.png"))),
+					iPartikel = new ImageIcon(ImageIO.read(new File(ordner, "partikel.png")));
 			lGFigur = new JLabel(iFigur);
 			lGFeld = new JLabel(iFeld);
 			lGItem = new JLabel(iItem);

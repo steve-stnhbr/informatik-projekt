@@ -21,7 +21,8 @@ public class Feld extends Grafikbasis {
 
 	@Override
 	public void zeichnen(Graphics2D g) {
-		g.drawImage(grafik, (int) raster.getX() * 32, (int) raster.getY() * 32, 32, 32, null);
+		g.drawImage(grafik, (int) (raster.getX() * Spiel.feldLaenge), (int) (raster.getY() * Spiel.feldLaenge),
+				(int) Spiel.feldLaenge, (int) Spiel.feldLaenge, null);
 	}
 
 	public String toString() {
@@ -67,7 +68,8 @@ public class Feld extends Grafikbasis {
 		BAUM(true),
 		WEITER(false) {
 			public void beimBetreten() {
-				if ((Spiel.gibInstanz().kannTeleportieren && Spiel.gibInstanz().tutorial) || !Spiel.gibInstanz().tutorial)
+				if ((Spiel.gibInstanz().kannTeleportieren && Spiel.gibInstanz().tutorial)
+						|| !Spiel.gibInstanz().tutorial)
 					Spiel.gibInstanz().setLevel(Spiel.gibInstanz().getLevel().getNaechstesLevel());
 			}
 		},

@@ -106,7 +106,9 @@ public class Vektor {
 	}
 
 	public boolean equals(Vektor o) {
-		return this.x == o.x && this.y == o.y;
+		if (o != null)
+			return this.x == o.x && this.y == o.y;
+		return false;
 	}
 
 	public String toString() {

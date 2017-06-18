@@ -1,10 +1,10 @@
 package matrizen.core;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 
-import javax.sound.sampled.AudioInputStream;
 import javax.xml.bind.ValidationException;
 
 public class Utils {
@@ -16,6 +16,16 @@ public class Utils {
 
 	public static int random(int start, int end) {
 		return random.nextInt(end - start) + start;
+	}
+
+	public static int random(int start, int end, int... ex) {
+		int r = 0;
+
+		do {
+			r = random(start, end);
+		} while (Arrays.asList(ex).contains(r));
+
+		return r;
 	}
 
 	@SuppressWarnings("unchecked")
@@ -56,7 +66,7 @@ public class Utils {
 			builder.append("]");
 			return builder.toString();
 		}
-		
+
 		return null;
 	}
 
@@ -74,10 +84,10 @@ public class Utils {
 
 	public static <E> List<E> arrayToList(E[] e) {
 		List<E> l = new ArrayList<E>();
-		
-		for(E i : e)
+
+		for (E i : e)
 			l.add(i);
-		
+
 		return l;
 	}
 }

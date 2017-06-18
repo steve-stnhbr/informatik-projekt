@@ -26,14 +26,16 @@ public class HUD extends Grafikbasis {
 	}
 
 	static class SpielerLeben {
-		private final static int w = 300, h = 70, off = 3, x = SpielFenster.breite / 32, y = SpielFenster.hoehe / 32;
+		private final static int w = 100, h = 25, off = 3, x = 5, y = 5;
 
 		public static void zeichnen(Graphics2D g) {
 			g.setColor(Color.white);
 			g.fillRect(x, y, w, h);
+			g.setColor(Color.lightGray);
+			g.fillRect(x + off, y + off, w - off * 2, h - off * 2);
 			g.setColor(Color.red);
 			g.fillRect(x + off, y + off,
-					(w * Spieler.gibInstanz().maxLeben / Spieler.gibInstanz().getLeben()) - off * 2, h - off * 2);
+					(w * Spieler.gibInstanz().getLeben() / Spieler.gibInstanz().maxLeben) - off * 2, h - off * 2);
 		}
 	}
 

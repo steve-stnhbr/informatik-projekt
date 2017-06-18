@@ -39,11 +39,11 @@ public enum Richtung {
 		if (v.getX() > 0 && v.getX() > v.getY())
 			return Richtung.RECHTS;
 		if (v.getY() > 0 && v.getY() > v.getX())
-			return Richtung.OBEN;
+			return Richtung.UNTEN;
 		if (v.getX() < 0 && v.getX() < v.getY())
 			return Richtung.LINKS;
 		if (v.getY() < 0 & v.getY() < v.getY())
-			return Richtung.UNTEN;
+			return Richtung.OBEN;
 
 		return Richtung.OBEN;
 	}

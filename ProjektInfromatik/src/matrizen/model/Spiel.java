@@ -31,7 +31,7 @@ import matrizen.view.hud.Text;
  */
 public class Spiel implements KeyListener {
 	public static final short zeilen = (short) 9, spalten = (short) 13;
-	public static final float feldLaenge = SpielFenster.breite / Spiel.spalten;
+	public static final int feldLaenge = 32;
 	private static Spiel instanz;
 	private Level level;
 	public long ticks = -75;
@@ -100,7 +100,7 @@ public class Spiel implements KeyListener {
 
 			level.zeichnen(graphics);
 			Spieler.gibInstanz().zeichnen(graphics);
-			// hud.zeichnen(graphics);
+			hud.zeichnen(graphics);
 			if (text != null)
 				text.zeichnen(graphics);
 
@@ -261,6 +261,7 @@ public class Spiel implements KeyListener {
 	}
 
 	public static void reset() {
+		MusikPlayer.stop();
 		instanz = null;
 	}
 

@@ -44,7 +44,8 @@ public class Spieler extends Figur {
 	private Spieler() {
 		cooldown = new short[5];
 		grafik = DateiManager.laden(DateiManager.Bild.figurSpieler);
-		pos = new Vektor((float) Math.floor(Spiel.spalten / 2) * 32, (float) Math.floor(Spiel.zeilen / 2) * 32);
+		pos = new Vektor((float) Math.floor(Spiel.spalten / 2) * Spiel.feldLaenge,
+				(float) Math.floor(Spiel.zeilen / 2) * Spiel.feldLaenge);
 		ziel = pos;
 		inventar = new ArrayList<Item>();
 		animation = new BufferedImage[] { DateiManager.laden(Bild.figurSpielerAnim0),
@@ -64,12 +65,15 @@ public class Spieler extends Figur {
 		super.aktualisieren();
 		checkInput();
 
-		System.out.println(leben);
+		if (leben <= 0)
+			Spiel.gibInstanz().beenden();
 
 		if (ges.mag() == 0 && magDavor == 0)
-			g.drawImage(bildDrehen(grafik), (int) pos.getX(), (int) pos.getY(), (int) 32, (int) 32, null);
+			g.drawImage(bildDrehen(grafik), (int) pos.getX(), (int) pos.getY(), (int) Spiel.feldLaenge,
+					(int) Spiel.feldLaenge, null);
 		else
-			g.drawImage(bildDrehen(animation[index]), (int) pos.getX(), (int) pos.getY(), 32, 32, null);
+			g.drawImage(bildDrehen(animation[index]), (int) pos.getX(), (int) pos.getY(), (int) Spiel.feldLaenge,
+					(int) Spiel.feldLaenge, null);
 
 		for (int i = 0; i < cooldown.length; i++) {
 			if (cooldown[i] > 0)
@@ -95,19 +99,22 @@ public class Spieler extends Figur {
 			/*
 			 * ges.setY(0);
 			 * 
-			 * if(((int)pos.getX()) % 32 != 0) pos.setX(((int) pos.getX() / 32)
-			 * * 32); if(((int)pos.getY()) % 32 != 0) pos.setY(((int) pos.getY()
-			 * / 32) * 32);
+			 * if(((int)pos.getX()) % Spiel.feldLaenge != 0) pos.setX(((int)
+			 * pos.getX() / Spiel.feldLaenge) * Spiel.feldLaenge);
+			 * if(((int)pos.getY()) % Spiel.feldLaenge != 0) pos.setY(((int)
+			 * pos.getY() / Spiel.feldLaenge) * Spiel.feldLaenge);
 			 * 
 			 * if(pos.getY() < 0) pos.setY(0); if(pos.getX() < 0) pos.setX(0);
 			 * 
-			 * if(ziel.getX() < pos.getX()) ziel.setX((((int)pos.getX() / 32) +
-			 * 1) * 32); else if(ziel.getX() > pos.getX())
-			 * ziel.setX((((int)pos.getX() / 32) - 1) * 32);
+			 * if(ziel.getX() < pos.getX()) ziel.setX((((int)pos.getX() /
+			 * Spiel.feldLaenge) + 1) * Spiel.feldLaenge); else if(ziel.getX() >
+			 * pos.getX()) ziel.setX((((int)pos.getX() / Spiel.feldLaenge) - 1)
+			 * * Spiel.feldLaenge);
 			 * 
-			 * if(ziel.getY() < pos.getY()) ziel.setY((((int)pos.getY() / 32) +
-			 * 1) * 32); if(ziel.getY() > pos.getY())
-			 * ziel.setY((((int)pos.getY() / 32) - 1) * 32);
+			 * if(ziel.getY() < pos.getY()) ziel.setY((((int)pos.getY() /
+			 * Spiel.feldLaenge) + 1) * Spiel.feldLaenge); if(ziel.getY() >
+			 * pos.getY()) ziel.setY((((int)pos.getY() / Spiel.feldLaenge) - 1)
+			 * * Spiel.feldLaenge);
 			 */
 
 			logger.log(Level.WARNING, "Ziel danach: " + ziel.toString());
@@ -158,7 +165,7 @@ public class Spieler extends Figur {
 					new Vektor(xFeld, yFeld).add(r.getVektor()).kopieren(), r));
 			xFeld += r.getVektor().getX();
 			yFeld += r.getVektor().getY();
-			ziel = new Vektor(xFeld, yFeld).mult(32f);
+			ziel = new Vektor(xFeld, yFeld).mult(Spiel.feldLaenge);
 			bes = ziel.kopieren().sub(pos).mult(.125f);
 
 			for (int i = 0; i < 4; i++) {
@@ -175,9 +182,10 @@ public class Spieler extends Figur {
 		Vektor v = new Vektor(xFeld + r.getVektor().getX(), yFeld + r.getVektor().getY());
 
 		try {
-			return v.getX() >= 0 && v.getY() >= 0 && v.getX() < SpielFenster.hoehe / 32
-					&& v.getY() < SpielFenster.breite / 32 && !Spiel.gibInstanz().getLevel().getFeld(v).isSolide()
-					&& !Spiel.gibInstanz().getLevel().istGegner(v);
+			return v.getX() >= 0 && v.getY() >= 0 && v.getX() < SpielFenster.hoehe / Spiel.feldLaenge
+					&& v.getY() < SpielFenster.breite / Spiel.feldLaenge
+					&& !Spiel.gibInstanz().getLevel().getFeld(v).isSolide()
+					&& !Spiel.gibInstanz().getLevel().istGegnerSpieler(v, this);
 		} catch (Exception e) {
 		}
 		return false;

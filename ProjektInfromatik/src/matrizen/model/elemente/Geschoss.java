@@ -12,12 +12,12 @@ public class Geschoss extends Levelelement {
 	private boolean spieler, aktiv = true;
 	private int schaden, weite;
 
-	public Geschoss(Typ t, int schaden, int weite, Vektor pos, Vektor v, boolean spieler) {
+	public Geschoss(Typ t, int schaden, int weite, Vektor pos, Vektor v, Figur schuetze) {
 		this.t = t;
 		this.schaden = schaden;
 		this.weite = weite;
 		this.pos = pos;
-		this.spieler = spieler;
+		this.spieler = schuetze.equals(Spieler.gibInstanz());
 		grafik = DateiManager.laden(DateiManager.Bild.zufaelligeGrafik(t));
 		bes = v;
 
