@@ -19,7 +19,7 @@ public class EinfachSchwacherStab extends Zauberstab {
 	@Override
 	public void schuss() {
 		Spiel.gibInstanz().getLevel()
-				.hinzufuegen(new Geschoss(Geschoss.Typ.stern, schaden, reichweite, Spieler.gibInstanz().getPos(),
+				.hinzufuegen(new Geschoss(Geschoss.Typ.kleinBlau, schaden, reichweite, Spieler.gibInstanz().getPos(),
 						Spieler.gibInstanz().getBlick().getVektor().kopieren().mult(geschw), true));
 	}
 

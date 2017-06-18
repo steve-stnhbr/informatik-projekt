@@ -174,13 +174,13 @@ public class DateiManager {
 			try {
 
 				if (srcFeld == null)
-					srcFeld = ImageIO.read(new File(config.getGrafiken(), "feld_res.png"));
+					srcFeld = ImageIO.read(new File(config.getGrafiken(), "feld.png"));
 				if (srcFigur == null)
-					srcFigur = ImageIO.read(new File(config.getGrafiken(), "figur_res.png"));
+					srcFigur = ImageIO.read(new File(config.getGrafiken(), "figur.png"));
 				if (srcPartikel == null)
-					srcPartikel = ImageIO.read(new File(config.getGrafiken(), "partikel_res.png"));
+					srcPartikel = ImageIO.read(new File(config.getGrafiken(), "partikel.png"));
 				if (srcItem == null)
-					srcItem = ImageIO.read(new File(config.getGrafiken(), "item_res.png"));
+					srcItem = ImageIO.read(new File(config.getGrafiken(), "items.png"));
 			} catch (IOException e) {
 				new File(System.getenv("APPDATA") + "/Trollkarl/.m").delete();
 				logger.log(java.util.logging.Level.SEVERE, e.getMessage(), e);
@@ -189,13 +189,13 @@ public class DateiManager {
 			try {
 
 				if (srcFeld == null)
-					srcFeld = ImageIO.read(new File(pfad + "res/grafik/feld_res.png"));
+					srcFeld = ImageIO.read(new File(pfad + "res/grafik/feld.png"));
 				if (srcFigur == null)
-					srcFigur = ImageIO.read(new File(pfad + "res/grafik/figur_res.png"));
+					srcFigur = ImageIO.read(new File(pfad + "res/grafik/figur.png"));
 				if (srcPartikel == null)
-					srcPartikel = ImageIO.read(new File(pfad + "res/grafik/partikel_res.png"));
+					srcPartikel = ImageIO.read(new File(pfad + "res/grafik/partikel.png"));
 				if (srcItem == null)
-					srcItem = ImageIO.read(new File(pfad + "res/grafik/item_res.png"));
+					srcItem = ImageIO.read(new File(pfad + "res/grafik/items.png"));
 			} catch (IOException e) {
 				logger.log(java.util.logging.Level.SEVERE, e.getMessage(), e);
 			}
@@ -220,8 +220,6 @@ public class DateiManager {
 					e.printStackTrace();
 				}
 			}
-
-			System.out.println(a);
 
 			return a.toArray(new AudioInputStream[a.size()]);
 		}
@@ -288,17 +286,22 @@ public class DateiManager {
 		feldErde3(96, 160, srcFeld),
 		figurSpieler(0, 0, srcFigur),
 		figurSpielerAnim0(32, 0, srcFigur),
-		figurGegener(0, 128, srcFigur),
-		figurDrache(32, 128, srcFigur),
-		figurRitter(64, 128, srcFigur),
-		figurRitterDrehung(96, 128, srcFigur),
+		figurSpielerAnim1(64, 0, srcFigur),
+		figurDrache(0, 128, srcFigur),
+		figurRitter(0, 160, srcFigur),
+		figurRitterAnim0(32, 160, srcFigur),
+		figurRitterAnim1(64, 160, srcFigur),
+		figurRitterDrehung(96, 160, srcFigur),
+		figurHexe(32, 128, srcFigur),
+		figurFledermaus(64, 128, srcFigur),
 		itemSchluessel(0, 0, srcItem),
 		itemMuenze(0, 32, srcItem),
 		itemHerz(64, 0, srcItem),
 		partikelMittelOrange(0, 0, srcPartikel),
 		partikelMittelBlau(32, 0, srcPartikel),
 		partikelKleinRot(32, 0, srcPartikel),
-		partikelSternRotGelb(0, 32, srcPartikel);
+		partikelSternRotGelb(0, 32, srcPartikel),
+		partikelFeuer(64, 0, srcPartikel);
 
 		public int x, y;
 		public BufferedImage src;
@@ -351,6 +354,8 @@ public class DateiManager {
 				return partikelMittelOrange;
 			case stern:
 				return partikelSternRotGelb;
+			case feuer:
+				return partikelFeuer;
 			default:
 				return nullGrafik;
 			}

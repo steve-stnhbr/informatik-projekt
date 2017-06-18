@@ -89,6 +89,10 @@ public class Vektor {
 		return (x + o.x) * (y + o.y);
 	}
 
+	public float kreuz(Vektor o) {
+		return x * o.y - y * o.x;
+	}
+
 	public float mag() {
 		return (float) Math.sqrt(x * x + y * y);
 	}

@@ -12,7 +12,7 @@ import matrizen.model.elemente.Gegner;
 import matrizen.model.elemente.Geschoss;
 import matrizen.model.elemente.Item;
 import matrizen.model.elemente.Spieler;
-import matrizen.model.gegner.TestGegner;
+import matrizen.model.gegner.HexeGegner;
 import matrizen.view.SpielFenster;
 
 public class Level {
@@ -68,7 +68,8 @@ public class Level {
 
 					if (g.isSpieler()) {
 						if (g.getPos().dist(f.getPos()) <= g.getTyp().getRadius()) {
-							if (l1 instanceof TestGegner && Spiel.gibInstanz().tutorials[1]) {
+							if (l1 instanceof HexeGegner && Spiel.gibInstanz().tutorials[1]
+									&& !((HexeGegner) l1).isAktiv()) {
 								if (!Spiel.gibInstanz().tutorials[2])
 									Spiel.gibInstanz().tutorialTick = (int) Spiel.gibInstanz().ticks;
 								Spiel.gibInstanz().tutorials[2] = true;
@@ -81,6 +82,9 @@ public class Level {
 						if (g.getPos().dist(Spieler.gibInstanz().getPos()) <= g.getTyp().getRadius()) {
 							Spieler.gibInstanz().schaden(g.getSchaden());
 							liste.remove(g);
+
+							if (Spieler.gibInstanz().getLeben() <= 0)
+								Spiel.gibInstanz().beenden();
 						}
 					}
 				} else {

@@ -19,7 +19,7 @@ import matrizen.core.Richtung;
 import matrizen.core.Utils;
 import matrizen.core.Vektor;
 import matrizen.model.elemente.Spieler;
-import matrizen.model.gegner.TestGegner;
+import matrizen.model.gegner.HexeGegner;
 import matrizen.view.SpielFenster;
 import matrizen.view.einstellung.AnfangsFenster;
 import matrizen.view.einstellung.StartPanel;
@@ -37,7 +37,7 @@ public class Spiel implements KeyListener {
 	public long ticks = -75;
 	private Text text;
 	public boolean tutorial = (DateiManager.config.getTutorial() == 0), schluesselAufheben, gegnerKannSterben,
-			kannTeleportieren;
+			kannTeleportieren, beendet;
 	private boolean schiessen, gegnerErstellt;
 	public boolean[] tutorials;
 	public int tutorialTick;
@@ -68,9 +68,9 @@ public class Spiel implements KeyListener {
 
 		schiessen = !tutorial;
 		level = Level.level1;
-		
+
 		hud = HUD.gibInstanz();
-		
+
 		if (!tutorial)
 			SpielFenster.gibInstanz().addKeyListener(this);
 	}
@@ -100,9 +100,22 @@ public class Spiel implements KeyListener {
 
 			level.zeichnen(graphics);
 			Spieler.gibInstanz().zeichnen(graphics);
-//			hud.zeichnen(graphics);
+			// hud.zeichnen(graphics);
 			if (text != null)
 				text.zeichnen(graphics);
+
+			if (beendet) {
+				try {
+					graphics.setFont(Font
+							.createFont(Font.TRUETYPE_FONT, new File(DateiManager.pfad + "res/schrift/prstartk.ttf"))
+							.deriveFont(20f));
+					graphics.setColor(Color.white);
+					graphics.drawString("verkackt", Spiel.spalten * 16 - 75, Spiel.zeilen * 16 - 40);
+					SpielFenster.gibInstanz().getTimer().stop();
+				} catch (FontFormatException | IOException e) {
+					e.printStackTrace();
+				}
+			}
 		}
 
 		ticks++;
@@ -150,8 +163,8 @@ public class Spiel implements KeyListener {
 			} else if (ticks > tutorialTick + tutorialDelay && tutorials[1] && !tutorials[2]) {
 				text = new Text(0, "Diese Partikel fügen den Gegnern Schaden zu,", "wenn du sie triffst");
 				if (!gegnerErstellt) {
-					level.hinzufuegen(new TestGegner(
-							new Vektor(Utils.random(2, Spiel.spalten - 2), Utils.random(2, Spiel.zeilen - 2))));
+					level.hinzufuegen(new HexeGegner(
+							new Vektor(Utils.random(2, Spiel.spalten - 2), Utils.random(2, Spiel.zeilen - 2)), false));
 					gegnerErstellt = true;
 				}
 			} else if (ticks > tutorialTick + tutorialDelay && tutorials[2] && !tutorials[3]) {
@@ -248,7 +261,7 @@ public class Spiel implements KeyListener {
 	}
 
 	public void beenden() {
-
+		beendet = true;
 	}
 
 	public Level getLevel() {

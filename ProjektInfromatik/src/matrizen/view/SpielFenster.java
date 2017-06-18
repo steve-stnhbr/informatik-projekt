@@ -147,6 +147,10 @@ public class SpielFenster extends JFrame {
 		instanz = null;
 	}
 
+	public Timer getTimer() {
+		return timer;
+	}
+
 	/**
 	 * Singleton-Methode, die die statische Instanz des Spielfensters zurückgibt
 	 * 

@@ -1,7 +1,6 @@
 package matrizen.model.elemente;
 
 import static matrizen.core.DateiManager.werte;
-
 import static matrizen.view.SpielFenster.logger;
 
 import java.awt.Graphics2D;
@@ -14,6 +13,7 @@ import java.util.List;
 import java.util.logging.Level;
 
 import matrizen.core.DateiManager;
+import matrizen.core.DateiManager.Bild;
 import matrizen.core.EingabeManager;
 import matrizen.core.Richtung;
 import matrizen.core.Vektor;
@@ -21,7 +21,6 @@ import matrizen.core.event.BewegungsEvent;
 import matrizen.core.event.EventManager;
 import matrizen.model.Spiel;
 import matrizen.model.Zauberstab;
-import matrizen.model.elemente.Geschoss.Typ;
 import matrizen.model.zauberstaebe.EinfachSchwacherStab;
 import matrizen.view.SpielFenster;
 
@@ -40,6 +39,7 @@ public class Spieler extends Figur {
 	private Richtung blick = Richtung.OBEN;
 	private List<Item> inventar;
 	private Zauberstab stab;
+	private float magDavor;
 
 	private Spieler() {
 		cooldown = new short[5];
@@ -47,7 +47,8 @@ public class Spieler extends Figur {
 		pos = new Vektor((float) Math.floor(Spiel.spalten / 2) * 32, (float) Math.floor(Spiel.zeilen / 2) * 32);
 		ziel = pos;
 		inventar = new ArrayList<Item>();
-		animation = new BufferedImage[] { DateiManager.laden(DateiManager.Bild.figurSpielerAnim0) };
+		animation = new BufferedImage[] { DateiManager.laden(Bild.figurSpielerAnim0),
+				DateiManager.laden(Bild.figurSpielerAnim1) };
 		stab = new EinfachSchwacherStab();
 		leben = maxLeben;
 	}
@@ -63,9 +64,9 @@ public class Spieler extends Figur {
 		super.aktualisieren();
 		checkInput();
 
-		System.out.println(cooldown[4]);
+		System.out.println(leben);
 
-		if (ges.mag() == 0)
+		if (ges.mag() == 0 && magDavor == 0)
 			g.drawImage(bildDrehen(grafik), (int) pos.getX(), (int) pos.getY(), (int) 32, (int) 32, null);
 		else
 			g.drawImage(bildDrehen(animation[index]), (int) pos.getX(), (int) pos.getY(), 32, 32, null);
@@ -75,7 +76,7 @@ public class Spieler extends Figur {
 				cooldown[i] = (short) (cooldown[i] - 1);
 		}
 
-		if (Spiel.gibInstanz().ticks % 20 == 0) {
+		if (Spiel.gibInstanz().ticks % 5 == 0) {
 			index++;
 			if (index == animation.length)
 				index = 0;
@@ -112,6 +113,8 @@ public class Spieler extends Figur {
 			logger.log(Level.WARNING, "Ziel danach: " + ziel.toString());
 			logger.log(Level.WARNING, "Position danach: " + pos.toString());
 		}
+
+		magDavor = ges.mag();
 	}
 
 	private void checkInput() {

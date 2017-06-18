@@ -20,10 +20,10 @@ import matrizen.model.elemente.Spieler;
 public class DracheGegner extends Gegner {
 	public final int maxLeben = werte.get("drache_leben"), schaden = werte.get("drache_schaden"),
 			delayAngriff = werte.get("drache_delay_angriff"), weite = werte.get("drache_weite"),
-			partikelGeschw = werte.get("drache_partikel_geschw");
+			partikelGeschw = werte.get("drache_partikel_geschw") / 3;
 
 	public DracheGegner(Vektor vektor) {
-		grafik = DateiManager.laden(Bild.figurGegener);
+		grafik = DateiManager.laden(Bild.figurDrache);
 		leben = 200;
 		pos = vektor.mult(32);
 	}
@@ -31,7 +31,7 @@ public class DracheGegner extends Gegner {
 	@Override
 	public void angriff() {
 		Spiel.gibInstanz().getLevel().hinzufuegen(new Geschoss(Typ.feuer, schaden, weite, pos,
-				pos.kopieren().sub(Spieler.gibInstanz().getPos()).mult(partikelGeschw), false));
+				Spieler.gibInstanz().getPos().kopieren().sub(pos).normalize().mult(partikelGeschw), false));
 	}
 
 	@Override
@@ -41,7 +41,7 @@ public class DracheGegner extends Gegner {
 
 	@Override
 	public void zeichnen(Graphics2D g) {
-		g.drawImage(grafik, (int) pos.getX(), (int) pos.getY(), 32, 32, null);
+		g.drawImage(bildDrehen(grafik), (int) pos.getX(), (int) pos.getY(), 32, 32, null);
 
 		if (delayAngriff != 0 && Spiel.gibInstanz().ticks % delayAngriff == 0)
 			angriff();
@@ -50,12 +50,18 @@ public class DracheGegner extends Gegner {
 	// TODO
 	private Image bildDrehen(BufferedImage grafik) {
 		AffineTransform transform = new AffineTransform();
-		transform.rotate(Math.toRadians(Math.asin(Spieler.gibInstanz().getPos().kopieren().sub(pos).skalar(pos))),
-				grafik.getWidth() / 2, grafik.getHeight() / 2);
+		transform.rotate(getWinkel() + Math.toRadians(180), grafik.getWidth() / 2, grafik.getHeight() / 2);
 
-		AffineTransformOp operation = new AffineTransformOp(transform, AffineTransformOp.TYPE_BILINEAR);
-
+		AffineTransformOp operation = new AffineTransformOp(transform, AffineTransformOp.TYPE_NEAREST_NEIGHBOR);
 		return operation.filter(grafik, null);
+	}
+
+	private double getWinkel() {
+		Vektor v1 = Spieler.gibInstanz().getPos().kopieren().sub(pos);
+		Vektor v2 = new Vektor(0, pos.getY());
+
+		return Math.atan2(v1.getY(), v1.getX()) - Math.atan2(v2.getY(), v2.getX());
+		// return -Math.atan2(v1.kreuz(v2), v1.skalar(v2));
 	}
 
 }
