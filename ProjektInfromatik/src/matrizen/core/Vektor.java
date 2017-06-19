@@ -139,5 +139,4 @@ public class Vektor {
 		div(mag());
 		return this;
 	}
-
 }

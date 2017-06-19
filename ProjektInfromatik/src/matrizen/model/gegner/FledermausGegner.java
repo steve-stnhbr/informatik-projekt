@@ -23,7 +23,9 @@ public class FledermausGegner extends Gegner {
 			lebenMax = DateiManager.werte.get("fledermaus_lebenszeit_max"),
 			lebenMin = DateiManager.werte.get("fledermaus_lebenszeit_min"),
 			maxLeben = DateiManager.werte.get("fledermaus_leben"),
-			angriffDelay = DateiManager.werte.get("fledermaus_angriff_delay");
+			angriffDelay = DateiManager.werte.get("fledermaus_angriff_delay"),
+			bewegungInaktivGeschw = DateiManager.werte.get("fledermaus_bewegung_inaktiv_geschw"),
+			bewegungDelayInaktiv = DateiManager.werte.get("fledermaus_bewegung_inaktiv_delay");
 
 	private int lebenszeit, bewegung;
 	private boolean inaktiv;
@@ -44,14 +46,16 @@ public class FledermausGegner extends Gegner {
 		super.aktualisieren();
 
 		if (inaktiv)
-			g.setComposite(makeComposite(.75f));
+			g.setComposite(compositeErstellen(.75f));
 		g.drawImage(bildDrehen(grafik), (int) pos.getX(), (int) pos.getY(), (int) Spiel.feldLaenge,
 				(int) Spiel.feldLaenge, null);
-		g.setComposite(makeComposite(1f));
+		g.setComposite(compositeErstellen(1f));
 
 		if (Spiel.gibInstanz().ticks % angriffDelay == 0)
 			angriff();
-		else if (Spiel.gibInstanz().ticks % bewegungDelay == 0)
+		else if (Spiel.gibInstanz().ticks % bewegungDelayInaktiv == 0 && inaktiv)
+			bewegen();
+		else if (Spiel.gibInstanz().ticks % bewegungDelay == 0 && !inaktiv)
 			bewegen();
 
 		if (pos.dist(ziel) < ges.mag()) {
@@ -65,13 +69,12 @@ public class FledermausGegner extends Gegner {
 		lebenszeit--;
 	}
 
-	private AlphaComposite makeComposite(float alpha) {
+	private AlphaComposite compositeErstellen(float alpha) {
 		int type = AlphaComposite.SRC_OVER;
 		return (AlphaComposite.getInstance(type, alpha));
 	}
 
 	private void bewegen() {
-		System.out.println(ziel + ":" + pos + ":" + inaktiv + ":" + Spieler.gibInstanz().getPos().dist(pos));
 		if (!inaktiv) {
 			if (pos.equals(ziel) && Spieler.gibInstanz().getPos().dist(pos) > Spiel.feldLaenge) {
 				Vektor v = Spieler.gibInstanz().getPos().kopieren().sub(pos), z = Vektor.nullVektor;
@@ -86,6 +89,8 @@ public class FledermausGegner extends Gegner {
 				if (bewegungMoeglich(z))
 					ziel = z;
 
+				if (!ziel.equals(pos))
+					bes = ziel.kopieren().sub(pos).normalize().mult(bewegungGeschw / 10);
 			}
 		} else {
 			if (bewegung == 0) {
@@ -97,14 +102,14 @@ public class FledermausGegner extends Gegner {
 					return;
 				}
 
-				abstandX = (int) (v.getX() > Spiel.spalten / 2 ? Spiel.spalten / 2 - v.getX()
-						: v.getX() - Spiel.spalten / 2);
-				abstandY = (int) (v.getY() > Spiel.zeilen / 2 ? Spiel.zeilen / 2 - v.getY()
-						: v.getY() - Spiel.zeilen / 2);
+				abstandX = (int) (v.getX() > (int) Spiel.spalten / 2 ? v.getX() - Spiel.spalten / 2
+						: Spiel.spalten / 2 - v.getX());
+				abstandX = (int) (v.getY() > (int) Spiel.zeilen / 2 ? v.getY() - Spiel.zeilen / 2
+						: Spiel.zeilen / 2 - v.getY());
 
-				if (abstandX > abstandY)
+				if (abstandX < abstandY)
 					bewegung = (int) (2 * Math.signum(v.getX() - Spiel.spalten));
-				else if (abstandY > abstandX)
+				else if (abstandY < abstandX)
 					bewegung = (int) (Math.signum(v.getY() - Spiel.spalten));
 				else
 					bewegung = Utils.random(-2, 2, 0);
@@ -113,23 +118,25 @@ public class FledermausGegner extends Gegner {
 					Vektor z = Vektor.nullVektor;
 
 					if (bewegung == -2)
-						z = pos.add(new Vektor(1, 0).mult(Spiel.feldLaenge));
+						z = pos.kopieren().add(new Vektor(1, 0).mult(Spiel.feldLaenge));
 					else if (bewegung == -1)
-						z = pos.add(new Vektor(0, 1).mult(Spiel.feldLaenge));
+						z = pos.kopieren().add(new Vektor(0, 1).mult(Spiel.feldLaenge));
 					else if (bewegung == 1)
-						z = pos.add(new Vektor(0, -1).mult(Spiel.feldLaenge));
+						z = pos.kopieren().add(new Vektor(0, -1).mult(Spiel.feldLaenge));
 					else if (bewegung == 2)
-						z = pos.add(new Vektor(-1, 0).mult(Spiel.feldLaenge));
+						z = pos.kopieren().add(new Vektor(-1, 0).mult(Spiel.feldLaenge));
 
 					blick = Richtung.getRichtung(pos, ziel);
 
 					if (bewegungMoeglich(z))
 						ziel = z;
+
+					if (!ziel.equals(pos))
+						bes = ziel.kopieren().sub(pos).normalize().mult(bewegungInaktivGeschw / 10);
+
 				}
 			}
 		}
-
-		pos = ziel;
 	}
 
 	private Image bildDrehen(BufferedImage b) {

@@ -83,9 +83,6 @@ public class Level {
 						if (g.getPos().dist(Spieler.gibInstanz().getPos()) <= g.getTyp().getRadius()) {
 							Spieler.gibInstanz().schaden(g.getSchaden());
 							liste.remove(g);
-
-							if (Spieler.gibInstanz().getLeben() <= 0)
-								Spiel.gibInstanz().beenden();
 						}
 					}
 				} else {
@@ -102,9 +99,7 @@ public class Level {
 					}
 					if (Spiel.gibInstanz().tutorial && Spiel.gibInstanz().gegnerKannSterben
 							|| !Spiel.gibInstanz().tutorial) {
-						liste.remove(l1);
-						((Figur) l1).beimTod();
-						l1 = null;
+						figurEntfernen(((Figur) l1));
 					}
 				}
 			}
@@ -126,6 +121,26 @@ public class Level {
 			}
 		}
 
+	}
+
+	private void figurEntfernen(Figur f) {
+		if (gibAnzahlGegner() == 1)
+			hinzufuegen(new Item(Item.Typ.schluessel, f.getPos().div(Spiel.feldLaenge)));
+
+		liste.remove(f);
+		f.beimTod();
+		f = null;
+
+	}
+
+	private int gibAnzahlGegner() {
+		int a = 0;
+
+		for (Levelelement l : liste)
+			if (l instanceof Gegner && !(l instanceof FledermausGegner))
+				a++;
+
+		return a;
 	}
 
 	private void checkPosition(Levelelement l) {
@@ -188,14 +203,13 @@ public class Level {
 	public boolean istGegner(Vektor v, Figur f) {
 		for (Levelelement l : liste) {
 			if (f != null)
-				if (l instanceof Gegner
-						&& (l.getPos().kopieren().div(Spiel.feldLaenge).equals(v) || ((Gegner) l).getZiel().equals(v))
-						&& !l.equals(f))
+				if (l instanceof Gegner && (l.getPos().kopieren().div(Spiel.feldLaenge).equals(v)
+						|| ((Gegner) l).getZiel().equals(v.kopieren().mult(Spiel.feldLaenge))) && !l.equals(f))
 					return true;
 				else
 					;
-			else if (l instanceof Gegner
-					&& (l.getPos().kopieren().div(Spiel.feldLaenge).equals(v) || ((Gegner) l).getZiel().equals(v)))
+			else if (l instanceof Gegner && (l.getPos().kopieren().div(Spiel.feldLaenge).equals(v)
+					|| ((Gegner) l).getZiel().equals(v.kopieren().mult(Spiel.feldLaenge))))
 				return true;
 		}
 
@@ -205,17 +219,16 @@ public class Level {
 	// TODO
 	public boolean istGegnerSpieler(Vektor v, Figur f) {
 		for (Levelelement l : liste) {
-			if (f != null)
-				if (l instanceof Gegner
-						&& (l.getPos().kopieren().div(Spiel.feldLaenge).equals(v) || ((Gegner) l).getZiel().equals(v))
-						&& !l.equals(f) && !(l instanceof FledermausGegner))
+			if (l instanceof Gegner)
+				if (f != null) {
+					if ((l.getPos().kopieren().div(Spiel.feldLaenge).equals(v)
+							|| ((Gegner) l).getZiel().equals(v.kopieren().mult(Spiel.feldLaenge))) && !l.equals(f)
+							&& !(l instanceof FledermausGegner))
+						return true;
+				} else if ((l.getPos().kopieren().div(Spiel.feldLaenge).equals(v)
+						|| ((Gegner) l).getZiel().equals(v.kopieren().mult(Spiel.feldLaenge)))
+						&& !(l instanceof FledermausGegner))
 					return true;
-				else
-					;
-			else if (l instanceof Gegner
-					&& (l.getPos().kopieren().div(Spiel.feldLaenge).equals(v) || ((Gegner) l).getZiel().equals(v))
-					&& !(l instanceof FledermausGegner))
-				return true;
 		}
 
 		return false;
@@ -235,5 +248,31 @@ public class Level {
 
 	public void entfernen(Levelelement l) {
 		liste.remove(l);
+	}
+
+	public Figur gibNaechstenGegner(Vektor pos) {
+		Gegner g = new Gegner() {
+			Vektor pos = new Vektor(-1000, -1000);
+
+			public void zeichnen(Graphics2D g) {
+			}
+
+			public void beimTod() {
+			}
+
+			public Vektor getZiel() {
+				return null;
+			}
+
+			public boolean angriff() {
+				return false;
+			}
+		};
+
+		for (Levelelement l : liste)
+			if (l instanceof Gegner && l.getPos().dist(pos) < pos.dist(g.getPos()))
+				g = (Gegner) l;
+
+		return g.getPos().equals(new Vektor(-1000, -1000)) ? null : g;
 	}
 }

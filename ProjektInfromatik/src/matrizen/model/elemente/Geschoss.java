@@ -52,7 +52,7 @@ public class Geschoss extends Levelelement {
 	}
 
 	public enum Typ implements GrafikTyp {
-		kleinBlau(10), kleinOrange(10), stern(5), feuer(7);
+		kleinBlau(10), kleinOrange(10), stern(5), feuer(7), verfolger(7);
 
 		int radius;
 

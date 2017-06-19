@@ -11,7 +11,6 @@ import matrizen.core.Richtung;
 import matrizen.core.Utils;
 import matrizen.core.Vektor;
 import matrizen.core.DateiManager.Bild;
-import matrizen.model.Levelelement;
 import matrizen.model.Spiel;
 import matrizen.model.elemente.Gegner;
 import matrizen.model.elemente.Geschoss;
@@ -24,7 +23,8 @@ public class HexeGegner extends Gegner {
 			spezialDelay = DateiManager.werte.get("hexe_delay_spezial"),
 			maxLeben = DateiManager.werte.get("hexe_leben"), maxSpawn = DateiManager.werte.get("hexe_spawn_max"),
 			minSpawn = DateiManager.werte.get("hexe_spawn_min"), schaden = DateiManager.werte.get("hexe_schaden"),
-			weite = DateiManager.werte.get("hexe_weite");
+			weite = DateiManager.werte.get("hexe_weite"),
+			bewegungGeschw = DateiManager.werte.get("hexe_bewegung_geschw");
 
 	private final float partikelGeschw = DateiManager.werte.get("hexe_partikel_geschw") / 10;
 
@@ -38,22 +38,25 @@ public class HexeGegner extends Gegner {
 		leben = maxLeben;
 		ziel = pos;
 		blick = Richtung.OBEN;
+		this.aktiv = aktiv;
 	}
 
 	@Override
 	public void zeichnen(Graphics2D g) {
+		super.aktualisieren();
+
 		g.drawImage(bildDrehen(grafik), (int) pos.getX(), (int) pos.getY(), (int) Spiel.feldLaenge,
 				(int) Spiel.feldLaenge, null);
 
 		if (Spiel.gibInstanz().ticks % bewegungDelay == 0)
 			bewegen();
-		else if (Spiel.gibInstanz().ticks % angriffDelay == 0)
+		else if (Spiel.gibInstanz().ticks % angriffDelay == 0 && aktiv)
 			angriff();
-		else if (Spiel.gibInstanz().ticks % spezialDelay == 0)
+		else if (Spiel.gibInstanz().ticks % spezialDelay == 0 && aktiv)
 			spezialAttacke();
 
-		if (pos.dist(ziel) < bes.mag()) {
-			bes.mult(0);
+		if (pos.dist(ziel) < ges.mag()) {
+			ges = Vektor.nullVektor;
 			pos = ziel;
 		}
 
@@ -85,7 +88,8 @@ public class HexeGegner extends Gegner {
 
 			if (bewegungMoeglich(z))
 				ziel = z;
-
+			if (!pos.equals(ziel))
+				bes = ziel.kopieren().sub(pos).normalize().mult(bewegungGeschw / 10);
 		}
 	}
 

@@ -294,6 +294,7 @@ public class DateiManager {
 		figurRitterDrehung(96, 160, srcFigur),
 		figurHexe(32, 128, srcFigur),
 		figurFledermaus(64, 128, srcFigur),
+		figurZombie(96, 128, srcFigur),
 		itemSchluessel(0, 0, srcItem),
 		itemMuenze(0, 32, srcItem),
 		itemHerz(64, 0, srcItem),

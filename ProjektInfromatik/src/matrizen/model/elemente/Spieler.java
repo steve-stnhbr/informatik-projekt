@@ -21,7 +21,8 @@ import matrizen.core.event.BewegungsEvent;
 import matrizen.core.event.EventManager;
 import matrizen.model.Spiel;
 import matrizen.model.Zauberstab;
-import matrizen.model.zauberstaebe.EinfachSchwacherStab;
+import matrizen.model.zauberstaebe.EinfachZauberstab;
+import matrizen.model.zauberstaebe.VerfolgungsZauberstab;
 import matrizen.view.SpielFenster;
 
 /**
@@ -50,7 +51,7 @@ public class Spieler extends Figur {
 		inventar = new ArrayList<Item>();
 		animation = new BufferedImage[] { DateiManager.laden(Bild.figurSpielerAnim0),
 				DateiManager.laden(Bild.figurSpielerAnim1) };
-		stab = new EinfachSchwacherStab();
+		stab = new EinfachZauberstab();
 		leben = maxLeben;
 	}
 
@@ -64,7 +65,7 @@ public class Spieler extends Figur {
 	public void zeichnen(Graphics2D g) {
 		super.aktualisieren();
 		checkInput();
-		
+
 		if (leben > maxLeben)
 			leben = maxLeben;
 
@@ -77,7 +78,9 @@ public class Spieler extends Figur {
 		else
 			g.drawImage(bildDrehen(animation[index]), (int) pos.getX(), (int) pos.getY(), (int) Spiel.feldLaenge,
 					(int) Spiel.feldLaenge, null);
-
+		
+		stab.aktualisieren();
+		
 		for (int i = 0; i < cooldown.length; i++) {
 			if (cooldown[i] > 0)
 				cooldown[i] = (short) (cooldown[i] - 1);
@@ -154,7 +157,7 @@ public class Spieler extends Figur {
 		transform.rotate(Math.toRadians(blick.getWinkel()), grafik.getWidth() / 2, grafik.getHeight() / 2);
 
 		AffineTransformOp operation = new AffineTransformOp(transform, AffineTransformOp.TYPE_BILINEAR);
-		if (ges.kopieren().normalize().equals(blick.getVektor()) || ges.equals(Vektor.nullVektor))
+		if (ges.kopieren().normalize().equals(blick.getVektor().normalize()) || ges.equals(Vektor.nullVektor))
 			return operation.filter(grafik, null);
 		else
 			return grafik;
@@ -185,11 +188,13 @@ public class Spieler extends Figur {
 		Vektor v = new Vektor(xFeld + r.getVektor().getX(), yFeld + r.getVektor().getY());
 
 		try {
-			return v.getX() >= 0 && v.getY() >= 0 && v.getX() < SpielFenster.hoehe / Spiel.feldLaenge
-					&& v.getY() < SpielFenster.breite / Spiel.feldLaenge
+			System.out.println(v);
+			return v.getX() >= 0 && v.getY() >= 0 && v.getX() < Spiel.feldLaenge * Spiel.spalten
+					&& v.getY() < Spiel.feldLaenge * Spiel.zeilen
 					&& !Spiel.gibInstanz().getLevel().getFeld(v).isSolide()
 					&& !Spiel.gibInstanz().getLevel().istGegnerSpieler(v, this);
 		} catch (Exception e) {
+			e.printStackTrace();
 		}
 		return false;
 	}

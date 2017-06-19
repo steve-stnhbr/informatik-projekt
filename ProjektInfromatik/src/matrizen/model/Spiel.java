@@ -103,7 +103,7 @@ public class Spiel implements KeyListener {
 			hud.zeichnen(graphics);
 			if (text != null)
 				text.zeichnen(graphics);
-
+			
 			if (beendet) {
 				try {
 					graphics.setFont(Font

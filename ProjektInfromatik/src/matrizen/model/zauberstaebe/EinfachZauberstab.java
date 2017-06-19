@@ -7,9 +7,9 @@ import matrizen.model.Zauberstab;
 import matrizen.model.elemente.Geschoss;
 import matrizen.model.elemente.Spieler;
 
-public class EinfachSchwacherStab extends Zauberstab {
+public class EinfachZauberstab extends Zauberstab {
 
-	public EinfachSchwacherStab() {
+	public EinfachZauberstab() {
 		delay = werte.get("stab_einfach_delay_angriff");
 		schaden = werte.get("stab_einfach_schaden");
 		reichweite = werte.get("stab_einfach_weite");
