@@ -100,7 +100,7 @@ public class Spiel implements KeyListener {
 
 			level.zeichnen(graphics);
 			Spieler.gibInstanz().zeichnen(graphics);
-			hud.zeichnen(graphics);
+//			hud.zeichnen(graphics);
 			if (text != null)
 				text.zeichnen(graphics);
 			

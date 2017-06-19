@@ -26,6 +26,21 @@ public enum Richtung {
 		return winkel;
 	}
 
+	public Vektor getFinalVektor() {
+		switch (this) {
+		case OBEN:
+			return new Vektor(0, -1);
+		case UNTEN:
+			return new Vektor(0, 1);
+		case LINKS:
+			return new Vektor(-1, 0);
+		case RECHTS:
+			return new Vektor(1, 0);
+		default:
+			return Vektor.nullVektor;
+		}
+	}
+
 	public static int getIndex(Richtung r) {
 		for (int i = 0; i < values().length; i++)
 			if (values()[i] == r)

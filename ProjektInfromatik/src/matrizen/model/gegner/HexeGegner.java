@@ -108,13 +108,13 @@ public class HexeGegner extends Gegner {
 	@Override
 	public boolean angriff() {
 		Spiel.gibInstanz().getLevel().hinzufuegen(
-				new Geschoss(Typ.kleinOrange, schaden, weite, pos, new Vektor(1, 0).mult(partikelGeschw), this));
+				new Geschoss(Typ.raute, schaden, weite, pos, new Vektor(1, 0).mult(partikelGeschw), this));
 		Spiel.gibInstanz().getLevel().hinzufuegen(
-				new Geschoss(Typ.kleinOrange, schaden, weite, pos, new Vektor(-1, 0).mult(partikelGeschw), this));
+				new Geschoss(Typ.raute, schaden, weite, pos, new Vektor(-1, 0).mult(partikelGeschw), this));
 		Spiel.gibInstanz().getLevel().hinzufuegen(
-				new Geschoss(Typ.kleinOrange, schaden, weite, pos, new Vektor(0, -1).mult(partikelGeschw), this));
+				new Geschoss(Typ.raute, schaden, weite, pos, new Vektor(0, -1).mult(partikelGeschw), this));
 		Spiel.gibInstanz().getLevel().hinzufuegen(
-				new Geschoss(Typ.kleinOrange, schaden, weite, pos, new Vektor(0, 1).mult(partikelGeschw), this));
+				new Geschoss(Typ.raute, schaden, weite, pos, new Vektor(0, 1).mult(partikelGeschw), this));
 		return true;
 	}
 

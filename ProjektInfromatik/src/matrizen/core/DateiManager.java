@@ -298,11 +298,18 @@ public class DateiManager {
 		itemSchluessel(0, 0, srcItem),
 		itemMuenze(0, 32, srcItem),
 		itemHerz(64, 0, srcItem),
+		itemZauberstabMehrfach(0, 32, srcItem),
+		itemZauberstabVerfolgung(0, 64, srcItem),
+		itemZauberstabBlitz(0, 96, srcItem),
 		partikelMittelOrange(0, 0, srcPartikel),
 		partikelMittelBlau(32, 0, srcPartikel),
 		partikelKleinRot(32, 0, srcPartikel),
 		partikelSternRotGelb(0, 32, srcPartikel),
-		partikelFeuer(64, 0, srcPartikel);
+		partikelFeuer(64, 0, srcPartikel),
+		partikelRaute(96, 0, srcPartikel),
+		partikelVerfolger(32, 32, srcPartikel),
+		partikelBlitzHorizontal(64, 32, srcPartikel),
+		partikelBlitzVertikal(96, 32, srcPartikel);
 
 		public int x, y;
 		public BufferedImage src;
@@ -357,6 +364,12 @@ public class DateiManager {
 				return partikelSternRotGelb;
 			case feuer:
 				return partikelFeuer;
+			case raute:
+				return partikelRaute;
+			case blitzHorizontal:
+				return Bild.partikelBlitzHorizontal;
+			case blitzVertikal:
+				return Bild.partikelBlitzVertikal;
 			default:
 				return nullGrafik;
 			}

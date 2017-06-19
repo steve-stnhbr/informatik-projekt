@@ -20,7 +20,7 @@ public class EinfachZauberstab extends Zauberstab {
 	public void schuss() {
 		Spiel.gibInstanz().getLevel()
 				.hinzufuegen(new Geschoss(Geschoss.Typ.kleinBlau, schaden, reichweite, Spieler.gibInstanz().getPos(),
-						Spieler.gibInstanz().getBlick().getVektor().kopieren().mult(geschw), Spieler.gibInstanz()));
+						Spieler.gibInstanz().getBlick().getVektor().kopieren().normalize().mult(geschw / 10), Spieler.gibInstanz()));
 	}
 
 }

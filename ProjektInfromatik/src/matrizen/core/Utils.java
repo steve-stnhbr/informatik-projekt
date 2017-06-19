@@ -7,6 +7,8 @@ import java.util.Random;
 
 import javax.xml.bind.ValidationException;
 
+import matrizen.model.Spiel;
+
 public class Utils {
 	private static final Random random = new Random();
 
@@ -89,5 +91,12 @@ public class Utils {
 			l.add(i);
 
 		return l;
+	}
+
+	public static boolean vektorIstInFeld(Vektor p) {
+		if (p.mag() > 100)
+			p.div(32).round();
+		return p.getX() > 0 && p.getY() > 0 && p.getX() < Spiel.spalten * Spiel.feldLaenge
+				&& p.getY() < Spiel.zeilen * Spiel.feldLaenge;
 	}
 }

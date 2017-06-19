@@ -275,4 +275,8 @@ public class Level {
 
 		return g.getPos().equals(new Vektor(-1000, -1000)) ? null : g;
 	}
+
+	public void alleEntfernen(List<Geschoss> list) {
+		liste.removeAll(list);
+	}
 }

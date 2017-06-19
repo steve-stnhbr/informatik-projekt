@@ -139,4 +139,10 @@ public class Vektor {
 		div(mag());
 		return this;
 	}
+
+	public Vektor round() {
+		x = (int) x;
+		y = (int) y;
+		return this;
+	}
 }

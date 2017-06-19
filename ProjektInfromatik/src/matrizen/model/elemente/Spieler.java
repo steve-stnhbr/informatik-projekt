@@ -21,9 +21,7 @@ import matrizen.core.event.BewegungsEvent;
 import matrizen.core.event.EventManager;
 import matrizen.model.Spiel;
 import matrizen.model.Zauberstab;
-import matrizen.model.zauberstaebe.EinfachZauberstab;
-import matrizen.model.zauberstaebe.VerfolgungsZauberstab;
-import matrizen.view.SpielFenster;
+import matrizen.model.zauberstaebe.BlitzZauberstab;
 
 /**
  * Diese Klasse repräsentiert den Spieler
@@ -51,7 +49,7 @@ public class Spieler extends Figur {
 		inventar = new ArrayList<Item>();
 		animation = new BufferedImage[] { DateiManager.laden(Bild.figurSpielerAnim0),
 				DateiManager.laden(Bild.figurSpielerAnim1) };
-		stab = new EinfachZauberstab();
+		stab = new BlitzZauberstab();
 		leben = maxLeben;
 	}
 
@@ -78,9 +76,9 @@ public class Spieler extends Figur {
 		else
 			g.drawImage(bildDrehen(animation[index]), (int) pos.getX(), (int) pos.getY(), (int) Spiel.feldLaenge,
 					(int) Spiel.feldLaenge, null);
-		
+
 		stab.aktualisieren();
-		
+
 		for (int i = 0; i < cooldown.length; i++) {
 			if (cooldown[i] > 0)
 				cooldown[i] = (short) (cooldown[i] - 1);
@@ -149,6 +147,7 @@ public class Spieler extends Figur {
 		if (cooldown[4] == 0) {
 			stab.schuss();
 			cooldown[4] = (short) stab.getDelay();
+			System.out.println(cooldown[4]);
 		}
 	}
 
@@ -188,7 +187,6 @@ public class Spieler extends Figur {
 		Vektor v = new Vektor(xFeld + r.getVektor().getX(), yFeld + r.getVektor().getY());
 
 		try {
-			System.out.println(v);
 			return v.getX() >= 0 && v.getY() >= 0 && v.getX() < Spiel.feldLaenge * Spiel.spalten
 					&& v.getY() < Spiel.feldLaenge * Spiel.zeilen
 					&& !Spiel.gibInstanz().getLevel().getFeld(v).isSolide()
