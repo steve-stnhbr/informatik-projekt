@@ -275,7 +275,8 @@ public class DateiManager {
 		feldSteinchen0(0, 64, srcFeld),
 		feldSteinchen1(32, 64, srcFeld),
 		feldSchotter0(0, 96, srcFeld),
-		feldWeiter(32, 96, srcFeld),
+		feldTorZu(32, 96, srcFeld),
+		feldTorOffen(64, 96, srcFeld),
 		feldBaum0(0, 128, srcFeld),
 		feldBaum1(32, 128, srcFeld),
 		feldWasser(64, 128, srcFeld),
@@ -296,7 +297,7 @@ public class DateiManager {
 		figurFledermaus(64, 128, srcFigur),
 		figurZombie(96, 128, srcFigur),
 		itemSchluessel(0, 0, srcItem),
-		itemMuenze(0, 32, srcItem),
+		itemMuenze(32, 0, srcItem),
 		itemHerz(64, 0, srcItem),
 		itemZauberstabMehrfach(0, 32, srcItem),
 		itemZauberstabVerfolgung(0, 64, srcItem),
@@ -404,8 +405,10 @@ public class DateiManager {
 				return zufaelligerStein();
 			case ERDE:
 				return feldErde0;
-			case WEITER:
-				return feldWeiter;
+			case TORZU:
+				return feldTorZu;
+			case TOROFFEN:
+				return feldTorOffen;
 			default:
 				return nullGrafik;
 			}
@@ -451,7 +454,13 @@ public class DateiManager {
 				elem.add(new Item(Item.Typ.values()[t], new Vektor(x, y)));
 			}
 
-			matrizen.model.Level lvl = new matrizen.model.Level(elem, felder);
+			Vektor v = null;
+			if (obj.has("start_pos")) {
+				JSONObject sp = obj.getJSONObject("start_pos");
+				v = new Vektor(sp.getInt("x"), sp.getInt("y"));
+			}
+
+			matrizen.model.Level lvl = new matrizen.model.Level(elem, felder, v);
 			logger.log(java.util.logging.Level.FINEST, "Level " + lvl + " aus " + s + " gelesen");
 			return lvl;
 		}

@@ -13,6 +13,8 @@
 	
 	"gegner" : [],
 	
-	"items" : []
+	"items" : [],
+
+	"start_pos" : { "x" : 6 , "y" : 4 }
 
 }

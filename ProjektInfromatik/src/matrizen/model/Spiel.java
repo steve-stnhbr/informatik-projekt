@@ -33,6 +33,8 @@ public class Spiel implements KeyListener {
 	public static final short zeilen = (short) 9, spalten = (short) 13;
 	public static final int feldLaenge = 32;
 	private static Spiel instanz;
+
+	private final int muenzen = DateiManager.werte.get("spiel_ziel_muenzen");
 	private Level level;
 	public long ticks = -75;
 	private Text text;
@@ -41,7 +43,7 @@ public class Spiel implements KeyListener {
 	private boolean schiessen, gegnerErstellt;
 	public boolean[] tutorials;
 	public int tutorialTick;
-	private static final int tutorialDelay = 100;
+	private static final int tutorialDelay = 150;
 
 	private final int[] links = DateiManager.config.getLinks(), rechts = DateiManager.config.getRechts(),
 			oben = DateiManager.config.getOben(), unten = DateiManager.config.getUnten(),
@@ -53,9 +55,9 @@ public class Spiel implements KeyListener {
 		Spieler.gibInstanz().setxFeld((int) Math.floor(spalten / 2));
 		Spieler.gibInstanz().setyFeld((int) Math.floor(zeilen / 2));
 
-		Level.level0.setNaechstesLevel(Level.level1);
-		Level.level1.setNaechstesLevel(Level.level2);
-		Level.level2.setNaechstesLevel(Level.level3);
+		Level.getLevel(0).setNaechstesLevel(Level.getLevel(1));
+		Level.getLevel(1).setNaechstesLevel(Level.getLevel(2));
+		Level.getLevel(2).setNaechstesLevel(Level.getLevel(3));
 
 		MusikPlayer.setZufall(true);
 		MusikPlayer.setWiederholen(true);
@@ -67,7 +69,7 @@ public class Spiel implements KeyListener {
 		tutorials = new boolean[8];
 
 		schiessen = !tutorial;
-		level = Level.level1;
+		level = Level.getLevel(1);
 
 		hud = HUD.gibInstanz();
 
@@ -86,7 +88,7 @@ public class Spiel implements KeyListener {
 			try {
 				graphics.setFont(
 						Font.createFont(Font.TRUETYPE_FONT, new File(DateiManager.pfad + "res/schrift/prstartk.ttf"))
-								.deriveFont(20f));
+								.deriveFont(45f));
 				graphics.setColor(Color.white);
 				graphics.drawString("trollkarl", Spiel.spalten * 16 - 75, Spiel.zeilen * 16 - 40);
 			} catch (FontFormatException | IOException e) {
@@ -95,22 +97,27 @@ public class Spiel implements KeyListener {
 		} else {
 			tutorialAbarbeiten();
 
-			if (level.equals(Level.level1))
+			if (level.equals(Level.getLevel(1)))
 				tutorials[5] = true;
 
 			level.zeichnen(graphics);
 			Spieler.gibInstanz().zeichnen(graphics);
-//			hud.zeichnen(graphics);
+			hud.zeichnen(graphics);
 			if (text != null)
 				text.zeichnen(graphics);
-			
+
 			if (beendet) {
 				try {
 					graphics.setFont(Font
 							.createFont(Font.TRUETYPE_FONT, new File(DateiManager.pfad + "res/schrift/prstartk.ttf"))
-							.deriveFont(20f));
-					graphics.setColor(Color.white);
-					graphics.drawString("verkackt", Spiel.spalten * 16 - 75, Spiel.zeilen * 16 - 40);
+							.deriveFont(45f));
+					graphics.setColor(Color.darkGray);
+					graphics.drawString("GAME OVER!!", Spiel.spalten * 16 - 75, Spiel.zeilen * 16 - 40);
+					graphics.setFont(Font
+							.createFont(Font.TRUETYPE_FONT, new File(DateiManager.pfad + "res/schrift/prstartk.ttf"))
+							.deriveFont(25f));
+					graphics.setColor(Color.black);
+					graphics.drawString("Dr¸cke esc um es nochmal zu probieren", Spiel.spalten * 2, Spiel.zeilen * 16);
 					SpielFenster.gibInstanz().getTimer().stop();
 				} catch (FontFormatException | IOException e) {
 					e.printStackTrace();
@@ -135,13 +142,9 @@ public class Spiel implements KeyListener {
 						switch (e.getKeyCode()) {
 						case KeyEvent.VK_PAGE_UP:
 							MusikPlayer.setVolume(MusikPlayer.getVolume() + .025f);
-							logger.log(java.util.logging.Level.FINE,
-									"Lautst‰rke auf " + MusikPlayer.getVolume() + " gestellt");
 							break;
 						case KeyEvent.VK_PAGE_DOWN:
 							MusikPlayer.setVolume(MusikPlayer.getVolume() - .025f);
-							logger.log(java.util.logging.Level.FINE,
-									"Lautst‰rke auf " + MusikPlayer.getVolume() + " gestellt");
 							break;
 						}
 					}
@@ -175,19 +178,23 @@ public class Spiel implements KeyListener {
 				text = new Text(0, "Einer dieser Gegenst‰nde ist dieser", "Schl¸ssel");
 			}
 			if (ticks > tutorialTick + tutorialDelay * 1.5 && tutorials[3] && !tutorials[4]) {
-				text = new Text(0, "Dieser Schl¸ssel erstellt ein Tele-", "Pad, wenn du ihn aufhebst");
+				text = new Text(0, "Dieser Schl¸ssel ˆffnet das Tor, wenn du", "davor stehst und es ansiehst");
 				schluesselAufheben = true;
 			} else if (ticks > tutorialTick + tutorialDelay && tutorials[4] && !tutorials[5]) {
-				text = new Text(0, "Wenn du auf das Pad steigst, wirst du in", "das n‰chste Level teleportiert");
+				text = new Text(0, "Durch das Tor gelangst du ", "ind das n‰chste Level");
 				kannTeleportieren = true;
 			} else if (ticks > tutorialTick + tutorialDelay && tutorials[5] && !tutorials[6])
 				text = new Text(0, "Die Herzen, die du hier siehst, regenerieren", "dein Leben, wenn du sie aufhebst");
 			else if (ticks > tutorialTick + tutorialDelay * 2 && tutorials[6] && !tutorials[7]) {
-				text = new Text(0, "                 Viel Spaﬂ!");
+				text = new Text(0, "Das Ziel ist es " + muenzen + " zu sammeln", "die Gegner manchmal fallen lassen");
 				if (!tutorials[7])
 					tutorialTick = (int) ticks;
 				tutorials[7] = true;
-			} else if (ticks > tutorialTick + tutorialDelay * 5 && tutorials[7]) {
+			} else if (ticks > tutorialTick + tutorialDelay && tutorials[7]) {
+				text = new Text(0, "                 Viel Spaﬂ!");
+			}
+
+			else if (ticks > tutorialTick + tutorialDelay * 5 && tutorials[7]) {
 				text = new Text(-1, "                 Viel Spaﬂ!");
 				tutorialTick = (int) ticks;
 				tutorial = false;
@@ -248,7 +255,7 @@ public class Spiel implements KeyListener {
 		if (c == VK_ESCAPE) {
 			AnfangsFenster.gibInstanz().inhaltAendern(StartPanel.gibInstanz());
 			SpielFenster.gibInstanz().stop();
-			if(beendet)
+//			if (beendet)
 				SpielFenster.reset();
 		} else if (c == oben[0] || c == oben[1])
 			EingabeManager.deaktivieren(Richtung.getIndex(Richtung.OBEN));
@@ -263,7 +270,8 @@ public class Spiel implements KeyListener {
 	}
 
 	public static void reset() {
-		instanz = null;
+		instanz = new Spiel();
+		Level.reset();
 	}
 
 	public void beenden() {

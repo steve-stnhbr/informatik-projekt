@@ -6,6 +6,7 @@ import java.awt.image.BufferedImage;
 import matrizen.core.DateiManager;
 import matrizen.core.Vektor;
 import matrizen.model.elemente.GrafikTyp;
+import matrizen.model.elemente.Spieler;
 
 public class Feld extends Grafikbasis {
 	private boolean solide;
@@ -66,18 +67,23 @@ public class Feld extends Grafikbasis {
 		ERDE(false),
 		WASSER(true),
 		BAUM(true),
-		WEITER(false) {
+		TOROFFEN(false) {
 			public void beimBetreten() {
-				if ((Spiel.gibInstanz().kannTeleportieren && Spiel.gibInstanz().tutorial)
-						|| !Spiel.gibInstanz().tutorial)
+				if ((Spiel.gibInstanz().kannTeleportieren && Spiel.gibInstanz().tutorial || !Spiel.gibInstanz().tutorial)) {
+					Vektor sp = Spiel.gibInstanz().getLevel().getStartPosition();
 					Spiel.gibInstanz().setLevel(Spiel.gibInstanz().getLevel().getNaechstesLevel());
+					Spieler.gibInstanz().setPos(sp.kopieren().mult(Spiel.feldLaenge));
+					Spieler.gibInstanz().setxFeld((int) sp.getX());
+					Spieler.gibInstanz().setyFeld((int) sp.getY());
+				}
 			}
 		},
 		STEIN(false),
 		STEINCHEN(true),
 		SCHOTTER(false),
 		BRUECKE(false),
-		HECKE(true);
+		HECKE(true),
+		TORZU(true);
 
 		final boolean solide;
 

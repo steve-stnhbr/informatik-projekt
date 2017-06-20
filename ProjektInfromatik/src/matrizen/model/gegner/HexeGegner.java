@@ -35,10 +35,12 @@ public class HexeGegner extends Gegner {
 	public HexeGegner(Vektor feldPos, boolean aktiv) {
 		grafik = DateiManager.laden(Bild.figurHexe);
 		pos = feldPos.mult(Spiel.feldLaenge);
-		leben = maxLeben;
+		leben = aktiv ? maxLeben : 100;
 		ziel = pos;
 		blick = Richtung.OBEN;
 		this.aktiv = aktiv;
+		
+		
 	}
 
 	@Override

@@ -19,9 +19,11 @@ import matrizen.core.Richtung;
 import matrizen.core.Vektor;
 import matrizen.core.event.BewegungsEvent;
 import matrizen.core.event.EventManager;
+import matrizen.model.Levelelement;
 import matrizen.model.Spiel;
 import matrizen.model.Zauberstab;
-import matrizen.model.zauberstaebe.BlitzZauberstab;
+import matrizen.model.elemente.Item.Typ;
+import matrizen.model.zauberstaebe.EinfachZauberstab;
 
 /**
  * Diese Klasse repräsentiert den Spieler
@@ -49,7 +51,7 @@ public class Spieler extends Figur {
 		inventar = new ArrayList<Item>();
 		animation = new BufferedImage[] { DateiManager.laden(Bild.figurSpielerAnim0),
 				DateiManager.laden(Bild.figurSpielerAnim1) };
-		stab = new BlitzZauberstab();
+		stab = new EinfachZauberstab();
 		leben = maxLeben;
 	}
 
@@ -192,7 +194,6 @@ public class Spieler extends Figur {
 					&& !Spiel.gibInstanz().getLevel().getFeld(v).isSolide()
 					&& !Spiel.gibInstanz().getLevel().istGegnerSpieler(v, this);
 		} catch (Exception e) {
-			e.printStackTrace();
 		}
 		return false;
 	}
@@ -200,7 +201,7 @@ public class Spieler extends Figur {
 	public void aufsammeln(Item i) {
 		switch (i.getTyp()) {
 		case herz:
-			leben += 20;
+			break;
 		default:
 			inventar.add(i);
 		}
@@ -257,6 +258,29 @@ public class Spieler extends Figur {
 
 	public void setStab(Zauberstab stab) {
 		this.stab = stab;
+	}
+
+	public int gibAnzahlMuenzen() {
+		int m = 0;
+
+		for (Item l : inventar)
+			if (l.getTyp() == Typ.muenze)
+				m++;
+		return m;
+	}
+
+	public boolean hatSchluessel() {
+		for (Item i : inventar)
+			if (i.getTyp() == Typ.schluessel)
+				return true;
+
+		return false;
+	}
+
+	public void schluesselEntfernen() {
+		for (int i = 0; i < inventar.size(); i++)
+			if (inventar.get(i).getTyp() == Typ.schluessel)
+				inventar.remove(i);
 	}
 
 }

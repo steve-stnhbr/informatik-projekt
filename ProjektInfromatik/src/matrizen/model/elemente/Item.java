@@ -10,6 +10,8 @@ import matrizen.model.Gegenstand;
 import matrizen.model.Spiel;
 
 public class Item extends Gegenstand {
+	private final static int herzRegeneration = DateiManager.werte.get("herz_regeneration");
+
 	private Typ typ;
 	private Vektor posIF;
 
@@ -38,7 +40,7 @@ public class Item extends Gegenstand {
 
 			@Override
 			public void beimAufheben() {
-				Spieler.gibInstanz().leben += 20;
+				Spieler.gibInstanz().leben += herzRegeneration;
 			}
 		},
 		muenze,
@@ -46,8 +48,6 @@ public class Item extends Gegenstand {
 
 			@Override
 			public void beimAufheben() {
-				Spiel.gibInstanz().getLevel().setFeld((int) Utils.random(1, Spiel.spalten - 1),
-						(int) Utils.random(1, Spiel.zeilen - (Spiel.gibInstanz().tutorial ? 1 : 2)), Feld.Typ.WEITER);
 			}
 		};
 

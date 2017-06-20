@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import matrizen.core.DateiManager;
+import matrizen.core.Utils;
 import matrizen.core.Vektor;
 import matrizen.model.Feld.Typ;
 import matrizen.model.elemente.Figur;
@@ -14,29 +15,38 @@ import matrizen.model.elemente.Item;
 import matrizen.model.elemente.Spieler;
 import matrizen.model.gegner.FledermausGegner;
 import matrizen.model.gegner.HexeGegner;
+import matrizen.model.gegner.RitterGegner;
+import matrizen.model.gegner.ZombieGegner;
 import matrizen.view.SpielFenster;
 
 public class Level {
-	public static final Level level0 = DateiManager.laden(DateiManager.Level.level0);
-	public static final Level level1 = DateiManager.laden(DateiManager.Level.level1);
-	public static final Level level2 = DateiManager.laden(DateiManager.Level.level2);
-	public static final Level level3 = DateiManager.laden(DateiManager.Level.level3);
+	public static Level level0 = DateiManager.laden(DateiManager.Level.level0);
+	public static Level level1 = DateiManager.laden(DateiManager.Level.level1);
+	public static Level level2 = DateiManager.laden(DateiManager.Level.level2);
+	public static Level level3 = DateiManager.laden(DateiManager.Level.level3);
+
+	private final int spawnDelay = DateiManager.werte.get("level_spawn_delay"),
+			zombieWahrscheinlichkeit = DateiManager.werte.get("level_wahrsch_zombie"),
+			ritterWahrscheinlichkeit = DateiManager.werte.get("level_wahrsch_ritter"),
+			hexeWahrscheinlichkeit = DateiManager.werte.get("level_wahrsch_hexe");
 
 	private List<Levelelement> liste;
 	private Feld[][] felder;
 	private Level naechstesLevel;
+	private Vektor startPosition;
 
 	public Level() {
 		this(new Feld[Spiel.zeilen][Spiel.spalten]);
 	}
 
 	public Level(Feld[][] felder) {
-		this(new CopyOnWriteArrayList<Levelelement>(), felder);
+		this(new CopyOnWriteArrayList<Levelelement>(), felder, null);
 	}
 
-	public Level(List<Levelelement> liste, Feld[][] felder) {
+	public Level(List<Levelelement> liste, Feld[][] felder, Vektor startPosition) {
 		this.liste = liste;
 		this.felder = felder;
+		this.startPosition = startPosition;
 	}
 
 	public void zeichnen(Graphics2D g) {
@@ -51,6 +61,41 @@ public class Level {
 			kollisionUeberpruefen(l);
 			l.zeichnen(g);
 			checkPosition(l);
+		}
+
+		spielerPositionUeberpruefen();
+
+		if (equals(Level.getLevel(3)) && Spiel.gibInstanz().ticks % spawnDelay == 0) {
+			int r = Utils.random(100);
+			if (r < zombieWahrscheinlichkeit)
+				hinzufuegen(new ZombieGegner(erstellePosition()));
+			else if (r < zombieWahrscheinlichkeit + ritterWahrscheinlichkeit)
+				hinzufuegen(new RitterGegner(erstellePosition()));
+			else if (r < zombieWahrscheinlichkeit + ritterWahrscheinlichkeit + hexeWahrscheinlichkeit)
+				hinzufuegen(new HexeGegner(erstellePosition(), true));
+		}
+
+	}
+
+	private Vektor erstellePosition() {
+		Vektor v = null;
+
+		do {
+			v = new Vektor(Utils.random(Spiel.spalten), Utils.random(Spiel.zeilen));
+		} while (istLegal(v));
+
+		return v;
+
+	}
+
+	private boolean istLegal(Vektor v) {
+		try {
+			return v.getX() >= 0 && v.getY() >= 0 && v.getX() < Spiel.spalten && v.getY() < Spiel.zeilen
+					&& !getFeld((int) v.kopieren().div(32).getX(), (int) v.kopieren().div(32).getY()).isSolide();
+		} catch (ArrayIndexOutOfBoundsException e) {
+			v.div(32);
+			return v.getX() >= 0 && v.getY() >= 0 && v.getX() < Spiel.spalten && v.getY() < Spiel.zeilen
+					&& !getFeld((int) v.kopieren().div(32).getX(), (int) v.kopieren().div(32).getY()).isSolide();
 		}
 	}
 
@@ -107,7 +152,7 @@ public class Level {
 			if (l1 instanceof Item && (Spiel.gibInstanz().schluesselAufheben || !Spiel.gibInstanz().tutorial)
 					&& Spieler.gibInstanz().getPos().kopieren().div(Spiel.feldLaenge)
 							.equals(l1.getPos().kopieren().div(Spiel.feldLaenge))) {
-				((Item) l1).beimAufheben();
+				Spieler.gibInstanz().aufsammeln(((Item) l1));
 				if (((Item) l1).getTyp() == Item.Typ.schluessel) {
 					if (!Spiel.gibInstanz().tutorials[4])
 						Spiel.gibInstanz().tutorialTick = (int) Spiel.gibInstanz().ticks;
@@ -124,8 +169,10 @@ public class Level {
 	}
 
 	private void figurEntfernen(Figur f) {
-		if (gibAnzahlGegner() == 1)
+		if (gibAnzahlGegner() == 1) {
 			hinzufuegen(new Item(Item.Typ.schluessel, f.getPos().div(Spiel.feldLaenge).round()));
+			setFeld(Spieler.gibInstanz().getxFeld(), Spieler.gibInstanz().getyFeld(), Typ.TORZU);
+		}
 
 		liste.remove(f);
 		f.beimTod();
@@ -148,6 +195,22 @@ public class Level {
 				|| l.pos.getY() < -100)
 			liste.remove(l);
 
+	}
+
+	private void spielerPositionUeberpruefen() {
+		Vektor v = new Vektor(Spieler.gibInstanz().getxFeld(), Spieler.gibInstanz().getyFeld())
+				.add(Spieler.gibInstanz().getBlick().getFinalVektor());
+		if (positionIstLegal(v)) {
+			if (getFeld(v).getTyp() == Typ.TORZU && Spieler.gibInstanz().hatSchluessel()) {
+				setFeld((int) v.getX(), (int) v.getY(), Typ.TOROFFEN);
+				Spieler.gibInstanz().schluesselEntfernen();
+			}
+		}
+
+	}
+
+	private boolean positionIstLegal(Vektor v) {
+		return v.getX() >= 0 && v.getY() >= 0 && v.getX() < Spiel.spalten && v.getY() < Spiel.zeilen;
 	}
 
 	public void hinzufuegen(Levelelement l) {
@@ -216,7 +279,6 @@ public class Level {
 		return false;
 	}
 
-	// TODO
 	public boolean istGegnerSpieler(Vektor v, Figur f) {
 		for (Levelelement l : liste) {
 			if (l instanceof Gegner)
@@ -252,6 +314,7 @@ public class Level {
 
 	public Figur gibNaechstenGegner(Vektor pos) {
 		Gegner g = new Gegner() {
+			@SuppressWarnings("unused")
 			Vektor pos = new Vektor(-1000, -1000);
 
 			public void zeichnen(Graphics2D g) {
@@ -278,5 +341,40 @@ public class Level {
 
 	public void alleEntfernen(List<Geschoss> list) {
 		liste.removeAll(list);
+	}
+
+	public Vektor getStartPosition() {
+		return startPosition == null ? new Vektor(Spieler.gibInstanz().getxFeld(), Spieler.gibInstanz().getyFeld())
+				: startPosition;
+	}
+
+	static Level getLevel(int i) {
+		switch (i) {
+		case 0:
+			if (level0 == null)
+				level0 = DateiManager.laden(DateiManager.Level.level0);
+			return level0;
+		case 1:
+			if (level1 == null)
+				level1 = DateiManager.laden(DateiManager.Level.level1);
+			return level1;
+		case 2:
+			if (level2 == null)
+				level2 = DateiManager.laden(DateiManager.Level.level2);
+			return level2;
+		case 3:
+			if (level3 == null)
+				level3 = DateiManager.laden(DateiManager.Level.level3);
+			return level3;
+		default:
+			return null;
+		}
+	}
+
+	static void reset() {
+		level0 = null;
+		level1 = null;
+		level2 = null;
+		level3 = null;
 	}
 }
