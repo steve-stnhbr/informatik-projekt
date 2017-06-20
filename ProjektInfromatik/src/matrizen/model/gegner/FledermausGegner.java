@@ -14,6 +14,7 @@ import matrizen.core.Utils;
 import matrizen.core.Vektor;
 import matrizen.model.Spiel;
 import matrizen.model.elemente.Gegner;
+import matrizen.model.elemente.Item;
 import matrizen.model.elemente.Spieler;
 
 public class FledermausGegner extends Gegner {
@@ -25,7 +26,9 @@ public class FledermausGegner extends Gegner {
 			maxLeben = DateiManager.werte.get("fledermaus_leben"),
 			angriffDelay = DateiManager.werte.get("fledermaus_angriff_delay"),
 			bewegungInaktivGeschw = DateiManager.werte.get("fledermaus_bewegung_inaktiv_geschw"),
-			bewegungDelayInaktiv = DateiManager.werte.get("fledermaus_bewegung_inaktiv_delay");
+			bewegungDelayInaktiv = DateiManager.werte.get("fledermaus_bewegung_inaktiv_delay"),
+			dropHerz = DateiManager.werte.get("fledermaus_drop_herz"),
+			dropMuenze = DateiManager.werte.get("fledermaus_drop_muenze");
 
 	private int lebenszeit, bewegung;
 	private boolean inaktiv;
@@ -158,6 +161,14 @@ public class FledermausGegner extends Gegner {
 
 	@Override
 	public void beimTod() {
+		int r = Utils.random(100);
+
+		if (r < dropMuenze)
+			Spiel.gibInstanz().getLevel().hinzufuegen(
+					new Item(Item.Typ.muenze, pos.kopieren().div(Spiel.feldLaenge).add(new Vektor(0, -1))));
+		else if (r < dropMuenze + dropHerz)
+			Spiel.gibInstanz().getLevel()
+					.hinzufuegen(new Item(Item.Typ.herz, pos.kopieren().div(Spiel.feldLaenge).add(new Vektor(0, -1))));
 
 	}
 

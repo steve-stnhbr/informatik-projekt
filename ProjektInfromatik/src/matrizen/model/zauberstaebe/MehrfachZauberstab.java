@@ -1,5 +1,7 @@
 package matrizen.model.zauberstaebe;
 
+import java.awt.Color;
+
 import matrizen.core.DateiManager;
 import matrizen.model.Spiel;
 import matrizen.model.Zauberstab;
@@ -33,6 +35,11 @@ public class MehrfachZauberstab extends Zauberstab {
 	@Override
 	public void schuss() {
 		count = pause * anzahlPartikel;
+	}
+
+	@Override
+	public Color getFarbe() {
+		return new Color(0xe20e03);
 	}
 
 }

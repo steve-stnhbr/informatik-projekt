@@ -384,6 +384,12 @@ public class DateiManager {
 				return itemMuenze;
 			case schluessel:
 				return itemSchluessel;
+			case stabDreifach:
+				return itemZauberstabMehrfach;
+			case stabBlitz:
+				return Bild.itemZauberstabBlitz;
+			case stabVerfolgung:
+				return Bild.itemZauberstabVerfolgung;
 			default:
 				return nullGrafik;
 			}

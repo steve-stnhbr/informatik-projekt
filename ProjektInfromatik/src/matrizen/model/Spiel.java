@@ -181,7 +181,7 @@ public class Spiel implements KeyListener {
 				text = new Text(0, "Dieser Schlüssel öffnet das Tor, wenn du", "davor stehst und es ansiehst");
 				schluesselAufheben = true;
 			} else if (ticks > tutorialTick + tutorialDelay && tutorials[4] && !tutorials[5]) {
-				text = new Text(0, "Durch das Tor gelangst du ", "ind das nächste Level");
+				text = new Text(0, "Durch das Tor gelangst du in das", "nächste Level");
 				kannTeleportieren = true;
 			} else if (ticks > tutorialTick + tutorialDelay && tutorials[5] && !tutorials[6])
 				text = new Text(0, "Die Herzen, die du hier siehst, regenerieren", "dein Leben, wenn du sie aufhebst");

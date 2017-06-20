@@ -104,6 +104,7 @@ public class Level {
 			feld.beimBetreten();
 	}
 
+	// TODO
 	private void kollisionUeberpruefen(Levelelement l0) {
 		for (Levelelement l1 : liste) {
 			if (l0 instanceof Geschoss && l1 instanceof Figur) {
@@ -153,6 +154,7 @@ public class Level {
 					&& Spieler.gibInstanz().getPos().kopieren().div(Spiel.feldLaenge)
 							.equals(l1.getPos().kopieren().div(Spiel.feldLaenge))) {
 				Spieler.gibInstanz().aufsammeln(((Item) l1));
+				((Item)l1).beimAufheben();
 				if (((Item) l1).getTyp() == Item.Typ.schluessel) {
 					if (!Spiel.gibInstanz().tutorials[4])
 						Spiel.gibInstanz().tutorialTick = (int) Spiel.gibInstanz().ticks;
@@ -172,6 +174,12 @@ public class Level {
 		if (gibAnzahlGegner() == 1) {
 			hinzufuegen(new Item(Item.Typ.schluessel, f.getPos().div(Spiel.feldLaenge).round()));
 			setFeld(Spieler.gibInstanz().getxFeld(), Spieler.gibInstanz().getyFeld(), Typ.TORZU);
+
+			if (equals(getLevel(2))/* && f instanceof RitterGegner*/) {
+				Spiel.gibInstanz().getLevel().hinzufuegen(new Item(Item.Typ.stabVerfolgung,
+						f.pos.kopieren().div(Spiel.feldLaenge).add(new Vektor(1, 0))));
+			}
+
 		}
 
 		liste.remove(f);

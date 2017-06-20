@@ -1,5 +1,7 @@
 package matrizen.model;
 
+import java.awt.Color;
+
 public abstract class Zauberstab {
 	protected int schaden, delay, reichweite, geschw;
 	
@@ -12,4 +14,6 @@ public abstract class Zauberstab {
 	public int getDelay() {
 		return delay;
 	}
+
+	public abstract Color getFarbe(); 
 }

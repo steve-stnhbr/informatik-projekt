@@ -35,7 +35,7 @@ public class HUD extends Grafikbasis {
 	}
 
 	static class Muenzen {
-		private static final int x = Spiel.spalten * Spiel.feldLaenge - 52, y = 2;
+		private static final int x = Spiel.spalten * Spiel.feldLaenge - 52, y = 1;
 
 		public static void zeichnen(Graphics2D g) {
 			g.drawImage(DateiManager.laden(Bild.itemMuenze), x, y, 25, 25, null);

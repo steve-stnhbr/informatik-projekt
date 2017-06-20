@@ -1,5 +1,6 @@
 package matrizen.model.zauberstaebe;
 
+import java.awt.Color;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -60,6 +61,11 @@ public class BlitzZauberstab extends Zauberstab {
 	private void entferneBlitz() {
 		Spiel.gibInstanz().getLevel().alleEntfernen(list);
 		list.removeAll(list);
+	}
+
+	@Override
+	public Color getFarbe() {
+		return new Color(0xe3d806);
 	}
 
 }

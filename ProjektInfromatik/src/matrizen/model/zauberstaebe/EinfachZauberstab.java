@@ -2,6 +2,8 @@ package matrizen.model.zauberstaebe;
 
 import static matrizen.core.DateiManager.werte;
 
+import java.awt.Color;
+
 import matrizen.model.Spiel;
 import matrizen.model.Zauberstab;
 import matrizen.model.elemente.Geschoss;
@@ -21,6 +23,11 @@ public class EinfachZauberstab extends Zauberstab {
 		Spiel.gibInstanz().getLevel()
 				.hinzufuegen(new Geschoss(Geschoss.Typ.kleinBlau, schaden, reichweite, Spieler.gibInstanz().getPos(),
 						Spieler.gibInstanz().getBlick().getVektor().kopieren().normalize().mult(geschw / 10), Spieler.gibInstanz()));
+	}
+
+	@Override
+	public Color getFarbe() {
+		return new Color(0x0072d7);
 	}
 
 }

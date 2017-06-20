@@ -7,14 +7,15 @@ import java.awt.image.AffineTransformOp;
 import java.awt.image.BufferedImage;
 
 import matrizen.core.DateiManager;
+import matrizen.core.DateiManager.Bild;
 import matrizen.core.Richtung;
 import matrizen.core.Utils;
 import matrizen.core.Vektor;
-import matrizen.core.DateiManager.Bild;
 import matrizen.model.Spiel;
 import matrizen.model.elemente.Gegner;
 import matrizen.model.elemente.Geschoss;
 import matrizen.model.elemente.Geschoss.Typ;
+import matrizen.model.elemente.Item;
 import matrizen.model.elemente.Spieler;
 
 public class HexeGegner extends Gegner {
@@ -24,7 +25,9 @@ public class HexeGegner extends Gegner {
 			maxLeben = DateiManager.werte.get("hexe_leben"), maxSpawn = DateiManager.werte.get("hexe_spawn_max"),
 			minSpawn = DateiManager.werte.get("hexe_spawn_min"), schaden = DateiManager.werte.get("hexe_schaden"),
 			weite = DateiManager.werte.get("hexe_weite"),
-			bewegungGeschw = DateiManager.werte.get("hexe_bewegung_geschw");
+			bewegungGeschw = DateiManager.werte.get("hexe_bewegung_geschw"),
+			dropHerz = DateiManager.werte.get("hexe_drop_herz"),
+			dropMuenze = DateiManager.werte.get("hexe_drop_muenze");
 
 	private final float partikelGeschw = DateiManager.werte.get("hexe_partikel_geschw") / 10;
 
@@ -39,8 +42,7 @@ public class HexeGegner extends Gegner {
 		ziel = pos;
 		blick = Richtung.OBEN;
 		this.aktiv = aktiv;
-		
-		
+
 	}
 
 	@Override
@@ -109,19 +111,31 @@ public class HexeGegner extends Gegner {
 
 	@Override
 	public boolean angriff() {
-		Spiel.gibInstanz().getLevel().hinzufuegen(
-				new Geschoss(Typ.raute, schaden, weite, pos, new Vektor(1, 0).mult(partikelGeschw), this));
+		Spiel.gibInstanz().getLevel()
+				.hinzufuegen(new Geschoss(Typ.raute, schaden, weite, pos, new Vektor(1, 0).mult(partikelGeschw), this));
 		Spiel.gibInstanz().getLevel().hinzufuegen(
 				new Geschoss(Typ.raute, schaden, weite, pos, new Vektor(-1, 0).mult(partikelGeschw), this));
 		Spiel.gibInstanz().getLevel().hinzufuegen(
 				new Geschoss(Typ.raute, schaden, weite, pos, new Vektor(0, -1).mult(partikelGeschw), this));
-		Spiel.gibInstanz().getLevel().hinzufuegen(
-				new Geschoss(Typ.raute, schaden, weite, pos, new Vektor(0, 1).mult(partikelGeschw), this));
+		Spiel.gibInstanz().getLevel()
+				.hinzufuegen(new Geschoss(Typ.raute, schaden, weite, pos, new Vektor(0, 1).mult(partikelGeschw), this));
 		return true;
 	}
 
 	@Override
 	public void beimTod() {
+		if (aktiv)
+			Spiel.gibInstanz().getLevel().hinzufuegen(
+					new Item(Item.Typ.stabVerfolgung, this.pos.kopieren().div(Spiel.feldLaenge).add(new Vektor(1, 0))));
+
+		int r = Utils.random(100);
+
+		if (r < dropMuenze)
+			Spiel.gibInstanz().getLevel().hinzufuegen(
+					new Item(Item.Typ.muenze, pos.kopieren().div(Spiel.feldLaenge).add(new Vektor(0, -1))));
+		else if (r < dropMuenze + dropHerz)
+			Spiel.gibInstanz().getLevel()
+					.hinzufuegen(new Item(Item.Typ.herz, pos.kopieren().div(Spiel.feldLaenge).add(new Vektor(0, -1))));
 
 	}
 

@@ -37,19 +37,15 @@ public class Item extends Gegenstand {
 
 	public enum Typ implements GrafikTyp {
 		herz {
-
-			@Override
 			public void beimAufheben() {
-				Spieler.gibInstanz().leben += herzRegeneration;
+				Spieler.gibInstanz().schaden(-herzRegeneration);
 			}
 		},
 		muenze,
-		schluessel {
-
-			@Override
-			public void beimAufheben() {
-			}
-		};
+		schluessel,
+		stabDreifach,
+		stabBlitz,
+		stabVerfolgung;
 
 		public void beimAufheben() {
 			return;

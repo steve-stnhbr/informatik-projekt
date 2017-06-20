@@ -90,6 +90,14 @@ public class Geschoss extends Levelelement {
 			return false;
 		return true;
 	}
+	
+	@Override
+	public String toString() {
+		return "Geschoss [start=" + start + ", t=" + t + ", spieler=" + spieler + ", aktiv=" + aktiv + ", schaden="
+				+ schaden + ", weite=" + weite + ", pos=" + pos + "]";
+	}
+
+
 
 	public enum Typ implements GrafikTyp {
 		kleinBlau(10),

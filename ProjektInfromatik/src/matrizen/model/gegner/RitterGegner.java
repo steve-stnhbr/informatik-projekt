@@ -10,16 +10,20 @@ import java.awt.image.BufferedImage;
 
 import matrizen.core.DateiManager;
 import matrizen.core.Richtung;
+import matrizen.core.Utils;
 import matrizen.core.DateiManager.Bild;
 import matrizen.core.Vektor;
 import matrizen.model.Spiel;
 import matrizen.model.elemente.Gegner;
+import matrizen.model.elemente.Item;
 import matrizen.model.elemente.Spieler;
 
 public class RitterGegner extends Gegner {
 	public final int maxLeben = werte.get("ritter_leben"), delayAngriff = werte.get("ritter_delay_angriff"),
 			drehGeschw = werte.get("ritter_drehung_geschw"), schaden = werte.get("ritter_schaden"),
-			delayBewegung = werte.get("ritter_delay_bewegung"), bewegungGeschw = werte.get("ritter_bewegung_geschw");
+			delayBewegung = werte.get("ritter_delay_bewegung"), bewegungGeschw = werte.get("ritter_bewegung_geschw"),
+			dropMuenze = werte.get("ritter_drop_muenze"), dropHerz = werte.get("ritter_drop_herz");
+
 	private int drehung;
 	private Vektor ziel;
 	private BufferedImage drehBild;
@@ -49,6 +53,14 @@ public class RitterGegner extends Gegner {
 
 	@Override
 	public void beimTod() {
+		int r = Utils.random(100);
+
+		if (r < dropMuenze)
+			Spiel.gibInstanz().getLevel().hinzufuegen(
+					new Item(Item.Typ.muenze, pos.kopieren().div(Spiel.feldLaenge).add(new Vektor(0, -1))));
+		else if (r < dropMuenze + dropHerz)
+			Spiel.gibInstanz().getLevel()
+					.hinzufuegen(new Item(Item.Typ.herz, pos.kopieren().div(Spiel.feldLaenge).add(new Vektor(0, -1))));
 
 	}
 
@@ -100,7 +112,7 @@ public class RitterGegner extends Gegner {
 
 			if (bewegungMoeglich(z))
 				ziel = z;
-			
+
 			if (!ziel.equals(pos))
 				ges = ziel.kopieren().sub(pos).normalize().mult(bewegungGeschw / 10);
 		}
@@ -113,7 +125,7 @@ public class RitterGegner extends Gegner {
 		// !Spiel.gibInstanz().getLevel().getFeld(v.div(Spiel.feldLaenge)).isSolide();
 		return !Spieler.gibInstanz().getZiel().equals(v) && !Spiel.gibInstanz().getLevel().istGegner(v, this);
 	}
-	
+
 	public Vektor getZiel() {
 		return ziel;
 	}

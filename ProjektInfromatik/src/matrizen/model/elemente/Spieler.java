@@ -39,8 +39,11 @@ public class Spieler extends Figur {
 	private short[] cooldown;
 	private Richtung blick = Richtung.OBEN;
 	private List<Item> inventar;
-	private Zauberstab stab;
+	private Zauberstab stab, stabDavor;
 	private float magDavor;
+	private Vektor[] farbPositionen = { new Vektor(30, 8), new Vektor(30, 9), new Vektor(29, 7), new Vektor(29, 8),
+			new Vektor(29, 9), new Vektor(29, 10), new Vektor(28, 7), new Vektor(28, 8), new Vektor(28, 9),
+			new Vektor(28, 10), new Vektor(27, 9) };
 
 	private Spieler() {
 		cooldown = new short[5];
@@ -71,6 +74,9 @@ public class Spieler extends Figur {
 
 		if (leben <= 0)
 			Spiel.gibInstanz().beenden();
+
+		if (!stab.equals(stabDavor))
+			zauberstabZeichnen();
 
 		if (ges.mag() == 0 && magDavor == 0)
 			g.drawImage(bildDrehen(grafik), (int) pos.getX(), (int) pos.getY(), (int) Spiel.feldLaenge,
@@ -128,6 +134,18 @@ public class Spieler extends Figur {
 		}
 
 		magDavor = ges.mag();
+		stabDavor = stab;
+	}
+
+	private void zauberstabZeichnen() {
+		for (Vektor v : farbPositionen) {
+			grafik.setRGB((int) v.getX(), (int) v.getY(), stab.getFarbe().getRGB());
+		}
+
+	}
+
+	public static void reset() {
+		instanz = new Spieler();
 	}
 
 	private void checkInput() {
@@ -201,6 +219,9 @@ public class Spieler extends Figur {
 	public void aufsammeln(Item i) {
 		switch (i.getTyp()) {
 		case herz:
+		case stabBlitz:
+		case stabDreifach:
+		case stabVerfolgung:
 			break;
 		default:
 			inventar.add(i);
