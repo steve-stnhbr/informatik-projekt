@@ -141,8 +141,8 @@ public class Vektor {
 	}
 
 	public Vektor round() {
-		x = (int) x;
-		y = (int) y;
+		x = Math.round(x);
+		y = Math.round(y);
 		return this;
 	}
 }

@@ -125,7 +125,7 @@ public class Level {
 
 	private void figurEntfernen(Figur f) {
 		if (gibAnzahlGegner() == 1)
-			hinzufuegen(new Item(Item.Typ.schluessel, f.getPos().div(Spiel.feldLaenge)));
+			hinzufuegen(new Item(Item.Typ.schluessel, f.getPos().div(Spiel.feldLaenge).round()));
 
 		liste.remove(f);
 		f.beimTod();

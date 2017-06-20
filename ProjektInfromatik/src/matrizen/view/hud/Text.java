@@ -52,7 +52,7 @@ public class Text {
 		try {
 			graphics.setFont(
 					Font.createFont(Font.TRUETYPE_FONT, new File(DateiManager.pfad + "res/schrift/prstartk.ttf"))
-							.deriveFont(9.25f));
+							.deriveFont(22f));
 		} catch (FontFormatException | IOException e) {
 			e.printStackTrace();
 		}
