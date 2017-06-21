@@ -40,7 +40,7 @@ public class Spiel implements KeyListener {
 	private Text text;
 	public boolean tutorial = (DateiManager.config.getTutorial() == 0), schluesselAufheben, gegnerKannSterben,
 			kannTeleportieren, beendet, geschafft;
-	private boolean schiessen, gegnerErstellt;
+	private boolean schiessen, gegnerErstellt, pausiert;
 	public boolean[] tutorials;
 	public int tutorialTick;
 	private static final int tutorialDelay = 150;
@@ -70,7 +70,7 @@ public class Spiel implements KeyListener {
 		beendet = false;
 
 		schiessen = !tutorial;
-		level = Level.getLevel(1);
+		level = Level.getLevel(2);
 
 		hud = HUD.gibInstanz();
 
@@ -126,7 +126,6 @@ public class Spiel implements KeyListener {
 			}
 
 			if (geschafft) {
-
 				try {
 					graphics.setFont(Font
 							.createFont(Font.TRUETYPE_FONT, new File(DateiManager.pfad + "res/schrift/prstartk.ttf"))
@@ -294,6 +293,16 @@ public class Spiel implements KeyListener {
 			EingabeManager.deaktivieren(4);
 		else if (c == waffe[0] || c == waffe[1])
 			EingabeManager.deaktivieren(5);
+		else if(c == KeyEvent.VK_SPACE) {
+			if(pausiert) {
+				SpielFenster.gibInstanz().startTimer();
+				pausiert = false;
+			} else {
+				SpielFenster.gibInstanz().stopTimer();
+				pausiert = true;
+			}
+		}
+				
 	}
 
 	public static void reset() {
