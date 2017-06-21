@@ -355,7 +355,7 @@ public class Level {
 			if (l instanceof Gegner && l.getPos().dist(pos) < pos.dist(g.getPos()))
 				g = (Gegner) l;
 
-		return g.getPos().equals(new Vektor(-1000, -1000)) ? null : g;
+		return g.getPos().equals(new Vektor(Integer.MIN_VALUE, Integer.MIN_VALUE)) ? null : g;
 	}
 
 	public void alleEntfernen(List<Geschoss> list) {

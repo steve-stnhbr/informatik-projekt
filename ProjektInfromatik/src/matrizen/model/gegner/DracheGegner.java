@@ -52,8 +52,7 @@ public class DracheGegner extends Gegner {
 		if (delayAngriff != 0 && Spiel.gibInstanz().ticks % delayAngriff == 0)
 			angriff();
 	}
-
-	// TODO
+	
 	private Image bildDrehen(BufferedImage grafik) {
 		AffineTransform transform = new AffineTransform();
 		transform.rotate(getWinkel() + Math.toRadians(180), grafik.getWidth() / 2, grafik.getHeight() / 2);
