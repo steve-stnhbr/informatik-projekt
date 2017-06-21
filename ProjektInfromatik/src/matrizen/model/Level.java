@@ -30,12 +30,14 @@ public class Level {
 			zombieWahrscheinlichkeit = DateiManager.werte.get("level_wahrsch_zombie"),
 			ritterWahrscheinlichkeit = DateiManager.werte.get("level_wahrsch_ritter"),
 			hexeWahrscheinlichkeit = DateiManager.werte.get("level_wahrsch_hexe"),
-			dracheWahrscheinlichkeit = DateiManager.werte.get("level_wahrsch_drache");
+			dracheWahrscheinlichkeit = DateiManager.werte.get("level_wahrsch_drache"),
+			maxGegnerAE = DateiManager.werte.get("level_max_gegner_ae"), maxGegner = DateiManager.werte.get("level_max_gegner");
 
 	private List<Levelelement> liste;
 	private Feld[][] felder;
 	private Level naechstesLevel;
 	private Vektor startPosition;
+	private int gegner;
 
 	public Level() {
 		this(new Feld[Spiel.zeilen][Spiel.spalten]);
@@ -66,7 +68,7 @@ public class Level {
 		}
 
 		spielerPositionUeberpruefen();
-		if (Spiel.gibInstanz().ticks % spawnDelay == 0) {
+		if (Spiel.gibInstanz().ticks % spawnDelay == 0 && gibAnzahlGegner() < maxGegnerAE && gegner < maxGegner) {
 			int r = Utils.random(100);
 			if (equals(Level.getLevel(3))) {
 				if (r < zombieWahrscheinlichkeit)
@@ -85,7 +87,6 @@ public class Level {
 					hinzufuegen(new RitterGegner(erstellePosition()));
 			}
 		}
-
 	}
 
 	private Vektor erstellePosition() {
@@ -99,7 +100,7 @@ public class Level {
 
 	}
 
-	private boolean istLegal(Vektor v) {
+	public boolean istLegal(Vektor v) {
 		try {
 			return v.getX() >= 0 && v.getY() >= 0 && v.getX() < Spiel.spalten && v.getY() < Spiel.zeilen
 					&& !getFeld((int) v.kopieren().div(32).getX(), (int) v.kopieren().div(32).getY()).isSolide();
@@ -107,6 +108,15 @@ public class Level {
 			v.div(32);
 			return v.getX() >= 0 && v.getY() >= 0 && v.getX() < Spiel.spalten && v.getY() < Spiel.zeilen
 					&& !getFeld((int) v.kopieren().div(32).getX(), (int) v.kopieren().div(32).getY()).isSolide();
+		}
+	}
+
+	public boolean isInBounds(Vektor v) {
+		try {
+			return v.getX() >= 0 && v.getY() >= 0 && v.getX() < Spiel.spalten && v.getY() < Spiel.zeilen;
+		} catch (ArrayIndexOutOfBoundsException e) {
+			v.div(32);
+			return v.getX() >= 0 && v.getY() >= 0 && v.getX() < Spiel.spalten && v.getY() < Spiel.zeilen;
 		}
 	}
 
@@ -186,7 +196,7 @@ public class Level {
 			hinzufuegen(new Item(Item.Typ.schluessel, f.getPos().div(Spiel.feldLaenge).round()));
 			setFeld(Spieler.gibInstanz().getxFeld(), Spieler.gibInstanz().getyFeld(), Typ.TORZU);
 
-			if (equals(getLevel(2))/* && f instanceof RitterGegner */) {
+			if (equals(getLevel(2)) && f instanceof RitterGegner) {
 				Spiel.gibInstanz().getLevel().hinzufuegen(new Item(Item.Typ.stabVerfolgung,
 						f.pos.kopieren().div(Spiel.feldLaenge).add(new Vektor(1, 0))));
 			}
@@ -233,6 +243,7 @@ public class Level {
 	}
 
 	public void hinzufuegen(Levelelement l) {
+		if(l instanceof Gegner) gegner++;
 		liste.add(l);
 	}
 
@@ -259,7 +270,11 @@ public class Level {
 	}
 
 	public Feld getFeld(int x, int y) {
-		return felder[x][y];
+		try {
+			return felder[x][y];
+		} catch (ArrayIndexOutOfBoundsException e) {
+			return new Feld(Typ.WIESE, Vektor.nullVektor);
+		}
 	}
 
 	public List<Levelelement> getListe() {

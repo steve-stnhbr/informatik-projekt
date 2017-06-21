@@ -14,6 +14,8 @@ import matrizen.model.elemente.Geschoss.Typ;
 import matrizen.model.elemente.Spieler;
 
 public class BlitzZauberstab extends Zauberstab {
+	private static BlitzZauberstab instanz;
+
 	private final int weite = DateiManager.werte.get("stab_blitz_weite"),
 			schaden = DateiManager.werte.get("stab_blitz_schaden"),
 			delayAngriff = DateiManager.werte.get("stab_blitz_delay"),
@@ -22,7 +24,7 @@ public class BlitzZauberstab extends Zauberstab {
 	private int d;
 	private List<Geschoss> list;
 
-	public BlitzZauberstab() {
+	private BlitzZauberstab() {
 		delay = delayAngriff;
 		list = new ArrayList<>();
 	}
@@ -66,6 +68,52 @@ public class BlitzZauberstab extends Zauberstab {
 	@Override
 	public Color getFarbe() {
 		return new Color(0xe3d806);
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + d;
+		result = prime * result + dauer;
+		result = prime * result + delayAngriff;
+		result = prime * result + ((list == null) ? 0 : list.hashCode());
+		result = prime * result + schaden;
+		result = prime * result + weite;
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		BlitzZauberstab other = (BlitzZauberstab) obj;
+		if (d != other.d)
+			return false;
+		if (dauer != other.dauer)
+			return false;
+		if (delayAngriff != other.delayAngriff)
+			return false;
+		if (list == null) {
+			if (other.list != null)
+				return false;
+		} else if (!list.equals(other.list))
+			return false;
+		if (schaden != other.schaden)
+			return false;
+		if (weite != other.weite)
+			return false;
+		return true;
+	}
+
+	public static BlitzZauberstab gibInstanz() {
+		if (instanz == null)
+			instanz = new BlitzZauberstab();
+		return null;
 	}
 
 }

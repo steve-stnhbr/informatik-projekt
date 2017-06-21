@@ -40,13 +40,15 @@ public class EingabePanel extends JPanel implements Benennbar {
 
 	private void initContent() {
 		map = new HashMap<>();
-		inhalt = new String[] { "Bewegung oben", "Bewegung unten", "Bewegung rechts", "Bewegung links", "Schuss" };
+		inhalt = new String[] { "Bewegung oben", "Bewegung unten", "Bewegung rechts", "Bewegung links", "Schuss",
+				"Waffe wechseln" };
 
 		map.put(inhalt[0], new Integer[] { DateiManager.config.getOben()[0], DateiManager.config.getOben()[1] });
 		map.put(inhalt[1], new Integer[] { DateiManager.config.getUnten()[0], DateiManager.config.getUnten()[1] });
 		map.put(inhalt[2], new Integer[] { DateiManager.config.getRechts()[0], DateiManager.config.getRechts()[1] });
 		map.put(inhalt[3], new Integer[] { DateiManager.config.getLinks()[0], DateiManager.config.getLinks()[1] });
 		map.put(inhalt[4], new Integer[] { DateiManager.config.getSchuss()[0], DateiManager.config.getSchuss()[1] });
+		map.put(inhalt[5], new Integer[] { DateiManager.config.getWaffe()[0], DateiManager.config.getWaffe()[1] });
 	}
 
 	private void initComponents() {
@@ -134,6 +136,7 @@ public class EingabePanel extends JPanel implements Benennbar {
 			DateiManager.config.setRechts(map.get(inhalt[2])[0], map.get(inhalt[2])[1]);
 			DateiManager.config.setLinks(map.get(inhalt[3])[0], map.get(inhalt[3])[1]);
 			DateiManager.config.setSchuss(map.get(inhalt[4])[0], map.get(inhalt[4])[1]);
+			DateiManager.config.setWaffe(map.get(inhalt[5])[0], map.get(inhalt[5])[1]);
 
 			AnfangsFenster.gibInstanz().inhaltAendern(EinstellungsPanel.gibInstanz());
 		});

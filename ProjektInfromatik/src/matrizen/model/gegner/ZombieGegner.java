@@ -9,9 +9,12 @@ import java.awt.image.BufferedImage;
 import matrizen.core.DateiManager;
 import matrizen.core.DateiManager.Bild;
 import matrizen.core.Richtung;
+import matrizen.core.Utils;
 import matrizen.core.Vektor;
+import matrizen.model.Level;
 import matrizen.model.Spiel;
 import matrizen.model.elemente.Gegner;
+import matrizen.model.elemente.Item;
 import matrizen.model.elemente.Spieler;
 
 public class ZombieGegner extends Gegner {
@@ -19,7 +22,8 @@ public class ZombieGegner extends Gegner {
 			bewegungDelay = DateiManager.werte.get("zombie_bewegung_delay"),
 			bewegungGeschw = DateiManager.werte.get("zombie_bewegung_geschw"),
 			angriffDelay = DateiManager.werte.get("zombie_delay_angriff"),
-			maxLeben = DateiManager.werte.get("zombie_leben");
+			maxLeben = DateiManager.werte.get("zombie_leben"), dropHerz = DateiManager.werte.get("zombie_drop_herz"),
+			dropMuenze = DateiManager.werte.get("zombie_drop_muenze");
 
 	private Richtung blick;
 	private Vektor ziel;
@@ -34,7 +38,8 @@ public class ZombieGegner extends Gegner {
 
 	@Override
 	public boolean angriff() {
-		if (Spiel.gibInstanz().getLevel().istGegner(blick.getVektor().kopieren().add(pos), this)) {
+		if (pos.kopieren().add(blick.getFinalVektor().kopieren().mult(Spiel.feldLaenge))
+				.equals(Spieler.gibInstanz().getPos())) {
 			Spieler.gibInstanz().schaden(schaden);
 			return true;
 		}
@@ -49,7 +54,25 @@ public class ZombieGegner extends Gegner {
 
 	@Override
 	public void beimTod() {
+		if (Spieler.gibInstanz().gibAnzahlMuenzen() != Spieler.gibInstanz().zielMuenzen - 1
+				&& !Spiel.gibInstanz().getLevel().equals(Level.getLevel(3))) {
+			int r = Utils.random(100);
 
+			Vektor v = pos.kopieren().div(Spiel.feldLaenge).round();
+
+			do {
+				int r0 = Utils.random(-1, 1), r1 = Utils.random(-1, 1);
+
+				if (Spiel.gibInstanz().getLevel().isInBounds(v.kopieren().add(new Vektor(r0, r1))))
+					v.add(new Vektor(r0, r1));
+
+			} while (!Spiel.gibInstanz().getLevel().getFeld(v.kopieren().div(Spiel.feldLaenge)).isSolide());
+
+			if (r < dropMuenze)
+				Spiel.gibInstanz().getLevel().hinzufuegen(new Item(Item.Typ.muenze, v));
+			else if (r < dropMuenze + dropHerz)
+				Spiel.gibInstanz().getLevel().hinzufuegen(new Item(Item.Typ.herz, v));
+		}
 	}
 
 	@Override
@@ -90,9 +113,7 @@ public class ZombieGegner extends Gegner {
 	}
 
 	private boolean bewegungMoeglich(Vektor v) {
-		// return !Spiel.gibInstanz().getLevel().istGegner(v.div(32))
-		// && !Spiel.gibInstanz().getLevel().getFeld(v.div(32)).isSolide();
-		return !Spieler.gibInstanz().getZiel().equals(v);
+		return !Spieler.gibInstanz().getZiel().equals(v) && !Spiel.gibInstanz().getLevel().istGegner(v, this);
 	}
 
 	private Image bildDrehen(BufferedImage b) {

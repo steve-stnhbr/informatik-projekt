@@ -37,7 +37,7 @@ public class Spieler extends Figur {
 			zielMuenzen = DateiManager.werte.get("spiel_ziel_muenzen");
 
 	private Vektor ziel;
-	private int index, xFeld, yFeld, hatStab;
+	private int index, xFeld, yFeld;
 	private short delay = (short) werte.get("spieler_delay_bewegung");
 	private short[] cooldown;
 	private Richtung blick = Richtung.OBEN;
@@ -69,7 +69,7 @@ public class Spieler extends Figur {
 			new Vektor(8, 12), new Vektor(9, 12), new Vektor(9, 11), new Vektor(10, 11), new Vektor(10, 10) };
 
 	private Spieler() {
-		cooldown = new short[5];
+		cooldown = new short[6];
 		grafik = DateiManager.laden(DateiManager.Bild.figurSpieler);
 		pos = new Vektor((float) Math.floor(Spiel.spalten / 2) * Spiel.feldLaenge,
 				(float) Math.floor(Spiel.zeilen / 2) * Spiel.feldLaenge);
@@ -78,7 +78,7 @@ public class Spieler extends Figur {
 		animation = new BufferedImage[] { DateiManager.laden(Bild.figurSpielerAnim0),
 				DateiManager.laden(Bild.figurSpielerAnim1) };
 		staebe = new ArrayList<>();
-		staebe.add(new VerfolgungsZauberstab());
+		staebe.add(EinfachZauberstab.gibInstanz());
 		stab = staebe.get(0);
 		leben = maxLeben;
 	}
@@ -127,8 +127,8 @@ public class Spieler extends Figur {
 			ges.mult(0);
 			pos = ziel;
 		}
-		
-		if(gibAnzahlMuenzen() == zielMuenzen)
+
+		if (gibAnzahlMuenzen() == zielMuenzen)
 			Spiel.gibInstanz().geschafft();
 
 		if ((ges.getX() != 0 && ges.getY() != 0)) {
@@ -190,10 +190,14 @@ public class Spieler extends Figur {
 	}
 
 	private void waffeWechseln() {
-		if (staebe.indexOf(stab) + 1 >= staebe.size())
-			stab = staebe.get(0);
-		else
-			stab = staebe.get(staebe.indexOf(stab) + 1);
+		if (cooldown[5] == 0) {
+			if (staebe.indexOf(stab) + 1 >= staebe.size())
+				stab = staebe.get(0);
+			else
+				stab = staebe.get(staebe.indexOf(stab) + 1);
+
+			cooldown[5] = 5;
+		}
 	}
 
 	private void schuss() {
@@ -206,7 +210,6 @@ public class Spieler extends Figur {
 		if (cooldown[4] == 0) {
 			stab.schuss();
 			cooldown[4] = (short) stab.getDelay();
-			System.out.println(cooldown[4]);
 		}
 	}
 
@@ -257,15 +260,17 @@ public class Spieler extends Figur {
 
 	public void aufsammeln(Item i) {
 		switch (i.getTyp()) {
-		case herz:
 		case stabBlitz:
-			staebe.add(new BlitzZauberstab());
+			staebe.add(BlitzZauberstab.gibInstanz());
+			stab = staebe.get(staebe.indexOf(BlitzZauberstab.gibInstanz()));
 			break;
 		case stabDreifach:
-			staebe.add(new MehrfachZauberstab());
+			staebe.add(MehrfachZauberstab.gibInstanz());
+			stab = staebe.get(staebe.indexOf(MehrfachZauberstab.gibInstanz()));
 			break;
 		case stabVerfolgung:
-			staebe.add(new VerfolgungsZauberstab());
+			staebe.add(VerfolgungsZauberstab.gibInstanz());
+			stab = staebe.get(staebe.indexOf(VerfolgungsZauberstab.gibInstanz()));
 			break;
 		default:
 			inventar.add(i);

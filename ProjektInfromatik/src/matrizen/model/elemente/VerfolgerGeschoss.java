@@ -30,7 +30,7 @@ public class VerfolgerGeschoss extends Geschoss {
 		this.weite = weite;
 		this.ziel = ziel;
 		posDavor = pos;
-		bes = Spieler.gibInstanz().getBlick().getFinalVektor().kopieren().mult(geschw / 10);
+		bes = Spieler.gibInstanz().getBlick().getFinalVektor().kopieren().mult(geschw / 2.5f);
 	}
 
 	@Override
@@ -69,4 +69,49 @@ public class VerfolgerGeschoss extends Geschoss {
 		return ziel == null ? schadenNormal : schadenVerfolgung;
 	}
 
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = super.hashCode();
+		result = prime * result + anziehung;
+		result = prime * result + geschw;
+		result = prime * result + ((posDavor == null) ? 0 : posDavor.hashCode());
+		result = prime * result + schadenNormal;
+		result = prime * result + schadenVerfolgung;
+		result = prime * result + weg;
+		result = prime * result + ((ziel == null) ? 0 : ziel.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (!super.equals(obj))
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		VerfolgerGeschoss other = (VerfolgerGeschoss) obj;
+		if (anziehung != other.anziehung)
+			return false;
+		if (geschw != other.geschw)
+			return false;
+		if (posDavor == null) {
+			if (other.posDavor != null)
+				return false;
+		} else if (!posDavor.equals(other.posDavor))
+			return false;
+		if (schadenNormal != other.schadenNormal)
+			return false;
+		if (schadenVerfolgung != other.schadenVerfolgung)
+			return false;
+		if (weg != other.weg)
+			return false;
+		if (ziel == null) {
+			if (other.ziel != null)
+				return false;
+		} else if (!ziel.equals(other.ziel))
+			return false;
+		return true;
+	}
 }

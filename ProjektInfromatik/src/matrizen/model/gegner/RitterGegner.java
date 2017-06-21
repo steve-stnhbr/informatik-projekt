@@ -13,6 +13,7 @@ import matrizen.core.Richtung;
 import matrizen.core.Utils;
 import matrizen.core.DateiManager.Bild;
 import matrizen.core.Vektor;
+import matrizen.model.Level;
 import matrizen.model.Spiel;
 import matrizen.model.elemente.Gegner;
 import matrizen.model.elemente.Item;
@@ -34,7 +35,7 @@ public class RitterGegner extends Gegner {
 		animation = new BufferedImage[] { DateiManager.laden(Bild.figurRitterAnim0),
 				DateiManager.laden(Bild.figurRitterAnim1) };
 		drehBild = DateiManager.laden(Bild.figurRitterDrehung);
-		grafik = DateiManager.laden(Bild.figurRitter);
+		grafik = DateiManager.laden(Bild.figurRitterDrehung);
 		ziel = pos;
 		blick = Richtung.OBEN;
 		leben = maxLeben;
@@ -53,15 +54,25 @@ public class RitterGegner extends Gegner {
 
 	@Override
 	public void beimTod() {
-		int r = Utils.random(100);
+		if (Spieler.gibInstanz().gibAnzahlMuenzen() != Spieler.gibInstanz().zielMuenzen - 1
+				&& !Spiel.gibInstanz().getLevel().equals(Level.getLevel(3))) {
+			int r = Utils.random(100);
 
-		if (r < dropMuenze)
-			Spiel.gibInstanz().getLevel().hinzufuegen(
-					new Item(Item.Typ.muenze, pos.kopieren().div(Spiel.feldLaenge).round().add(new Vektor(0, -1))));
-		else if (r < dropMuenze + dropHerz)
-			Spiel.gibInstanz().getLevel().hinzufuegen(
-					new Item(Item.Typ.herz, pos.kopieren().div(Spiel.feldLaenge).round().add(new Vektor(0, -1))));
+			Vektor v = pos.kopieren().div(Spiel.feldLaenge).round();
 
+			do {
+				int r0 = Utils.random(-1, 1), r1 = Utils.random(-1, 1);
+
+				if (Spiel.gibInstanz().getLevel().isInBounds(v.kopieren().add(new Vektor(r0, r1))))
+					v.add(new Vektor(r0, r1));
+
+			} while (!Spiel.gibInstanz().getLevel().getFeld(v.kopieren().div(Spiel.feldLaenge)).isSolide());
+
+			if (r < dropMuenze)
+				Spiel.gibInstanz().getLevel().hinzufuegen(new Item(Item.Typ.muenze, v));
+			else if (r < dropMuenze + dropHerz)
+				Spiel.gibInstanz().getLevel().hinzufuegen(new Item(Item.Typ.herz, v));
+		}
 	}
 
 	@Override
@@ -73,11 +84,11 @@ public class RitterGegner extends Gegner {
 		else
 			g.drawImage(bildDrehen(grafik, Math.toRadians(blick.getWinkel())), (int) pos.getX(), (int) pos.getY(),
 					(int) Spiel.feldLaenge, (int) Spiel.feldLaenge, null);
-
-		if (Spiel.gibInstanz().ticks % delayAngriff + Utils.random(10) == 0 && !angriff())
+		if (Spiel.gibInstanz().ticks % delayAngriff == 0 && !angriff())
 			;
-		else if (Spiel.gibInstanz().ticks % delayBewegung == 0 && pos.equals(ziel))
+		else if (Spiel.gibInstanz().ticks % delayBewegung == 0 && pos.equals(ziel)) {
 			bewegen();
+		}
 
 		if (ziel.dist(pos) < ges.mag()) {
 			ges = Vektor.nullVektor;
@@ -95,7 +106,11 @@ public class RitterGegner extends Gegner {
 		transform.rotate(d, 16, 16);
 
 		AffineTransformOp operation = new AffineTransformOp(transform, AffineTransformOp.TYPE_NEAREST_NEIGHBOR);
-		return operation.filter(grafik, null);
+		try {
+			return operation.filter(grafik, null);
+		} catch (Exception e) {
+			return grafik;
+		}
 	}
 
 	private void bewegen() {
@@ -118,10 +133,6 @@ public class RitterGegner extends Gegner {
 	}
 
 	private boolean bewegungMoeglich(Vektor v) {
-		// return
-		// !Spiel.gibInstanz().getLevel().istGegner(v.div(Spiel.feldLaenge))
-		// &&
-		// !Spiel.gibInstanz().getLevel().getFeld(v.div(Spiel.feldLaenge)).isSolide();
 		return !Spieler.gibInstanz().getZiel().equals(v) && !Spiel.gibInstanz().getLevel().istGegner(v, this);
 	}
 

@@ -10,6 +10,7 @@ import matrizen.model.elemente.Geschoss;
 import matrizen.model.elemente.Spieler;
 
 public class EinfachZauberstab extends Zauberstab {
+	private static EinfachZauberstab instanz;
 
 	public EinfachZauberstab() {
 		delay = werte.get("stab_einfach_delay_angriff");
@@ -22,12 +23,19 @@ public class EinfachZauberstab extends Zauberstab {
 	public void schuss() {
 		Spiel.gibInstanz().getLevel()
 				.hinzufuegen(new Geschoss(Geschoss.Typ.kleinBlau, schaden, reichweite, Spieler.gibInstanz().getPos(),
-						Spieler.gibInstanz().getBlick().getVektor().kopieren().normalize().mult(geschw / 10), Spieler.gibInstanz()));
+						Spieler.gibInstanz().getBlick().getVektor().kopieren().normalize().mult(geschw / 10),
+						Spieler.gibInstanz()));
 	}
 
 	@Override
 	public Color getFarbe() {
 		return new Color(0xd70000);
+	}
+
+	public static EinfachZauberstab gibInstanz() {
+		if (instanz == null)
+			instanz = new EinfachZauberstab();
+		return instanz;
 	}
 
 }

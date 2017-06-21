@@ -278,10 +278,10 @@ public class Spiel implements KeyListener {
 	public void keyReleased(KeyEvent e) {
 		int c = e.getKeyCode();
 		if (c == VK_ESCAPE) {
-			AnfangsFenster.gibInstanz().inhaltAendern(StartPanel.gibInstanz());
 			SpielFenster.gibInstanz().stop();
-			// if (beendet)
 			SpielFenster.reset();
+			SpielFenster.gibInstanz().setVisible(false);
+			AnfangsFenster.main(null);
 		} else if (c == oben[0] || c == oben[1])
 			EingabeManager.deaktivieren(Richtung.getIndex(Richtung.OBEN));
 		else if (c == rechts[0] || c == rechts[1])
@@ -315,6 +315,5 @@ public class Spiel implements KeyListener {
 
 	public void geschafft() {
 		geschafft = true;
-		SpielFenster.gibInstanz().getTimer().stop();
 	}
 }

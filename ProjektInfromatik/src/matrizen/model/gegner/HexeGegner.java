@@ -11,6 +11,7 @@ import matrizen.core.DateiManager.Bild;
 import matrizen.core.Richtung;
 import matrizen.core.Utils;
 import matrizen.core.Vektor;
+import matrizen.model.Level;
 import matrizen.model.Spiel;
 import matrizen.model.elemente.Gegner;
 import matrizen.model.elemente.Geschoss;
@@ -124,19 +125,29 @@ public class HexeGegner extends Gegner {
 
 	@Override
 	public void beimTod() {
-		if (aktiv)
+		if (aktiv && Spiel.gibInstanz().getLevel().equals(Level.getLevel(2)))
 			Spiel.gibInstanz().getLevel().hinzufuegen(
 					new Item(Item.Typ.stabVerfolgung, this.pos.kopieren().div(Spiel.feldLaenge).add(new Vektor(1, 0))));
 
-		int r = Utils.random(100);
+		if (Spieler.gibInstanz().gibAnzahlMuenzen() != Spieler.gibInstanz().zielMuenzen - 1
+				&& !Spiel.gibInstanz().getLevel().equals(Level.getLevel(3))) {
+			int r = Utils.random(100);
 
-		if (r < dropMuenze)
-			Spiel.gibInstanz().getLevel().hinzufuegen(
-					new Item(Item.Typ.muenze, pos.kopieren().div(Spiel.feldLaenge).add(new Vektor(0, -1))));
-		else if (r < dropMuenze + dropHerz)
-			Spiel.gibInstanz().getLevel()
-					.hinzufuegen(new Item(Item.Typ.herz, pos.kopieren().div(Spiel.feldLaenge).add(new Vektor(0, -1))));
+			Vektor v = pos.kopieren().div(Spiel.feldLaenge).round();
 
+			do {
+				int r0 = Utils.random(-1, 1), r1 = Utils.random(-1, 1);
+
+				if (Spiel.gibInstanz().getLevel().isInBounds(v.kopieren().add(new Vektor(r0, r1))))
+					v.add(new Vektor(r0, r1));
+
+			} while (!Spiel.gibInstanz().getLevel().getFeld(v.kopieren().div(Spiel.feldLaenge)).isSolide());
+
+			if (r < dropMuenze)
+				Spiel.gibInstanz().getLevel().hinzufuegen(new Item(Item.Typ.muenze, v));
+			else if (r < dropMuenze + dropHerz)
+				Spiel.gibInstanz().getLevel().hinzufuegen(new Item(Item.Typ.herz, v));
+		}
 	}
 
 	private boolean bewegungMoeglich(Vektor v) {
