@@ -18,7 +18,8 @@ public class ZombieGegner extends Gegner {
 	private final int schaden = DateiManager.werte.get("zombie_schaden"),
 			bewegungDelay = DateiManager.werte.get("zombie_bewegung_delay"),
 			bewegungGeschw = DateiManager.werte.get("zombie_bewegung_geschw"),
-			angriffDelay = DateiManager.werte.get("zombie_delay_angriff");
+			angriffDelay = DateiManager.werte.get("zombie_delay_angriff"),
+			maxLeben = DateiManager.werte.get("zombie_leben");
 
 	private Richtung blick;
 	private Vektor ziel;
@@ -28,6 +29,7 @@ public class ZombieGegner extends Gegner {
 		grafik = DateiManager.laden(Bild.figurZombie);
 		blick = Richtung.OBEN;
 		ziel = pos;
+		leben = maxLeben;
 	}
 
 	@Override
@@ -76,7 +78,7 @@ public class ZombieGegner extends Gegner {
 			else
 				z = new Vektor(0, Math.signum(v.getY())).mult(Spiel.feldLaenge).add(pos);
 
-			blick = Richtung.getRichtung(pos, ziel);
+			blick = Richtung.getRichtung(pos, z);
 
 			if (bewegungMoeglich(z))
 				ziel = z;

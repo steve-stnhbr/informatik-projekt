@@ -88,7 +88,7 @@ public class HexeGegner extends Gegner {
 			else
 				z = new Vektor(0, Math.signum(v.getY())).mult(Spiel.feldLaenge).add(pos);
 
-			blick = Richtung.getRichtung(pos, ziel);
+			blick = Richtung.getRichtung(pos, z);
 
 			if (bewegungMoeglich(z))
 				ziel = z;

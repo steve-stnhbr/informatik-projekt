@@ -13,6 +13,7 @@ import matrizen.model.elemente.Gegner;
 import matrizen.model.elemente.Geschoss;
 import matrizen.model.elemente.Item;
 import matrizen.model.elemente.Spieler;
+import matrizen.model.gegner.DracheGegner;
 import matrizen.model.gegner.FledermausGegner;
 import matrizen.model.gegner.HexeGegner;
 import matrizen.model.gegner.RitterGegner;
@@ -28,7 +29,8 @@ public class Level {
 	private final int spawnDelay = DateiManager.werte.get("level_spawn_delay"),
 			zombieWahrscheinlichkeit = DateiManager.werte.get("level_wahrsch_zombie"),
 			ritterWahrscheinlichkeit = DateiManager.werte.get("level_wahrsch_ritter"),
-			hexeWahrscheinlichkeit = DateiManager.werte.get("level_wahrsch_hexe");
+			hexeWahrscheinlichkeit = DateiManager.werte.get("level_wahrsch_hexe"),
+			dracheWahrscheinlichkeit = DateiManager.werte.get("level_wahrsch_drache");
 
 	private List<Levelelement> liste;
 	private Feld[][] felder;
@@ -64,15 +66,24 @@ public class Level {
 		}
 
 		spielerPositionUeberpruefen();
-
-		if (equals(Level.getLevel(3)) && Spiel.gibInstanz().ticks % spawnDelay == 0) {
+		if (Spiel.gibInstanz().ticks % spawnDelay == 0) {
 			int r = Utils.random(100);
-			if (r < zombieWahrscheinlichkeit)
-				hinzufuegen(new ZombieGegner(erstellePosition()));
-			else if (r < zombieWahrscheinlichkeit + ritterWahrscheinlichkeit)
-				hinzufuegen(new RitterGegner(erstellePosition()));
-			else if (r < zombieWahrscheinlichkeit + ritterWahrscheinlichkeit + hexeWahrscheinlichkeit)
-				hinzufuegen(new HexeGegner(erstellePosition(), true));
+			if (equals(Level.getLevel(3))) {
+				if (r < zombieWahrscheinlichkeit)
+					hinzufuegen(new ZombieGegner(erstellePosition()));
+				else if (r < zombieWahrscheinlichkeit + ritterWahrscheinlichkeit)
+					hinzufuegen(new RitterGegner(erstellePosition()));
+				else if (r < zombieWahrscheinlichkeit + ritterWahrscheinlichkeit + hexeWahrscheinlichkeit)
+					hinzufuegen(new HexeGegner(erstellePosition(), true));
+				else if (r < zombieWahrscheinlichkeit + ritterWahrscheinlichkeit + hexeWahrscheinlichkeit
+						+ dracheWahrscheinlichkeit)
+					hinzufuegen(new DracheGegner(erstellePosition()));
+			} else {
+				if (r < zombieWahrscheinlichkeit)
+					hinzufuegen(new ZombieGegner(erstellePosition()));
+				else if (r < zombieWahrscheinlichkeit + ritterWahrscheinlichkeit)
+					hinzufuegen(new RitterGegner(erstellePosition()));
+			}
 		}
 
 	}
@@ -154,7 +165,7 @@ public class Level {
 					&& Spieler.gibInstanz().getPos().kopieren().div(Spiel.feldLaenge)
 							.equals(l1.getPos().kopieren().div(Spiel.feldLaenge))) {
 				Spieler.gibInstanz().aufsammeln(((Item) l1));
-				((Item)l1).beimAufheben();
+				((Item) l1).beimAufheben();
 				if (((Item) l1).getTyp() == Item.Typ.schluessel) {
 					if (!Spiel.gibInstanz().tutorials[4])
 						Spiel.gibInstanz().tutorialTick = (int) Spiel.gibInstanz().ticks;
@@ -175,7 +186,7 @@ public class Level {
 			hinzufuegen(new Item(Item.Typ.schluessel, f.getPos().div(Spiel.feldLaenge).round()));
 			setFeld(Spieler.gibInstanz().getxFeld(), Spieler.gibInstanz().getyFeld(), Typ.TORZU);
 
-			if (equals(getLevel(2))/* && f instanceof RitterGegner*/) {
+			if (equals(getLevel(2))/* && f instanceof RitterGegner */) {
 				Spiel.gibInstanz().getLevel().hinzufuegen(new Item(Item.Typ.stabVerfolgung,
 						f.pos.kopieren().div(Spiel.feldLaenge).add(new Vektor(1, 0))));
 			}
@@ -275,7 +286,7 @@ public class Level {
 		for (Levelelement l : liste) {
 			if (f != null)
 				if (l instanceof Gegner && (l.getPos().kopieren().div(Spiel.feldLaenge).equals(v)
-						|| ((Gegner) l).getZiel().equals(v.kopieren().mult(Spiel.feldLaenge))) && !l.equals(f))
+						|| ((Gegner) l).getZiel().equals(v.kopieren())) && !l.equals(f))
 					return true;
 				else
 					;
@@ -356,7 +367,7 @@ public class Level {
 				: startPosition;
 	}
 
-	static Level getLevel(int i) {
+	public static Level getLevel(int i) {
 		switch (i) {
 		case 0:
 			if (level0 == null)

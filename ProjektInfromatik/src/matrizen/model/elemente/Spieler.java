@@ -19,11 +19,10 @@ import matrizen.core.Richtung;
 import matrizen.core.Vektor;
 import matrizen.core.event.BewegungsEvent;
 import matrizen.core.event.EventManager;
-import matrizen.model.Levelelement;
 import matrizen.model.Spiel;
 import matrizen.model.Zauberstab;
 import matrizen.model.elemente.Item.Typ;
-import matrizen.model.zauberstaebe.EinfachZauberstab;
+import matrizen.model.zauberstaebe.MehrfachZauberstab;
 
 /**
  * Diese Klasse repräsentiert den Spieler
@@ -41,9 +40,28 @@ public class Spieler extends Figur {
 	private List<Item> inventar;
 	private Zauberstab stab, stabDavor;
 	private float magDavor;
-	private Vektor[] farbPositionen = { new Vektor(30, 8), new Vektor(30, 9), new Vektor(29, 7), new Vektor(29, 8),
-			new Vektor(29, 9), new Vektor(29, 10), new Vektor(28, 7), new Vektor(28, 8), new Vektor(28, 9),
-			new Vektor(28, 10), new Vektor(27, 9) };
+	private Vektor[] farbPositionen = { new Vektor(29, 8), new Vektor(29, 9), new Vektor(28, 7), new Vektor(28, 8),
+			new Vektor(28, 9), new Vektor(28, 10), new Vektor(27, 7), new Vektor(27, 8), new Vektor(27, 9),
+			new Vektor(27, 10), new Vektor(9, 8), new Vektor(10, 8), new Vektor(11, 8), new Vektor(12, 8),
+			new Vektor(13, 8), new Vektor(18, 8), new Vektor(15, 8), new Vektor(16, 8), new Vektor(17, 8),
+			new Vektor(17, 9), new Vektor(17, 10), new Vektor(18, 10), new Vektor(19, 10), new Vektor(19, 11),
+			new Vektor(20, 11), new Vektor(20, 12), new Vektor(20, 13), new Vektor(20, 14), new Vektor(20, 15),
+			new Vektor(20, 16), new Vektor(20, 17), new Vektor(20, 18), new Vektor(19, 18), new Vektor(19, 19),
+			new Vektor(18, 19), new Vektor(17, 19), new Vektor(17, 20), new Vektor(17, 21), new Vektor(16, 21),
+			new Vektor(15, 21), new Vektor(14, 21), new Vektor(13, 21), new Vektor(12, 21), new Vektor(11, 21),
+			new Vektor(10, 21), new Vektor(9, 21), new Vektor(9, 20), new Vektor(9, 19), new Vektor(8, 19),
+			new Vektor(8, 18), new Vektor(7, 18), new Vektor(6, 18), new Vektor(6, 17), new Vektor(5, 16),
+			new Vektor(6, 15), new Vektor(6, 14), new Vektor(6, 12), new Vektor(6, 11), new Vektor(7, 11),
+			new Vektor(8, 11), new Vektor(8, 10), new Vektor(9, 10), new Vektor(9, 9), new Vektor(10, 9),
+			new Vektor(11, 9), new Vektor(12, 9), new Vektor(13, 9), new Vektor(14, 9), new Vektor(15, 9),
+			new Vektor(16, 9), new Vektor(16, 10), new Vektor(16, 11), new Vektor(17, 11), new Vektor(18, 11),
+			new Vektor(18, 12), new Vektor(19, 12), new Vektor(19, 13), new Vektor(19, 14), new Vektor(19, 15),
+			new Vektor(19, 16), new Vektor(19, 17), new Vektor(18, 17), new Vektor(18, 18), new Vektor(17, 18),
+			new Vektor(16, 18), new Vektor(16, 19), new Vektor(16, 20), new Vektor(15, 20), new Vektor(14, 20),
+			new Vektor(13, 20), new Vektor(12, 20), new Vektor(11, 20), new Vektor(10, 20), new Vektor(10, 19),
+			new Vektor(10, 18), new Vektor(9, 18), new Vektor(9, 17), new Vektor(8, 17), new Vektor(7, 17),
+			new Vektor(7, 16), new Vektor(7, 15), new Vektor(7, 14), new Vektor(7, 13), new Vektor(7, 12),
+			new Vektor(8, 12), new Vektor(9, 12), new Vektor(9, 11), new Vektor(10, 11), new Vektor(10, 10) };
 
 	private Spieler() {
 		cooldown = new short[5];
@@ -54,7 +72,7 @@ public class Spieler extends Figur {
 		inventar = new ArrayList<Item>();
 		animation = new BufferedImage[] { DateiManager.laden(Bild.figurSpielerAnim0),
 				DateiManager.laden(Bild.figurSpielerAnim1) };
-		stab = new EinfachZauberstab();
+		stab = new MehrfachZauberstab();
 		leben = maxLeben;
 	}
 
@@ -140,6 +158,8 @@ public class Spieler extends Figur {
 	private void zauberstabZeichnen() {
 		for (Vektor v : farbPositionen) {
 			grafik.setRGB((int) v.getX(), (int) v.getY(), stab.getFarbe().getRGB());
+			for (BufferedImage bImg : animation)
+				bImg.setRGB((int) v.getX(), (int) v.getY(), stab.getFarbe().getRGB());
 		}
 
 	}

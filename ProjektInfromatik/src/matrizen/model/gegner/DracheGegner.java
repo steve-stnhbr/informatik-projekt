@@ -11,6 +11,7 @@ import java.awt.image.BufferedImage;
 import matrizen.core.DateiManager;
 import matrizen.core.DateiManager.Bild;
 import matrizen.core.Vektor;
+import matrizen.model.Level;
 import matrizen.model.Spiel;
 import matrizen.model.elemente.Gegner;
 import matrizen.model.elemente.Geschoss;
@@ -38,7 +39,10 @@ public class DracheGegner extends Gegner {
 
 	@Override
 	public void beimTod() {
-		Spiel.gibInstanz().getLevel().hinzufuegen(new Item(Item.Typ.schluessel, pos.div(32)));
+		if (Spiel.gibInstanz().getLevel().equals(Level.getLevel(1)))
+			Spiel.gibInstanz().getLevel().hinzufuegen(new Item(Item.Typ.stabDreifach,
+					pos.kopieren().div(Spiel.feldLaenge).round().add(new Vektor(-1, 0))));
+		Spiel.gibInstanz().getLevel().hinzufuegen(new Item(Item.Typ.schluessel, pos.kopieren().div(32).round()));
 	}
 
 	@Override
@@ -65,7 +69,7 @@ public class DracheGegner extends Gegner {
 		return Math.atan2(v1.getY(), v1.getX()) - Math.atan2(v2.getY(), v2.getX());
 		// return -Math.atan2(v1.kreuz(v2), v1.skalar(v2));
 	}
-	
+
 	public Vektor getZiel() {
 		return pos;
 	}

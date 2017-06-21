@@ -31,10 +31,10 @@ public class RitterGegner extends Gegner {
 
 	public RitterGegner(Vektor feldPos) {
 		pos = feldPos.mult(Spiel.feldLaenge);
-		grafik = DateiManager.laden(Bild.figurRitterDrehung);
 		animation = new BufferedImage[] { DateiManager.laden(Bild.figurRitterAnim0),
 				DateiManager.laden(Bild.figurRitterAnim1) };
 		drehBild = DateiManager.laden(Bild.figurRitterDrehung);
+		grafik = DateiManager.laden(Bild.figurRitter);
 		ziel = pos;
 		blick = Richtung.OBEN;
 		leben = maxLeben;
@@ -42,7 +42,7 @@ public class RitterGegner extends Gegner {
 
 	@Override
 	public boolean angriff() {
-		if (Spieler.gibInstanz().getPos().dist(pos) <= Spiel.feldLaenge) {
+		if (Spieler.gibInstanz().getPos().dist(pos) <= Spiel.feldLaenge * 1.33) {
 			drehung = 360;
 			Spieler.gibInstanz().schaden(schaden);
 			return true;
@@ -57,25 +57,24 @@ public class RitterGegner extends Gegner {
 
 		if (r < dropMuenze)
 			Spiel.gibInstanz().getLevel().hinzufuegen(
-					new Item(Item.Typ.muenze, pos.kopieren().div(Spiel.feldLaenge).add(new Vektor(0, -1))));
+					new Item(Item.Typ.muenze, pos.kopieren().div(Spiel.feldLaenge).round().add(new Vektor(0, -1))));
 		else if (r < dropMuenze + dropHerz)
-			Spiel.gibInstanz().getLevel()
-					.hinzufuegen(new Item(Item.Typ.herz, pos.kopieren().div(Spiel.feldLaenge).add(new Vektor(0, -1))));
+			Spiel.gibInstanz().getLevel().hinzufuegen(
+					new Item(Item.Typ.herz, pos.kopieren().div(Spiel.feldLaenge).round().add(new Vektor(0, -1))));
 
 	}
 
 	@Override
 	public void zeichnen(Graphics2D g) {
 		super.aktualisieren();
-		System.out.println(pos);
-		if (drehung >= 0)
+		if (drehung > 0)
 			g.drawImage(bildDrehen(drehBild, Math.toRadians(drehung)), (int) pos.getX(), (int) pos.getY(),
 					(int) Spiel.feldLaenge, (int) Spiel.feldLaenge, null);
 		else
 			g.drawImage(bildDrehen(grafik, Math.toRadians(blick.getWinkel())), (int) pos.getX(), (int) pos.getY(),
 					(int) Spiel.feldLaenge, (int) Spiel.feldLaenge, null);
 
-		if (Spiel.gibInstanz().ticks % delayAngriff == 0 && !angriff())
+		if (Spiel.gibInstanz().ticks % delayAngriff + Utils.random(10) == 0 && !angriff())
 			;
 		else if (Spiel.gibInstanz().ticks % delayBewegung == 0 && pos.equals(ziel))
 			bewegen();
@@ -108,7 +107,7 @@ public class RitterGegner extends Gegner {
 			else
 				z = new Vektor(0, Math.signum(v.getY())).mult(Spiel.feldLaenge).add(pos);
 
-			blick = Richtung.getRichtung(pos, ziel);
+			blick = Richtung.getRichtung(pos, z);
 
 			if (bewegungMoeglich(z))
 				ziel = z;

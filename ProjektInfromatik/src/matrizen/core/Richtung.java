@@ -50,16 +50,22 @@ public enum Richtung {
 
 	public static Richtung getRichtung(Vektor start, Vektor ziel) {
 		Vektor v = ziel.kopieren().sub(start);
+		v.normalize();
 
-		if (v.getX() > 0 && v.getX() > v.getY())
-			return Richtung.RECHTS;
-		if (v.getY() > 0 && v.getY() > v.getX())
-			return Richtung.UNTEN;
-		if (v.getX() < 0 && v.getX() < v.getY())
-			return Richtung.LINKS;
-		if (v.getY() < 0 & v.getY() < v.getY())
-			return Richtung.OBEN;
+		/*
+		 * for (Richtung r : values()) { if (v.equals(r.getFinalVektor()))
+		 * return r; }
+		 */
 
+		System.out.println(v);
+		if (v.getX() == 1 && v.getY() == 0)
+			return RECHTS;
+		else if (v.getX() == -1 && v.getY() == 0)
+			return LINKS;
+		else if (v.getY() == 1 && v.getX() == 0)
+			return UNTEN;
+		else if (v.getY() == -1 && v.getX() == 0)
+			return OBEN;
 		return Richtung.OBEN;
 	}
 }
