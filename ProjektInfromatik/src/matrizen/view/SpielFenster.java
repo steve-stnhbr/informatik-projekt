@@ -139,13 +139,15 @@ public class SpielFenster extends JFrame {
 	}
 
 	public void stop() {
+		/*
 		removeKeyListener(Spiel.gibInstanz());
 		timer.stop();
 		MusikPlayer.stop();
 		setVisible(false);
 		DateiManager.configSchreiben();
 		DateiManager.werteSchreiben();
-		instanz = null;
+//		instanz = null;
+		 */
 	}
 
 	public static void reset() {

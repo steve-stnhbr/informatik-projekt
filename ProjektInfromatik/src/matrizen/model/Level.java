@@ -3,6 +3,7 @@ package matrizen.model;
 import java.awt.Graphics2D;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.logging.Logger;
 
 import matrizen.core.DateiManager;
 import matrizen.core.Utils;
@@ -273,6 +274,7 @@ public class Level {
 		try {
 			return felder[x][y];
 		} catch (ArrayIndexOutOfBoundsException e) {
+			Logger.getAnonymousLogger().log(java.util.logging.Level.WARNING, "Feld nicht gefunden");
 			return new Feld(Typ.WIESE, Vektor.nullVektor);
 		}
 	}

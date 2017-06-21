@@ -78,31 +78,36 @@ public class AnfangsFenster extends JFrame {
 	}
 
 	public static void main(String[] args) {
-		// ändert die formatierung der Konsole, des logs
-		// ---------------------------------------------------- zeit, ms, level,
-		// nachricht, neue zeile
-		System.setProperty("java.util.logging.SimpleFormatter.format", "%1$tT:%tL-%4$s: %5$s%6$s%n");
-		SpielFenster.logger.setLevel(Level.FINE);
-		Handler handler = new ConsoleHandler();
-		handler.setLevel(Level.FINE);
+		try {
+			// ändert die formatierung der Konsole, des logs
+			// ---------------------------------------------------- zeit, ms,
+			// level,
+			// nachricht, neue zeile
+			System.setProperty("java.util.logging.SimpleFormatter.format", "%1$tT:%tL-%4$s: %5$s%6$s%n");
+			SpielFenster.logger.setLevel(Level.FINEST);
+			Handler handler = new ConsoleHandler();
+			handler.setLevel(Level.FINEST);
 
-		if (!new File(System.getenv("APDATA") + "/Trollkarl/.m").exists()) {
-			DateiManager.initConfig();
-			try {
-				new File(System.getenv("APDATA") + "/Trollkarl").mkdirs();
-				new File(System.getenv("APDATA") + "/Trollkarl/.m").createNewFile();
-			} catch (IOException e) {
-				e.printStackTrace();
+			if (!new File(System.getenv("APDATA") + "/Trollkarl/.m").exists()) {
+				DateiManager.initConfig();
+				try {
+					new File(System.getenv("APDATA") + "/Trollkarl").mkdirs();
+					new File(System.getenv("APDATA") + "/Trollkarl/.m").createNewFile();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+
+				DateiManager.init = true;
+			} else {
+				DateiManager.init = true;
 			}
 
-			DateiManager.init = true;
-		} else {
-			DateiManager.init = true;
+			SpielFenster.logger.addHandler(handler);
+			SpielFenster.init();
+			init();
+		} catch (Throwable e) {
+			e.printStackTrace();
 		}
-
-		SpielFenster.logger.addHandler(handler);
-		SpielFenster.init();
-		init();
 	}
 
 	public void inhaltAendern(JPanel p) {

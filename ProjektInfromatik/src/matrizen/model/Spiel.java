@@ -36,7 +36,7 @@ public class Spiel implements KeyListener {
 
 	private final int muenzen = DateiManager.werte.get("spiel_ziel_muenzen");
 	private Level level;
-	public long ticks = -75;
+	public long ticks = 0;
 	private Text text;
 	public boolean tutorial = (DateiManager.config.getTutorial() == 0), schluesselAufheben, gegnerKannSterben,
 			kannTeleportieren, beendet, geschafft;
