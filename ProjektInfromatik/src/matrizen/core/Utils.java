@@ -99,4 +99,11 @@ public class Utils {
 		return p.getX() > 0 && p.getY() > 0 && p.getX() < Spiel.spalten * Spiel.feldLaenge
 				&& p.getY() < Spiel.zeilen * Spiel.feldLaenge;
 	}
+
+	public static float begrenzen(float dist, int i, int j) {
+		if(dist > j)
+			return j;
+		else
+			return dist;
+	}
 }

@@ -22,6 +22,6 @@ public class EingabeManager {
 
 	static {		
 		if (eingabe == null)
-			eingabe = new boolean[5];
+			eingabe = new boolean[6];
 	}
 }

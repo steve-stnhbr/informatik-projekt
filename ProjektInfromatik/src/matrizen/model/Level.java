@@ -334,7 +334,7 @@ public class Level {
 	public Figur gibNaechstenGegner(Vektor pos) {
 		Gegner g = new Gegner() {
 			@SuppressWarnings("unused")
-			Vektor pos = new Vektor(-1000, -1000);
+			Vektor pos = new Vektor(Integer.MIN_VALUE, Integer.MIN_VALUE);
 
 			public void zeichnen(Graphics2D g) {
 			}

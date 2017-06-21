@@ -39,7 +39,7 @@ public class MehrfachZauberstab extends Zauberstab {
 
 	@Override
 	public Color getFarbe() {
-		return new Color(0xe20e03);
+		return new Color(0x006fd7);
 	}
 
 }

@@ -371,6 +371,8 @@ public class DateiManager {
 				return Bild.partikelBlitzHorizontal;
 			case blitzVertikal:
 				return Bild.partikelBlitzVertikal;
+			case verfolger:
+				return partikelVerfolger;
 			default:
 				return nullGrafik;
 			}
@@ -526,6 +528,8 @@ public class DateiManager {
 			c.setLinks(a.getInt(0), a.getInt(1));
 			a = obj.getJSONArray("schuss");
 			c.setSchuss(a.getInt(0), a.getInt(1));
+			a = obj.getJSONArray("waffe");
+			c.setWaffe(a.getInt(0), a.getInt(1));
 
 			a = obj.getJSONArray("aktiv");
 
@@ -569,6 +573,7 @@ public class DateiManager {
 			obj.put("aktiv", new JSONArray(k.getAktiveMusik()));
 			obj.put("grafik", k.getGrafiken().getAbsolutePath());
 			obj.put("tutorial", k.getTutorial());
+			obj.put("waffe", new JSONArray(k.getWaffe()));
 
 			return obj.toString();
 		}

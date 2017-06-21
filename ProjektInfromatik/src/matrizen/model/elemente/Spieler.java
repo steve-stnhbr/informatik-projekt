@@ -22,7 +22,10 @@ import matrizen.core.event.EventManager;
 import matrizen.model.Spiel;
 import matrizen.model.Zauberstab;
 import matrizen.model.elemente.Item.Typ;
+import matrizen.model.zauberstaebe.BlitzZauberstab;
+import matrizen.model.zauberstaebe.EinfachZauberstab;
 import matrizen.model.zauberstaebe.MehrfachZauberstab;
+import matrizen.model.zauberstaebe.VerfolgungsZauberstab;
 
 /**
  * Diese Klasse repräsentiert den Spieler
@@ -30,16 +33,18 @@ import matrizen.model.zauberstaebe.MehrfachZauberstab;
 public class Spieler extends Figur {
 	private static Spieler instanz;
 
-	public final int maxLeben = werte.get("spieler_leben"), angriff = werte.get("spieler_delay_angriff");
+	public final int maxLeben = werte.get("spieler_leben"), angriff = werte.get("spieler_delay_angriff"),
+			zielMuenzen = DateiManager.werte.get("spiel_ziel_muenzen");
 
 	private Vektor ziel;
-	private int index, xFeld, yFeld;
+	private int index, xFeld, yFeld, hatStab;
 	private short delay = (short) werte.get("spieler_delay_bewegung");
 	private short[] cooldown;
 	private Richtung blick = Richtung.OBEN;
 	private List<Item> inventar;
 	private Zauberstab stab, stabDavor;
 	private float magDavor;
+	private List<Zauberstab> staebe;
 	private Vektor[] farbPositionen = { new Vektor(29, 8), new Vektor(29, 9), new Vektor(28, 7), new Vektor(28, 8),
 			new Vektor(28, 9), new Vektor(28, 10), new Vektor(27, 7), new Vektor(27, 8), new Vektor(27, 9),
 			new Vektor(27, 10), new Vektor(9, 8), new Vektor(10, 8), new Vektor(11, 8), new Vektor(12, 8),
@@ -72,7 +77,9 @@ public class Spieler extends Figur {
 		inventar = new ArrayList<Item>();
 		animation = new BufferedImage[] { DateiManager.laden(Bild.figurSpielerAnim0),
 				DateiManager.laden(Bild.figurSpielerAnim1) };
-		stab = new MehrfachZauberstab();
+		staebe = new ArrayList<>();
+		staebe.add(new VerfolgungsZauberstab());
+		stab = staebe.get(0);
 		leben = maxLeben;
 	}
 
@@ -120,6 +127,9 @@ public class Spieler extends Figur {
 			ges.mult(0);
 			pos = ziel;
 		}
+		
+		if(gibAnzahlMuenzen() == zielMuenzen)
+			Spiel.gibInstanz().geschafft();
 
 		if ((ges.getX() != 0 && ges.getY() != 0)) {
 			logger.log(Level.WARNING, "Bewegung korrigiert");
@@ -175,6 +185,15 @@ public class Spieler extends Figur {
 
 		if (EingabeManager.istAktiv(4))
 			schuss();
+		if (EingabeManager.istAktiv(5))
+			waffeWechseln();
+	}
+
+	private void waffeWechseln() {
+		if (staebe.indexOf(stab) + 1 >= staebe.size())
+			stab = staebe.get(0);
+		else
+			stab = staebe.get(staebe.indexOf(stab) + 1);
 	}
 
 	private void schuss() {
@@ -240,8 +259,13 @@ public class Spieler extends Figur {
 		switch (i.getTyp()) {
 		case herz:
 		case stabBlitz:
+			staebe.add(new BlitzZauberstab());
+			break;
 		case stabDreifach:
+			staebe.add(new MehrfachZauberstab());
+			break;
 		case stabVerfolgung:
+			staebe.add(new VerfolgungsZauberstab());
 			break;
 		default:
 			inventar.add(i);

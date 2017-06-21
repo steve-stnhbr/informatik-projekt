@@ -13,7 +13,7 @@ import java.util.List;
  * @author Stefan
  */
 public class Konfiguration {
-	private int[] rechts, links, oben, unten, schuss;
+	private int[] rechts, links, oben, unten, schuss, waffe;
 	private List<File> aktiveMusik, inaktiveMusik;
 	private File grafiken;
 	private short tutorial;
@@ -24,6 +24,7 @@ public class Konfiguration {
 		oben = new int[2];
 		unten = new int[2];
 		schuss = new int[2];
+		waffe = new int[2];
 		aktiveMusik = inaktiveMusik = new ArrayList<File>();
 	}
 
@@ -54,6 +55,12 @@ public class Konfiguration {
 	public Konfiguration setSchuss(int i0, int i1) {
 		schuss[0] = i0;
 		schuss[1] = i1;
+		return this;
+	}
+
+	public Konfiguration setWaffe(int i0, int i1) {
+		waffe[0] = i0;
+		waffe[1] = i1;
 		return this;
 	}
 
@@ -90,6 +97,15 @@ public class Konfiguration {
 
 	public Konfiguration setUnten(int[] unten) {
 		this.unten = unten;
+		return this;
+	}
+
+	public int[] getWaffe() {
+		return waffe;
+	}
+
+	public Konfiguration setWaffe(int[] waffe) {
+		this.waffe = waffe;
 		return this;
 	}
 

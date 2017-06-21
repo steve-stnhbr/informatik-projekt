@@ -8,7 +8,6 @@ public abstract class Zauberstab {
 	public abstract void schuss();
 
 	public void aktualisieren() {
-		
 	}
 	
 	public int getDelay() {

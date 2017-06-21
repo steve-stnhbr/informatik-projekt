@@ -39,7 +39,7 @@ public class Spiel implements KeyListener {
 	public long ticks = -75;
 	private Text text;
 	public boolean tutorial = (DateiManager.config.getTutorial() == 0), schluesselAufheben, gegnerKannSterben,
-			kannTeleportieren, beendet;
+			kannTeleportieren, beendet, geschafft;
 	private boolean schiessen, gegnerErstellt;
 	public boolean[] tutorials;
 	public int tutorialTick;
@@ -47,7 +47,7 @@ public class Spiel implements KeyListener {
 
 	private final int[] links = DateiManager.config.getLinks(), rechts = DateiManager.config.getRechts(),
 			oben = DateiManager.config.getOben(), unten = DateiManager.config.getUnten(),
-			schuss = DateiManager.config.getSchuss();
+			schuss = DateiManager.config.getSchuss(), waffe = DateiManager.config.getWaffe();
 	private HUD hud;
 
 	private Spiel() {
@@ -67,6 +67,7 @@ public class Spiel implements KeyListener {
 		MusikPlayer.abspielen();
 
 		tutorials = new boolean[8];
+		beendet = false;
 
 		schiessen = !tutorial;
 		level = Level.getLevel(1);
@@ -123,6 +124,25 @@ public class Spiel implements KeyListener {
 					e.printStackTrace();
 				}
 			}
+
+			if (geschafft) {
+
+				try {
+					graphics.setFont(Font
+							.createFont(Font.TRUETYPE_FONT, new File(DateiManager.pfad + "res/schrift/prstartk.ttf"))
+							.deriveFont(45f));
+					graphics.setColor(Color.darkGray);
+					graphics.drawString("GEWONNEN", Spiel.spalten * 16 - 75, Spiel.zeilen * 16 - 40);
+					graphics.setFont(Font
+							.createFont(Font.TRUETYPE_FONT, new File(DateiManager.pfad + "res/schrift/prstartk.ttf"))
+							.deriveFont(25f));
+					graphics.setColor(Color.black);
+					graphics.drawString("Du hast alle Münzen gefunden", Spiel.spalten * 2, Spiel.zeilen * 16);
+					SpielFenster.gibInstanz().getTimer().stop();
+				} catch (FontFormatException | IOException e) {
+					e.printStackTrace();
+				}
+			}
 		}
 
 		ticks++;
@@ -158,6 +178,9 @@ public class Spiel implements KeyListener {
 					}
 				});
 			} else if (ticks == tutorialDelay * 2) {
+				text = new Text(0, "Wenn du neue Stäbe aufsammelst, kannst du durch die Tab-",
+						"Taste ändern, welchen du ausgewählt hast");
+			} else if (ticks == tutorialDelay * 3) {
 				text = new Text(0, "Bewege dich mit den WASD-Tasten oder Pfeil-", "tasten durch die Welt");
 				SpielFenster.gibInstanz().addKeyListener(this);
 			} else if (ticks > tutorialTick + tutorialDelay && tutorials[0] && !tutorials[1]) {
@@ -234,9 +257,11 @@ public class Spiel implements KeyListener {
 			tutorials[0] = true;
 		} else if (c == schuss[0] || c == schuss[1]) {
 			if (schiessen) {
-				EingabeManager.aktivieren(EingabeManager.gibEingaben().length - 1);
+				EingabeManager.aktivieren(4);
 			}
-		} else if (c == KeyEvent.VK_PAGE_DOWN) {
+		} else if (c == waffe[0] || c == waffe[1])
+			EingabeManager.aktivieren(5);
+		else if (c == KeyEvent.VK_PAGE_DOWN) {
 			MusikPlayer.setVolume(MusikPlayer.getVolume() - .025f);
 			logger.log(java.util.logging.Level.FINE, "Lautstärke auf " + MusikPlayer.getVolume() + " gestellt");
 		} else if (c == KeyEvent.VK_PAGE_UP) {
@@ -255,8 +280,8 @@ public class Spiel implements KeyListener {
 		if (c == VK_ESCAPE) {
 			AnfangsFenster.gibInstanz().inhaltAendern(StartPanel.gibInstanz());
 			SpielFenster.gibInstanz().stop();
-//			if (beendet)
-				SpielFenster.reset();
+			// if (beendet)
+			SpielFenster.reset();
 		} else if (c == oben[0] || c == oben[1])
 			EingabeManager.deaktivieren(Richtung.getIndex(Richtung.OBEN));
 		else if (c == rechts[0] || c == rechts[1])
@@ -267,6 +292,8 @@ public class Spiel implements KeyListener {
 			EingabeManager.deaktivieren(Richtung.getIndex(Richtung.LINKS));
 		else if (c == schuss[0] || c == schuss[1])
 			EingabeManager.deaktivieren(4);
+		else if (c == waffe[0] || c == waffe[1])
+			EingabeManager.deaktivieren(5);
 	}
 
 	public static void reset() {
@@ -284,5 +311,10 @@ public class Spiel implements KeyListener {
 
 	public void setLevel(Level level) {
 		this.level = level;
+	}
+
+	public void geschafft() {
+		geschafft = true;
+		SpielFenster.gibInstanz().getTimer().stop();
 	}
 }

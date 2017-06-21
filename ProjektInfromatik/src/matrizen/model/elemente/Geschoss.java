@@ -11,7 +11,8 @@ public class Geschoss extends Levelelement {
 	private final Vektor start;
 	private Typ t;
 	private boolean spieler, aktiv = true;
-	private int schaden, weite;
+	private int schaden;
+	protected int weite;
 
 	public Geschoss(Typ t, int schaden, int weite, Vektor pos, Vektor v, Figur schuetze) {
 		this.t = t;

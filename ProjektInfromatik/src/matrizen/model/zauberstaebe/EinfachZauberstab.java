@@ -27,7 +27,7 @@ public class EinfachZauberstab extends Zauberstab {
 
 	@Override
 	public Color getFarbe() {
-		return new Color(0x0072d7);
+		return new Color(0xd70000);
 	}
 
 }
