@@ -84,9 +84,9 @@ public class AnfangsFenster extends JFrame {
 			// level,
 			// nachricht, neue zeile
 			System.setProperty("java.util.logging.SimpleFormatter.format", "%1$tT:%tL-%4$s: %5$s%6$s%n");
-			SpielFenster.logger.setLevel(Level.FINEST);
+			SpielFenster.logger.setLevel(Level.INFO);
 			Handler handler = new ConsoleHandler();
-			handler.setLevel(Level.FINEST);
+			handler.setLevel(Level.INFO);
 
 			if (!new File(System.getenv("APDATA") + "/Trollkarl/.m").exists()) {
 				DateiManager.initConfig();

@@ -81,7 +81,7 @@ public class Level {
 				else if (r < zombieWahrscheinlichkeit + ritterWahrscheinlichkeit + hexeWahrscheinlichkeit
 						+ dracheWahrscheinlichkeit)
 					hinzufuegen(new DracheGegner(erstellePosition()));
-			} else {
+			} else if(!Spiel.gibInstanz().tutorial){
 				if (r < zombieWahrscheinlichkeit)
 					hinzufuegen(new ZombieGegner(erstellePosition()));
 				else if (r < zombieWahrscheinlichkeit + ritterWahrscheinlichkeit)
@@ -91,13 +91,7 @@ public class Level {
 	}
 
 	private Vektor erstellePosition() {
-		Vektor v = null;
-
-		do {
-			v = new Vektor(Utils.random(Spiel.spalten), Utils.random(Spiel.zeilen));
-		} while (istLegal(v));
-
-		return v;
+		return new Vektor(Utils.random(Spiel.spalten), Utils.random(Spiel.zeilen));
 
 	}
 
@@ -198,7 +192,7 @@ public class Level {
 			setFeld(Spieler.gibInstanz().getxFeld(), Spieler.gibInstanz().getyFeld(), Typ.TORZU);
 
 			if (equals(getLevel(2)) && f instanceof RitterGegner) {
-				Spiel.gibInstanz().getLevel().hinzufuegen(new Item(Item.Typ.stabVerfolgung,
+				Spiel.gibInstanz().getLevel().hinzufuegen(new Item(Item.Typ.stabBlitz,
 						f.pos.kopieren().div(Spiel.feldLaenge).add(new Vektor(1, 0))));
 			}
 
@@ -230,7 +224,7 @@ public class Level {
 	private void spielerPositionUeberpruefen() {
 		Vektor v = new Vektor(Spieler.gibInstanz().getxFeld(), Spieler.gibInstanz().getyFeld())
 				.add(Spieler.gibInstanz().getBlick().getFinalVektor());
-		if (positionIstLegal(v)) {
+		if (isInBounds(v)) {
 			if (getFeld(v).getTyp() == Typ.TORZU && Spieler.gibInstanz().hatSchluessel()) {
 				setFeld((int) v.getX(), (int) v.getY(), Typ.TOROFFEN);
 				Spieler.gibInstanz().schluesselEntfernen();

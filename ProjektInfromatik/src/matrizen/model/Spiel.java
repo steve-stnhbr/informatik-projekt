@@ -70,7 +70,7 @@ public class Spiel implements KeyListener {
 		beendet = false;
 
 		schiessen = !tutorial;
-		level = Level.getLevel(2);
+		level = Level.getLevel(1);
 
 		hud = HUD.gibInstanz();
 
@@ -177,8 +177,8 @@ public class Spiel implements KeyListener {
 					}
 				});
 			} else if (ticks == tutorialDelay * 2) {
-				text = new Text(0, "Wenn du neue St‰be aufsammelst, kannst du durch die Tab-",
-						"Taste ‰ndern, welchen du ausgew‰hlt hast");
+				text = new Text(0, "Wenn du neue St‰be aufsammelst, kannst du durch die",
+						"Tab-Taste ‰ndern, welchen du ausgew‰hlt hast");
 			} else if (ticks == tutorialDelay * 3) {
 				text = new Text(0, "Bewege dich mit den WASD-Tasten oder Pfeil-", "tasten durch die Welt");
 				SpielFenster.gibInstanz().addKeyListener(this);
@@ -216,7 +216,7 @@ public class Spiel implements KeyListener {
 				text = new Text(0, "                 Viel Spaﬂ!");
 			}
 
-			else if (ticks > tutorialTick + tutorialDelay * 5 && tutorials[7]) {
+			else if (ticks > tutorialTick + 20 && tutorials[7]) {
 				text = new Text(-1, "                 Viel Spaﬂ!");
 				tutorialTick = (int) ticks;
 				tutorial = false;

@@ -5,6 +5,7 @@ import java.awt.Image;
 import java.awt.geom.AffineTransform;
 import java.awt.image.AffineTransformOp;
 import java.awt.image.BufferedImage;
+import java.awt.image.RasterFormatException;
 
 import matrizen.core.DateiManager;
 import matrizen.core.Utils;
@@ -54,7 +55,11 @@ public class VerfolgerGeschoss extends Geschoss {
 		transform.rotate(getWinkel() + Math.PI, grafik.getWidth() / 2, grafik.getHeight() / 2);
 
 		AffineTransformOp operation = new AffineTransformOp(transform, AffineTransformOp.TYPE_NEAREST_NEIGHBOR);
-		return operation.filter(grafik, null);
+		try {
+			return operation.filter(grafik, null);
+		} catch(RasterFormatException e) {
+			return grafik;
+		}
 	}
 
 	private double getWinkel() {

@@ -45,13 +45,12 @@ public class DracheGegner extends Gegner {
 			Spiel.gibInstanz().getLevel().hinzufuegen(
 					new Item(Item.Typ.stabDreifach, pos.kopieren().div(Spiel.feldLaenge).add(new Vektor(-1, 0))));
 
-
-
 		if (Spieler.gibInstanz().gibAnzahlMuenzen() != Spieler.gibInstanz().zielMuenzen - 1
 				&& !Spiel.gibInstanz().getLevel().equals(Level.getLevel(3))) {
 			int r = Utils.random(100);
-
-			Vektor v = pos.kopieren().div(Spiel.feldLaenge).round();
+			Vektor v = pos.kopieren().round();
+			if (pos.mag() > 32)
+				v = pos.kopieren().div(32).round();
 
 			do {
 				int r0 = Utils.random(-1, 1), r1 = Utils.random(-1, 1);
@@ -59,7 +58,7 @@ public class DracheGegner extends Gegner {
 				if (Spiel.gibInstanz().getLevel().isInBounds(v.kopieren().add(new Vektor(r0, r1))))
 					v.add(new Vektor(r0, r1));
 
-			} while (!Spiel.gibInstanz().getLevel().getFeld(v.kopieren().div(Spiel.feldLaenge)).isSolide());
+			} while (Spiel.gibInstanz().getLevel().getFeld(v).isSolide());
 
 			if (r < dropMuenze)
 				Spiel.gibInstanz().getLevel().hinzufuegen(new Item(Item.Typ.muenze, v));
